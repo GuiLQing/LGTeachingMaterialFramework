@@ -1,9 +1,9 @@
 {
   "name": "LGTeachingMaterialFramework",
-  "version": "1.0.0.0",
+  "version": "1.0.0.1",
   "summary": "A short description of LGTeachingMaterialFramework.",
   "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/SG/LGTeachingMaterialFramework",
+  "homepage": "https://github.com/GuiLQing/LGTeachingMaterialFramework",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/GuiLQing/LGTeachingMaterialFramework.git",
-    "tag": "1.0.0.0"
+    "tag": "1.0.0.1"
   },
   "platforms": {
     "ios": "9.0"
