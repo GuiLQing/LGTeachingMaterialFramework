@@ -1,0 +1,6 @@
+framework module Pods_LGTeachingMaterialFramework_Example {
+  umbrella header "Pods-LGTeachingMaterialFramework_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

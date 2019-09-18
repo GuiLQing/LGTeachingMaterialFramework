@@ -1,0 +1,6 @@
+framework module LGTeachingMaterialFramework {
+  umbrella header "LGTeachingMaterialFramework.h"
+
+  export *
+  module * { export * }
+}
