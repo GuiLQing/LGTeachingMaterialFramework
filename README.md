@@ -1,6 +1,6 @@
 # LGTeachingMaterialFramework
 
-[![CI Status](https://img.shields.io/travis/SG/LGTeachingMaterialFramework.svg?style=flat)](https://travis-ci.org/SG/LGTeachingMaterialFramework)
+[![CI Status](https://img.shields.io/travis/GuiLQing/LGTeachingMaterialFramework.svg?style=flat)](https://travis-ci.org/GuiLQing/LGTeachingMaterialFramework)
 [![Version](https://img.shields.io/cocoapods/v/LGTeachingMaterialFramework.svg?style=flat)](https://cocoapods.org/pods/LGTeachingMaterialFramework)
 [![License](https://img.shields.io/cocoapods/l/LGTeachingMaterialFramework.svg?style=flat)](https://cocoapods.org/pods/LGTeachingMaterialFramework)
 [![Platform](https://img.shields.io/cocoapods/p/LGTeachingMaterialFramework.svg?style=flat)](https://cocoapods.org/pods/LGTeachingMaterialFramework)
@@ -22,7 +22,7 @@ pod 'LGTeachingMaterialFramework'
 
 ## Author
 
-SG, gui950823@126.com
+GuiLQing, gui950823@126.com
 
 ## License
 

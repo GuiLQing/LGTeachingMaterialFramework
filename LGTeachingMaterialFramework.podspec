@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 TODO: Add long description of the pod here.
                        DESC
 
-  s.homepage         = 'https://github.com/SG/LGTeachingMaterialFramework'
+  s.homepage         = 'https://github.com/GuiLQing/LGTeachingMaterialFramework'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'GuiLQing' => 'gui950823@126.com' }
   s.source           = { :git => 'https://github.com/GuiLQing/LGTeachingMaterialFramework.git', :tag => s.version.to_s }
