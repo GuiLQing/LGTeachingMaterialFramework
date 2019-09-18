@@ -242,6 +242,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = SG;
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = Z35S33J39R;
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -546,9 +549,11 @@
 			baseConfigurationReference = E970664535508ED11E36E118 /* Pods-LGTeachingMaterialFramework_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = Z35S33J39R;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LGTeachingMaterialFramework/LGTeachingMaterialFramework-Prefix.pch";
 				INFOPLIST_FILE = "LGTeachingMaterialFramework/LGTeachingMaterialFramework-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -562,9 +567,11 @@
 			baseConfigurationReference = 0C646160EAC6F7A12B1DE1E0 /* Pods-LGTeachingMaterialFramework_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = Z35S33J39R;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LGTeachingMaterialFramework/LGTeachingMaterialFramework-Prefix.pch";
 				INFOPLIST_FILE = "LGTeachingMaterialFramework/LGTeachingMaterialFramework-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
