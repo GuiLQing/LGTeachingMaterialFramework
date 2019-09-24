@@ -9,6 +9,9 @@
 #ifndef LGTeachingMaterialVersion_h
 #define LGTeachingMaterialVersion_h
 
+/** 版本：1.0.0.1    2019-9-24 */
+/** 1、解决pod引用冲突问题 */
+
 /** 版本：1.0.0.0    2019-9-19 */
 
 #endif /* LGTeachingMaterialVersion_h */

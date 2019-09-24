@@ -62,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 应用跳转返回主页 */
 @property (nonatomic,copy) void (^jumpToHomeBlock) (void);
-
+@property (nonatomic,strong) void (^dismissBlock) (void);
 /** 进入电子教材模块 */
 - (void)presentTeachingPlanControllerBy:(UIViewController *)controller;
 /** 学友推荐调用 */

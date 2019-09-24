@@ -36,6 +36,8 @@ typedef NS_ENUM(NSInteger, YJIJKPlayerState) {
 /** 播放器准备开始播放时 */
 - (void)playerReadyToPlay;
 
+/** 视频拖拽超过截止点 */
+- (void)dragToSeekEndtime;
 @end
 
 @interface YJIJKPlayerManager : NSObject
@@ -51,8 +53,9 @@ typedef NS_ENUM(NSInteger, YJIJKPlayerState) {
 @property (nonatomic, assign, readonly) double currentTime;
 /** 获取当前状态 */
 @property (nonatomic, assign, readonly) YJIJKPlayerState state;
+- (void)updateSeekToEndTimePlayerState:(YJIJKPlayerState)state;
 /** 从xx秒开始播放视频 */
-@property (nonatomic, assign) NSInteger seekTime;
+@property (nonatomic, assign) NSTimeInterval seekTime;
 /** 播放完成是否显示重播按钮 */
 @property (nonatomic,assign) BOOL closeRepeatBtn;
 /** 是否静音 */
