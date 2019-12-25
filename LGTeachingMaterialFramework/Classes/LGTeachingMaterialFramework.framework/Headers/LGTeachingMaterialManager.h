@@ -60,29 +60,53 @@ NS_ASSUME_NONNULL_BEGIN
 /** 学科名称 */
 @property (nonatomic, strong) NSString *SubjectName;
 
+/** 付费VIP模式 (default is YES) */
+@property (nonatomic, assign) BOOL isVipMode;
+/** 非VIP模式试听秒数 */
+@property (nonatomic, assign) NSInteger nonVipListeningTestTime;
+/** 是否开启非VIP限制 */
+@property (nonatomic, assign, readonly) BOOL isOpenNonVipLimit;
+
 /** 应用跳转返回主页 */
 @property (nonatomic,copy) void (^jumpToHomeBlock) (void);
 @property (nonatomic,strong) void (^dismissBlock) (void);
-/** 进入电子教材模块 */
-- (void)presentTeachingPlanControllerBy:(UIViewController *)controller;
-/** 学友推荐调用 */
-- (void)presentShareTeachingPlanControllerBy:(UIViewController *)controller resType:(NSString *)resType resCode:(NSString *)resCode libCode:(NSString *)libCode;
-/** 公共笔记工具跳转链接调用 */
-- (UIViewController *)NoteLinkTeachingPlanControllerWithResType:(NSString *)resType resCode:(NSString *)resCode libCode:(NSString *)libCode;
-/** 跳转首页 */
-- (UIViewController*)jumpToTeachingMaterialMainPage;
 
 /** 跳转知识点学习课件 */
 @property (nonatomic,copy) void (^jumpToLGKnowledgeBlock) (UIViewController *fromController,NSString *klgCode);
 @property (nonatomic,copy) void (^jumpToLGKnowledgeAlertBlock) (UIViewController *fromController,NSString *klgCode,void (^addStudyBlock) (void));
 
-#pragma mark - 项目内部自使用字段
+#pragma mark -
+// !!!: 模块跳转
+/** 进入电子素材主界面 */
+@property (nonatomic, copy, readonly) void (^presentElectronicMaterialModule)(UIViewController * _Nonnull controller);
+/** 学友推荐进入电子素材资料详情界面 */
+@property (nonatomic, copy, readonly) void (^presentElectronicMaterialResDetail)(UIViewController * _Nonnull controller, NSString * _Nullable resType, NSString * _Nullable resCode, NSString * _Nullable libCode);
+/** 获取电子素材主界面导航栏控制器 */
+@property (nonatomic, copy, readonly) UINavigationController * _Nonnull (^naviControllerOfElectronicMaterialModule)(void);
+/** 获取电子素材资料详情导航栏控制器 */
+@property (nonatomic, copy, readonly) UINavigationController * _Nonnull (^naviControllerOfElectronicMaterialResDetail)(NSString * _Nullable resType, NSString * _Nullable resCode, NSString * _Nullable libCode);
+
+#pragma mark -
+// !!!: 项目内部自使用字段
 
 @property (nonatomic, assign, readonly) NSInteger levelId;
 /** 音频路径 */
 @property (nonatomic, strong) NSString *earmarkPath;
 /** 时间戳 */
 @property (nonatomic, strong) NSString *StampTime;
+
+
+#pragma mark -
+// !!!: Deprecated 已废弃
+
+/** 进入电子教材模块 */
+- (void)presentTeachingPlanControllerBy:(UIViewController *)controller __attribute__((deprecated("Use presentElectronicMaterialModule instead.")));
+/** 学友推荐调用 */
+- (void)presentShareTeachingPlanControllerBy:(UIViewController *)controller resType:(NSString *)resType resCode:(NSString *)resCode libCode:(NSString *)libCode __attribute__((deprecated("Use presentElectronicMaterialResDetail instead.")));
+/** 公共笔记工具跳转链接调用 */
+- (UINavigationController *)NoteLinkTeachingPlanControllerWithResType:(NSString *)resType resCode:(NSString *)resCode libCode:(NSString *)libCode __attribute__((deprecated("Use naviControllerOfElectronicMaterialResDetail instead.")));
+/** 跳转首页 */
+- (UINavigationController*)jumpToTeachingMaterialMainPage __attribute__((deprecated("Use naviControllerOfElectronicMaterialModule instead.")));
 
 @end
 
