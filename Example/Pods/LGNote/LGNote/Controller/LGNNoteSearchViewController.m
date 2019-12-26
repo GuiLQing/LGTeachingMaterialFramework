@@ -61,9 +61,9 @@
 }
 
 - (void)leftNavigationBar:(id)sender{
-    if (self.backRefreshSubject) {
-        [self.backRefreshSubject sendNext:@"back"];
-    }
+//    if (self.backRefreshSubject) {
+//        [self.backRefreshSubject sendNext:@"back"];
+//    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -139,8 +139,11 @@
         return;
     }
     
-    self.tableView.requestStatus = LGBaseTableViewRequestStatusStartLoading;
+   
+    self.tableView.requestStatus = LGBaseTableViewRequestSearchLoading;
+    
 
+    self.viewModel.paramModel.IsKeyPoint =@"-1";
     
       [self.viewModel.searchCommand execute:self.viewModel.paramModel];
     
@@ -222,7 +225,7 @@
     if (!_tableView) {
         _tableView = [[LGNNoteMainTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         _tableView.isNotoSearchVC = YES;
-        [_tableView allocInitRefreshHeader:NO allocInitFooter:NO];
+        [_tableView allocInitRefreshHeader:NO allocInitFooter:YES];
         _tableView.ownerController = self;
         _tableView.isSearchVC = YES;
         self.viewModel.isSearchOperation = YES;

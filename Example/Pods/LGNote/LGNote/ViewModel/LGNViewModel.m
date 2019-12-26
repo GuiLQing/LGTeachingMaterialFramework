@@ -216,8 +216,7 @@ NSString *const CheckNoteBaseUrlKey = @"CheckNoteBaseUrlKey";
          getSystemSigal = [self getAllSystemInfo];
     }
    
-    
-    
+
     
     
     // 如果skip == -1 的则表示跳过了 获取学科或者系统这两个接口
@@ -263,7 +262,7 @@ NSString *const CheckNoteBaseUrlKey = @"CheckNoteBaseUrlKey";
         NSString *url = [self.paramModel.CPBaseUrl stringByAppendingFormat:@"/Base/WS/Service_Basic.asmx/WS_G_GetSubSystemServerInfo?sysID=%@&subjectID=",@"S22"];
         
         
-        [kNetwork.setRequestUrl(url).setRequestType(GETXML)starSendRequestSuccess:^(id respone) {
+    [kNetwork.setRequestUrl(url).setRequestType(GETXML)starSendRequestSuccess:^(id respone) {
             
             NSDictionary *dic = [NSDictionary NotedictionaryWithXMLString:respone];
             
@@ -376,11 +375,11 @@ NSString *const CheckNoteBaseUrlKey = @"CheckNoteBaseUrlKey";
     return [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
         NSString *url = [self.paramModel.NoteBaseUrl stringByAppendingString:@"api/V2/Notes/GetNoteInfoByID"];
         
-       
+//       nsl
         NSDictionary *params = @{
                                  @"UserID":Note_HandleParams(self.paramModel.UserID),
                                  @"UserType":@(self.paramModel.UserType),
-                                 @"NoteID":noteID,
+                                 @"NoteID":Note_HandleParams(noteID),
                                  @"SecretKey": Note_HandleParams(self.paramModel.Secret),
                                  @"BackUpOne":@"",
                                  @"BackUpTwo":@""
@@ -418,55 +417,98 @@ NSString *const CheckNoteBaseUrlKey = @"CheckNoteBaseUrlKey";
     
     
     return [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
-        NSString *url = [self.paramModel.NoteBaseUrl stringByAppendingString:@"api/V2/Notes/GetNotesInformation"];
         
-                NSDictionary *params;
+        NSString *url;
+    NSDictionary *params;
         if (self.paramModel.SystemType ==SystemType_ALL || self.paramModel.SystemType ==SystemType_ASSISTANTER ||self.paramModel.SystemType ==SystemType_YPT) {
+            
+               url= [self.paramModel.NoteBaseUrl stringByAppendingString:@"api/V2/Notes/GetNotesInformation"];
             params = @{
-                                     @"UserID":Note_HandleParams(self.paramModel.UserID),
-                                     @"UserType":@(self.paramModel.UserType),
-                                     @"ResourceID":Note_HandleParams(self.paramModel.ResourceID),
-                                     @"SubjectID":subjectID,
-                                     @"SecretKey":Note_HandleParams(self.paramModel.Secret),
-                                     @"SchoolID":schoolID,
-                                     @"MaterialID":Note_HandleParams(self.paramModel.MaterialID),
-                                     @"IsKeyPoint":Note_HandleParams(self.paramModel.IsKeyPoint),
-                                     @"SysID":systemID,
-                                     @"Keycon":keycon,
-                                     @"Page":@(pageIndex),
-                                     @"StartTime":Note_HandleParams(self.paramModel.StartTime),
-                                     @"EndTime":Note_HandleParams(self.paramModel.EndTime),
-                                     
-                                     @"Size":@(size),
-                                     @"BackUpOne":@"All",
-                                     @"BackUpTwo":@""
-                                     };
+                                                @"UserID":Note_HandleParams(self.paramModel.UserID),
+                                                @"UserType":@(self.paramModel.UserType),
+                                                @"ResourceID":Note_HandleParams(self.paramModel.ResourceID),
+                                                @"SubjectID":Note_HandleParams(subjectID),
+                                                @"SecretKey":Note_HandleParams(self.paramModel.Secret),
+                                                
+                                                @"SchoolID":Note_HandleParams(schoolID),
+                                                @"MaterialID":Note_HandleParams(self.paramModel.MaterialID),
+                                                @"IsKeyPoint":Note_HandleParams(self.paramModel.IsKeyPoint),
+                                                
+                                                @"SysID":Note_HandleParams(systemID),
+                                                @"Keycon":Note_HandleParams(keycon),
+                                                @"Page":@(pageIndex),
+                                                @"StartTime":Note_HandleParams(self.paramModel.StartTime),
+                                                @"EndTime":Note_HandleParams(self.paramModel.EndTime),
+                                                
+                                                @"Size":@(size),
+                                                @"BackUpOne":@"All",
+                                                @"BackUpTwo":@""
+                                                };
+                       
             
         }else{
+            //其他端集成的
             
-          params = @{
-                                     @"UserID": Note_HandleParams(self.paramModel.UserID),
-                                     @"UserType":@(self.paramModel.UserType),
-                                     @"ResourceID":@"",
-                                     @"SubjectID":subjectID,
-                                     @"SecretKey": Note_HandleParams(self.paramModel.Secret),
-                                     @"SchoolID":schoolID,
-                                     @"MaterialID":@"",
-                                     @"IsKeyPoint":Note_HandleParams(self.paramModel.IsKeyPoint),
-                                     @"SysID":systemID,
-                                     @"Keycon":keycon,
-                                     @"Page":@(pageIndex),
-                                     @"StartTime":Note_HandleParams(self.paramModel.StartTime),
-                                     @"EndTime":Note_HandleParams(self.paramModel.EndTime),
-                                     
-                                     @"Size":@(size),
-                                     @"BackUpOne":@"",
-                                     @"BackUpTwo":@""
-                                     };
-            
+            if([keycon isEqualToString:@""]){
+                   
+                //获取全部
+            url= [self.paramModel.NoteBaseUrl stringByAppendingString:@"api/V2/Notes/GetAllNotesInformationForOneResource"];
+                
+                params = @{
+                                              @"UserID": Note_HandleParams(self.paramModel.UserID),
+                                              @"UserType":@(self.paramModel.UserType),
+                                              @"ResourceID":Note_HandleParams(self.paramModel.ResourceID),
+                                              
+                                              @"SubjectID":Note_HandleParams(subjectID),
+                                              @"SecretKey": Note_HandleParams(self.paramModel.Secret),
+                                              @"MaterialID":@"",
+                                              @"IsKeyPoint":Note_HandleParams(self.paramModel.IsKeyPoint),
+                                              
+                                              @"SysID":Note_HandleParams(systemID),
+
+                                              @"BackUpOne":@"",
+                                              @"BackUpTwo":@""
+                                              };
+                
+                          //传参也不一样
+                      }else{
+                          
+                          //搜索的
+                          url= [self.paramModel.NoteBaseUrl stringByAppendingString:@"api/V2/Notes/GetNotesInformationForOne"];
+                          params = @{
+                                                            @"UserID": Note_HandleParams(self.paramModel.UserID),
+                                                        @"UserType":@(self.paramModel.UserType),
+                                                        @"ResourceID":Note_HandleParams(self.paramModel.ResourceID),
+                                                            
+                                                             @"SubjectID":Note_HandleParams(subjectID),
+                                                             @"SecretKey": Note_HandleParams(self.paramModel.Secret),
+                                                            
+                                                             @"SchoolID":Note_HandleParams(schoolID),
+                                                        @"MaterialID":@"",
+                                                             @"IsKeyPoint":Note_HandleParams(self.paramModel.IsKeyPoint),
+                                                            
+                                                             @"SysID":Note_HandleParams(systemID),
+                                                            
+                                                             @"Keycon":Note_HandleParams(keycon),
+                                                             @"Page":@(pageIndex),
+                                                             @"StartTime":Note_HandleParams(self.paramModel.StartTime),
+                                                             @"EndTime":Note_HandleParams(self.paramModel.EndTime),
+                                                             
+                                                             @"Size":@(size),
+                                                             @"BackUpOne":@"",
+                                                             @"BackUpTwo":@""
+                                                             };
+                      }
+                      
         }
-        
        
+        
+      
+        
+    
+        
+      
+      
         [kNetwork.setRequestUrl(url).setRequestType(POSTENCRY).setEncryKey( Note_HandleParams(self.paramModel.UserID)).setToken(Note_HandleParams(self.paramModel.Token)).setParameters(params)starSendRequestSuccess:^(id respone) {
             
             
@@ -498,11 +540,18 @@ NSString *const CheckNoteBaseUrlKey = @"CheckNoteBaseUrlKey";
                 
                 // 判断是否是图文混排
                 NSString *contentString = model.NoteContent_Att.string;
+                
                 contentString = [contentString stringByReplacingOccurrencesOfString:@" " withString:@""];
                 contentString = [contentString stringByReplacingOccurrencesOfString:@"\n" withString:@""];
                 contentString = [contentString stringByReplacingOccurrencesOfString:@"\uFFFC" withString:@""];
                    contentString = [contentString stringByReplacingOccurrencesOfString:@"\U00002028" withString:@""];
+               
+                BOOL isKong = [self isEmpty:contentString];
                 
+                
+                if(isKong == YES){
+                    contentString = @"";
+                }
                 
                 if (!IsArrEmpty(imageUrls) && !IsStrEmpty(contentString)) {
                     model.mixTextImage = YES;
@@ -527,6 +576,25 @@ NSString *const CheckNoteBaseUrlKey = @"CheckNoteBaseUrlKey";
         return nil;
     }];
 }
+
+- (BOOL) isEmpty:(NSString *) str {
+         
+        if (!str) {
+                return true;
+            } else {
+               
+                    NSCharacterSet *set = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+                   
+                    NSString *trimedString = [str stringByTrimmingCharactersInSet:set];
+                     
+                    if ([trimedString length] == 0) {
+                            return true;
+                        } else {
+                                return false;
+                            }
+                }
+}
+
 
 /** 获取本学期开始和截止时间 */
 
@@ -624,7 +692,7 @@ NSString *const CheckNoteBaseUrlKey = @"CheckNoteBaseUrlKey";
                 }
                 
                 [kMBAlert showErrorWithStatus:message];
-                [subscriber sendNext:nil];
+                [subscriber sendNext:message];
                 [subscriber sendCompleted];
                 return;
             }
@@ -644,7 +712,7 @@ NSString *const CheckNoteBaseUrlKey = @"CheckNoteBaseUrlKey";
             
         } failure:^(NSError *error) {
             [kMBAlert showErrorWithStatus:@"操作失败，请检查网络后重试"];
-            [subscriber sendNext:nil];
+            [subscriber sendNext:@"操作失败"];
             [subscriber sendCompleted];
         }];
         return nil;
@@ -654,14 +722,17 @@ NSString *const CheckNoteBaseUrlKey = @"CheckNoteBaseUrlKey";
 - (RACSignal *)deletedNoteWithUserID:(NSString *)userID noteID:(NSString *)noteID schoolID:(NSString *)schoolID systemID:(NSString *)systemID subjectID:(NSString *)subjectID{
     return [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
         NSString *url = [self.paramModel.NoteBaseUrl stringByAppendingString:@"api/V2/Notes/DeleteNote"];
+       
         NSDictionary *params = @{
-                                 @"UserID":self.paramModel.UserID,
+                                 @"UserID": Note_HandleParams(self.paramModel.UserID),
                                  @"UserType":@(self.paramModel.UserType),
-                                 @"SubjectID":subjectID,
-                                 @"SecretKey":self.paramModel.Secret,
-                                 @"SchoolID":self.paramModel.SchoolID,
-                                 @"NoteID":noteID,
-                                 @"SysID":systemID,
+                                 
+                                 @"SubjectID":Note_HandleParams(subjectID),
+                                 @"SecretKey":Note_HandleParams(self.paramModel.Secret),
+                                 @"SchoolID":Note_HandleParams(self.paramModel.SchoolID),
+                                
+                                 @"NoteID":Note_HandleParams(noteID),
+                                 @"SysID": Note_HandleParams(systemID),
                                  @"BackUpOne":@"",
                                  @"BackUpTwo":@""
                                  };

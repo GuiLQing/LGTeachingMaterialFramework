@@ -13,8 +13,9 @@
 #import <Masonry/Masonry.h>
 #import "YJConst.h"
 
-static CGFloat kTaskCarkViewWidthRate = 0.9;
-static CGFloat kTaskCarkViewHeightRate = 0.7;
+#define kTaskCarkViewWidth  (IsIPad ? 480 : LG_ScreenWidth*0.9)
+#define kTaskCarkViewHeight  (IsIPad ? 640 : LG_ScreenHeight*0.7)
+
 @interface YJTaskCarkView ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) UIButton *closeBtn;
@@ -66,17 +67,17 @@ static CGFloat kTaskCarkViewHeightRate = 0.7;
     }];
 }
 + (YJTaskCarkView *)taskCarkView{
-    YJTaskCarkView *cardView = [[YJTaskCarkView alloc] initWithFrame:CGRectMake(0, 0, LG_ScreenWidth*kTaskCarkViewWidthRate, LG_ScreenHeight*kTaskCarkViewHeightRate)];
+    YJTaskCarkView *cardView = [[YJTaskCarkView alloc] initWithFrame:CGRectMake(0, 0, kTaskCarkViewWidth, kTaskCarkViewHeight)];
      cardView.maskView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     cardView.maskView.backgroundColor = LG_ColorWithHexA(0x000000, 0.6);
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:cardView action:@selector(hide)];
     [cardView.maskView addGestureRecognizer:tap];
-    [cardView.maskView addSubview:cardView.closeBtn];
-    [cardView.closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(cardView.maskView);
-        make.centerY.equalTo(cardView.maskView).offset(LG_ScreenHeight*kTaskCarkViewHeightRate/2 + 10);
-        make.width.height.mas_equalTo(28);
-    }];
+//    [cardView.maskView addSubview:cardView.closeBtn];
+//    [cardView.closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerX.equalTo(cardView.maskView);
+//        make.centerY.equalTo(cardView.maskView).offset(kTaskCarkViewHeight/2 + 10);
+//        make.width.height.mas_equalTo(28);
+//    }];
     return cardView;
 }
 - (void)setDataArr:(NSArray<YJTaskCarkModel *> *)dataArr{
@@ -98,18 +99,30 @@ static CGFloat kTaskCarkViewHeightRate = 0.7;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     YJTaskCarkModel *cardModel = self.dataArr[indexPath.row];
     NSInteger rowCount = 0;
-    if (cardModel.answerResults.count % 5 == 0) {
-        rowCount = cardModel.answerResults.count / 5 > 0 ? cardModel.answerResults.count / 5 : 1;
+    
+    if (IsIPad) {
+        if (cardModel.answerResults.count % 8 == 0) {
+            rowCount = cardModel.answerResults.count / 8 > 0 ? cardModel.answerResults.count / 8 : 1;
+        }else{
+            rowCount = cardModel.answerResults.count / 8 > 0 ? cardModel.answerResults.count / 8 + 1: 1;
+        }
+        return rowCount * ((kTaskCarkViewWidth-20*2-3*7-3*2)/8 + 3) + 3 + 3 + 30;
     }else{
-        rowCount = cardModel.answerResults.count / 5 > 0 ? cardModel.answerResults.count / 5 + 1: 1;
+        if (cardModel.answerResults.count % 5 == 0) {
+            rowCount = cardModel.answerResults.count / 5 > 0 ? cardModel.answerResults.count / 5 : 1;
+        }else{
+            rowCount = cardModel.answerResults.count / 5 > 0 ? cardModel.answerResults.count / 5 + 1: 1;
+        }
+        return rowCount * ((kTaskCarkViewWidth-20*2-3*4-3*2)/5 + 3) + 3 + 3 + 30;
     }
-    return rowCount * ((LG_ScreenWidth*kTaskCarkViewWidthRate-20*2-3*5)/5 + 3) + 3 + 3 + 30;
+    
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     YJTaskCarkCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJTaskCarkCell class])];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.curentImage.hidden = YES;
     cell.isTopicCardMode = self.isTopicCardMode;
+    cell.bigTopicTypeNameHideBig = self.bigTopicTypeNameHideBig;
     if (self.isTopicCardMode) {
         cell.currentSmallIndexStr = @"";
         if (self.currentSmallIndex == indexPath.row) {

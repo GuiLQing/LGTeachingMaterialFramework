@@ -14,9 +14,9 @@
 #import <Masonry/Masonry.h>
 
 
-static CGFloat kLeftSpace = 10;
-static CGFloat kCellSpace = 6;
-static CGFloat kCellRowSpace = 10;
+#define kLeftSpace  (IsIPad ? 40 : 10)
+#define kCellSpace  (IsIPad ? 24 : 6)
+#define kCellRowSpace 10
 @interface YJAnswerAlertView ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource>
 /** 头像 */
 @property (nonatomic,strong) UIImageView *headImageV;
@@ -92,8 +92,8 @@ static CGFloat kCellRowSpace = 10;
     [self.contentL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(contentView);
         make.left.equalTo(contentView).offset(20);
-        make.top.equalTo(self.titleL.mas_bottom).offset(8);
-        make.bottom.equalTo(self.collectionView.mas_top).offset(-20);
+        make.top.equalTo(self.titleL.mas_bottom).offset(10);
+        make.bottom.equalTo(self.collectionView.mas_top).offset(-25);
     }];
 }
 + (YJAnswerAlertView *)alertWithTitle:(NSString *)title normalMsg:(NSString *)normalMsg highLightMsg:(NSString *)highLightMsg destructiveTitle:(NSString *)destructiveTitle destructiveBlock:(void (^)(void))destructiveBlock{
@@ -106,11 +106,11 @@ static CGFloat kCellRowSpace = 10;
     CGFloat w = LG_ScreenWidth*0.72;
     CGFloat h = w;
     if (LG_ScreenWidth <= 320) {
-        h = w * 1.38;
+        h = w * 1.48;
     }else if (LG_ScreenWidth <= 375){
-        h = w * 1.28;
+        h = w * 1.38;
     }else{
-        h = w * 1.18;
+        h = w * 1.28;
     }
     CGFloat contentW = [normalMsg yj_widthWithFont:LG_SysFont(15)];
     CGFloat contentReferW = w - 20*2;
@@ -118,6 +118,14 @@ static CGFloat kCellRowSpace = 10;
         h -= 30;
     }else if (contentW <= contentReferW){
         h -= 30*2;
+    }
+    if (IsIPad) {
+        w = 400;
+        if (IsStrEmpty(choiceTitle)) {
+            h = 320;
+        }else{
+            h = 320 + kCellHeight;
+        }
     }
      YJAnswerAlertView *alertView = [[YJAnswerAlertView alloc] initWithFrame:CGRectMake(0, 0, w, h) choiceTitle:choiceTitle];
      alertView.maskView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -156,14 +164,14 @@ static CGFloat kCellRowSpace = 10;
         titleL.text = @"左右滑动切换题目";
         titleL.textColor = LG_ColorWithHex(0xffffff);
         titleL.textAlignment = NSTextAlignmentCenter;
-        titleL.font = [UIFont boldSystemFontOfSize:18];
+        titleL.font = [UIFont boldSystemFontOfSize:IsIPad ? 20 : 18];
         
         UIImageView *fingerimg = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"finger" atDir:YJTaskBundle_AlertView atBundle:YJTaskBundle()]];
         [alertView addSubview:fingerimg];
         [fingerimg mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(alertView);
             make.top.equalTo(alertView.mas_centerY);
-            make.width.mas_equalTo(LG_ScreenWidth*0.18);
+            make.width.mas_equalTo(IsIPad ? 100 : LG_ScreenWidth*0.18);
             make.height.equalTo(fingerimg.mas_width).multipliedBy(1.6);
         }];
         
@@ -173,7 +181,7 @@ static CGFloat kCellRowSpace = 10;
         [sureimg mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(alertView);
             make.top.equalTo(fingerimg.mas_bottom).offset(LG_ScreenHeight*0.08);
-            make.width.mas_equalTo(LG_ScreenWidth*0.216);
+            make.width.mas_equalTo(IsIPad ? 110 : LG_ScreenWidth*0.216);
             make.height.equalTo(sureimg.mas_width).multipliedBy(0.407);
         }];
         
@@ -183,7 +191,8 @@ static CGFloat kCellRowSpace = 10;
         [slideTipimg mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(alertView);
             make.bottom.equalTo(fingerimg.mas_top).offset(-LG_ScreenHeight*0.145);
-            make.left.equalTo(alertView).offset(20);
+            make.left.equalTo(alertView).offset(20).priority(999);
+            make.width.mas_lessThanOrEqualTo(500).priority(1000);
             make.height.equalTo(slideTipimg.mas_width).multipliedBy(0.129);
         }];
         
@@ -217,6 +226,9 @@ static CGFloat kCellRowSpace = 10;
     self.timeL.text = [NSString stringWithFormat:@"%li",timeCount];
 }
 - (CGFloat)alertWidth{
+    if (IsIPad) {
+        return 400;
+    }
     return LG_ScreenWidth*0.72;
 }
 - (CGFloat)alertHeight{
@@ -225,7 +237,7 @@ static CGFloat kCellRowSpace = 10;
 - (void)setNormalMsg:(NSString *)normalMsg{
     _normalMsg = normalMsg;
     NSMutableAttributedString *attr = normalMsg.yj_toMutableAttributedString;
-    [attr yj_setFont:15];
+    [attr yj_setFont: IsIPad ? 17 : 15];
     [attr yj_setColor:LG_ColorWithHex(0x333333)];
     if ([self.highLightMsg containsString:@"&"]) {
         NSArray *highLightArr = [self.highLightMsg componentsSeparatedByString:@"&"];
@@ -386,9 +398,9 @@ static CGFloat kCellRowSpace = 10;
         _titleL = [UILabel new];
         _titleL.textAlignment = NSTextAlignmentCenter;
         if(([[[UIDevice currentDevice] systemVersion] compare:@"8.2" options:NSNumericSearch] == NSOrderedAscending)) {
-             _titleL.font = [UIFont systemFontOfSize:18];
+            _titleL.font = [UIFont systemFontOfSize:IsIPad ? 21 : 18];
         } else {
-            _titleL.font = [UIFont systemFontOfSize:18 weight:UIFontWeightMedium];
+            _titleL.font = [UIFont systemFontOfSize:IsIPad ? 21 : 18 weight:UIFontWeightMedium];
         }
         _titleL.textColor = LG_ColorWithHex(0x222222);
         _titleL.text = @"温馨提示";

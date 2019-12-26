@@ -62,12 +62,16 @@
     
     instance.playerStatusModel.isVipMode = playerModel.isVipMode;
     instance.playerStatusModel.seekTime = playerModel.seekTime;
+    instance.playerStatusModel.seekStartTime = playerModel.seekStartTime;
     instance.playerStatusModel.seekEndTime = playerModel.seekEndTime;
+    instance.playerStatusModel.vipLimitTime = playerModel.vipLimitTime;
+    instance.playerStatusModel.vipEndTime = playerModel.vipEndTime;
     
     // !!!: 最底层视图创建
     instance.videoPlayerView = [YJIJKVideoPlayerView videoPlayerViewWithSuperView:view delegate:instance playerStatusModel:instance.playerStatusModel];
     instance.videoPlayerView.srtModel = playerModel.srtModel;
     instance.videoPlayerView.isMute = playerModel.isMute;
+     instance.videoPlayerView.fontSize = playerModel.fontSize;
     instance.videoPlayerView.isShowVoiceBgImg = playerModel.isShowVoiceBgImg;
     instance.videoPlayerView.portraitSrtInvisible = playerModel.portraitSrtInvisible;
     instance.videoPlayerView.playerControlView.delegate = instance;
@@ -86,7 +90,11 @@
     // !!!: 创建AVPlayer管理
     instance.playerMgr = [YJIJKPlayerManager playerManagerWithDelegate:instance playerStatusModel:instance.playerStatusModel];
     instance.playerMgr.isMute = playerModel.isMute;
-    instance.playerMgr.seekTime = playerModel.seekTime;
+    if (playerModel.seekTime > 0) {
+        instance.playerMgr.seekTime = playerModel.seekTime;
+    }else{
+        instance.playerMgr.seekTime = playerModel.seekStartTime;
+    }
     instance.playerMgr.closeRepeatBtn = playerModel.closeRepeatBtn;
     instance.isPauseByUser = YES;
     
@@ -103,6 +111,9 @@
     self.playerModel.isMute = mute;
     self.videoPlayerView.isMute = mute;
     [self.playerMgr configMute:mute];
+}
+- (void)setSrtFontSize:(CGFloat)fontSize{
+    self.videoPlayerView.fontSize = fontSize;
 }
 // !!!: 销毁视频
 - (void)destroyVideo {
@@ -200,6 +211,9 @@
 - (void)stopVideo {
     [self.playerMgr stop];
 }
+- (YJIJKPlayerState)currentPlayState{
+    return self.playerMgr.state;
+}
 - (void)seekToTime:(float)time{
     if ((self.playerMgr.state >= 2 && self.playerMgr.state <= 5) || (self.playerMgr.state >= 2 && self.playerModel.closeRepeatBtn)) {
         __weak typeof(self) wself = self;
@@ -286,19 +300,19 @@
         return;
     }
     
-    if (!self.isSeekToStartTime && self.playerModel.seekTime > 0 && second > 0 && second < self.playerModel.seekTime) {
-        [self seekToTime:self.playerModel.seekTime];
+    if (!self.isSeekToStartTime && self.playerModel.seekStartTime > 0 && second > 0 && second < self.playerModel.seekStartTime) {
+        [self seekToTime:self.playerModel.seekStartTime];
         self.isSeekToStartTime = YES;
         return;
     }
     
     
-    if (!self.isSeekToEndTime && self.playerModel.seekEndTime > 0 && second > self.playerModel.seekEndTime) {
+    if (!self.isSeekToEndTime && self.playerModel.vipEndTime > 0 && second > self.playerModel.vipEndTime) {
         [self dragToSeekEndtime];
         return;
     }
     
-    if (second > self.playerModel.seekTime) {
+    if (second > self.playerModel.seekStartTime) {
         self.isSeekToStartTime = NO;
     }
     
@@ -320,7 +334,9 @@
 
 - (void)didBuffer:(YJIJKPlayerManager *)playerMgr { 
     if (self.playerMgr.state == YJIJKPlayerStateBuffering || !self.playerStatusModel.isPauseByUser) {
-        [self.playerMgr play];
+        if (!self.isSeekToEndTime) {
+            [self.playerMgr play];
+        }
 //        [self.videoPlayerView.playerControlView readyToPlay];
     }
 }
@@ -398,9 +414,13 @@
 
 /** 进度结束拖动，并返回最后的值 */
 - (void)portraitProgressSliderEndDrag:(CGFloat)value {
+   
     //计算出拖动的当前秒数
     __weak typeof(self) wself = self;
     NSInteger dragedSeconds = floorf(self.playerMgr.duration * value);
+    if (self.playerModel.seekStartTime > 0 && dragedSeconds < self.playerModel.seekStartTime) {
+        dragedSeconds = self.playerModel.seekStartTime;
+    }
     [self.playerMgr seekToTime:dragedSeconds completionHandler:^(){
         wself.playerStatusModel.dragged = NO;
         [wself.playerMgr play];
@@ -422,6 +442,9 @@
     //计算出拖动的当前秒数
     __weak typeof(self) wself = self;
     NSInteger dragedSeconds = floorf(self.playerMgr.duration * value);
+    if (self.playerModel.seekStartTime > 0 && dragedSeconds < self.playerModel.seekStartTime) {
+        dragedSeconds = self.playerModel.seekStartTime;
+    }
     [self.playerMgr seekToTime:dragedSeconds completionHandler:^(){
         wself.playerStatusModel.dragged = NO;
         [wself.playerMgr play];
@@ -471,6 +494,9 @@
     //计算出拖动的当前秒数
     __weak typeof(self) wself = self;
     NSInteger dragedSeconds = floorf(self.playerMgr.duration * value);
+    if (self.playerModel.seekStartTime > 0 && dragedSeconds < self.playerModel.seekStartTime) {
+        dragedSeconds = self.playerModel.seekStartTime;
+    }
     [self.playerMgr seekToTime:dragedSeconds completionHandler:^(){
         wself.playerStatusModel.dragged = NO;
         [wself.playerMgr play];
@@ -485,6 +511,9 @@
     //计算出拖动的当前秒数
     __weak typeof(self) wself = self;
     NSInteger dragedSeconds = floorf(self.playerMgr.duration * value);
+    if (self.playerModel.seekStartTime > 0 && dragedSeconds < self.playerModel.seekStartTime) {
+        dragedSeconds = self.playerModel.seekStartTime;
+    }
     [self.playerMgr seekToTime:dragedSeconds completionHandler:^(){
         wself.playerStatusModel.dragged = NO;
         [wself.playerMgr play];
@@ -553,8 +582,12 @@
     
     // seekTime
     self.playerStatusModel.pauseByUser = NO;
+    CGFloat sumTime = self.sumTime;
+    if (self.playerModel.seekStartTime > 0 && sumTime < self.playerModel.seekStartTime) {
+        sumTime = self.playerModel.seekStartTime;
+    }
     __weak typeof(self) wself = self;
-    [self.playerMgr seekToTime:self.sumTime completionHandler:^{
+    [self.playerMgr seekToTime:sumTime completionHandler:^{
         [wself.playerMgr play];
     }];
     self.sumTime = 0;

@@ -12,6 +12,10 @@
 #import "YJCorrectModel.h"
 #import <YJTaskMark/YJSpeechResultModel.h>
 
+@interface YJPaperTextAttachment: NSTextAttachment
+
+@end
+
 NS_ASSUME_NONNULL_BEGIN
 @interface YJPaperSmallModel : YJBasePaperSmallModel
 @property (nonatomic,strong) NSArray *AnswerImgUrlList;
@@ -28,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) float HpScore;
 /** 小题索引 */
 @property (nonatomic,assign) NSInteger Index;
+@property (nonatomic,copy) NSString *IndexOri;
 /** 该题是否需要互评 */
 @property (nonatomic,assign) BOOL IsHpQues;
 /** 该题是否需要互评 */
@@ -39,6 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSMutableArray *OptionContentList_attr;
 /** 整份试卷第几题 */
 @property (nonatomic,assign) NSInteger PaperIndex;
+@property (nonatomic,assign) NSInteger PaperIndexOri;
 /** 题目解析 */
 @property (nonatomic,copy) NSString *QuesAnalysis;
 /** 参考答案 */
@@ -75,18 +81,27 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *TopicID;
 /** 历次得分 */
 @property (nonatomic,strong) NSArray<YJSpeechSaveScoreModel *> *ScoreInfoList;
-
+/** 翻译题的断句List */
+@property (nonatomic,strong) NSArray *QuesAskList;
 /** 新增 - 大题题型ID */
 @property (nonatomic,copy) NSString *TopicTypeID;
 /** 新增 - 小题作答点数 */
 @property (nonatomic,assign) NSInteger itemCount;
-
+/** 新增 - 大题题型名 */
+@property (nonatomic,copy) NSString *TopicTypeName;
 
 /** 新增 - 分句朗读 */
 @property (nonatomic,strong) NSArray<YJSpeechClauseModel *> *ClauseList;
 /**  新增 - 评测结果 */
 @property (nonatomic,strong) YJSpeechResultModel *speechResultModel;
-
+/** 新增 - 是否显示多答题点 */
+@property (nonatomic,assign) BOOL mutiBlankDisplayEnable;
+/** 新增 - 多答题点试题总分 */
+@property (nonatomic,assign) float mutiBlankQuesScore;
+/** 新增 - 多答题点试题总得分 */
+@property (nonatomic,assign) float mutiBlankQuesStuScore;
+/** 新增 - 多答题点实际索引 */
+@property (nonatomic,assign) NSInteger mutiBlankIndex;
 @end
 
 @interface YJPaperBigModel : YJBasePaperBigModel
@@ -98,9 +113,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *AudioResStr;
 /** 难度 */
 @property (nonatomic,copy) NSString *Difficulty;
-/** 重要知识点 */
+/** 重要知识点ID */
 @property (nonatomic,copy) NSString *ImportantKlg;
-/** 主要知识点 */
+/** 次要知识点ID */
 @property (nonatomic,copy) NSString *MainKlg;
 /** 大题索引 */
 @property (nonatomic,assign) NSInteger Index;
@@ -110,8 +125,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *PicResStr;
 /** 小题数量 */
 @property (nonatomic,assign) NSInteger QuesCount;
-/** 文本资源地址 */
+/** 文本资源地址:如听力原文 */
 @property (nonatomic,copy) NSString *TopicArticle;
+@property (nonatomic,copy) NSMutableAttributedString *TopicArticle_attr;
 /** 大题题目内容 */
 @property (nonatomic,copy) NSString *TopicContent;
 @property (nonatomic,copy) NSMutableAttributedString *TopicContent_attr;
@@ -139,8 +155,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) YJCorrectModel *GCQues;
 /** 小题List */
 @property (nonatomic,strong) NSArray<YJPaperSmallModel *> *Queses;
-
+@property (nonatomic,strong) NSArray *QuesOri;
+/** 重要知识点 */
 @property (nonatomic,copy) NSString *ImporKnText;
+/** 次要知识点 */
 @property (nonatomic,copy) NSString *MainKnText;
 @property (nonatomic,copy) NSString *ThemeKeywordCode;
 @property (nonatomic,copy) NSString *ThemeKeywordText;
@@ -154,6 +172,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *ResType;
 /** 听说作业ftp信息 */
 @property (nonatomic,copy) NSString *ftpPre;
+
+/** 新增 - 是否显示知识点信息 */
+@property (nonatomic,assign) BOOL klgInfoDisplayEnable;
+/** 新增-是否教师分析阶段 */
+@property (nonatomic,assign) BOOL taskStageTypeTeachAnalysis;
+
 @end
 
 @interface YJPaperModel : YJBasePaperModel

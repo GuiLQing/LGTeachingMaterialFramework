@@ -63,9 +63,9 @@
         
         [self.contentBgV addSubview:self.recordBtn];
         [self.recordBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.equalTo(self.contentBgV).offset(0);
-            make.right.equalTo(self.contentBgV).offset(0);
-            make.width.height.mas_equalTo(isSpeechMarkEnable ? 35 : 0);
+            make.bottom.equalTo(self.contentBgV).offset(isSpeechMarkEnable ? (IsIPad ? -15 : -10) : 0);
+            make.right.equalTo(self.contentBgV).offset(IsIPad ? - 10 : -5);
+            make.width.height.mas_equalTo(isSpeechMarkEnable ? (IsIPad ? 32 : 28) : 0);
         }];
         
         self.recordBtn.hidden = !isSpeechMarkEnable;
@@ -86,7 +86,7 @@
     if ([longGes state] == UIGestureRecognizerStateBegan) {
         [self.recordBtn setImage:[UIImage yj_imageNamed:@"yj_record_open" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateNormal];
         [[YJSpeechManager defaultManager] startEngineAtRefText:nil markType:YJSpeechMarkTypeASR];
-        [YJSpeechMarkView showSpeechMarkViewWithTitle:@"系统正在给你识别\n请稍候..."];
+        [YJSpeechMarkView showSpeechRecognizeView];
         if (self.SpeechMarkBlock) {
             self.SpeechMarkBlock();
         }
@@ -121,6 +121,10 @@
         self.recordBtn.enabled = NO;
         self.textView.placeholder = @"未作答";
     }
+}
+- (void)setHideSpeechBtn:(BOOL)hideSpeechBtn{
+    _hideSpeechBtn = hideSpeechBtn;
+    self.recordBtn.hidden = hideSpeechBtn;
 }
 - (void)setAnswerStr:(NSString *)answerStr{
     _answerStr = answerStr;
@@ -223,7 +227,7 @@
         _textView.scrollEnabled = NO;
         _textView.selectable = NO;
         _textView.userInteractionEnabled = NO;
-        _textView.font = [UIFont systemFontOfSize:16];
+        _textView.font = [UIFont systemFontOfSize:17];
     }
     return _textView;
 }

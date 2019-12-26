@@ -20,6 +20,7 @@
 @property (nonatomic,copy) void (^answerResultBlock) (NSString *result);
 
 @property (nonatomic,strong) UITextView *topicTextView;
+@property (nonatomic,strong) UILabel *titleLab;
 @property (nonatomic,strong) YJResizableSplitView *splitView;
 /** 是否发生更改 */
 @property (nonatomic,assign) BOOL isUpdate;
@@ -72,6 +73,7 @@
     titleL.font = [UIFont systemFontOfSize:17];
     titleL.textColor = [UIColor whiteColor];
     titleL.text = @"作文题";
+    self.titleLab = titleL;
     [navBar addSubview:titleL];
     [titleL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(navBar);
@@ -103,6 +105,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewWillDidBeginEditingNoti:) name:LGUITextViewWillDidBeginEditingCursorNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewWillDidEndEditingNoti:) name:LGUITextViewWillDidEndEditingNotification object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterBackgroundNoti) name:UIApplicationWillResignActiveNotification object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hide) name:@"YJAnswerTimerDidFinishCountdown" object:nil];
 }
 + (instancetype)showWithText:(NSString *)text answerResultBlock:(void (^)(NSString *))answerResultBlock{
@@ -116,6 +120,11 @@
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+
+- (void)enterBackgroundNoti{
+    [self endEditing:YES];
+}
+
 - (void)textViewWillDidBeginEditingNoti:(NSNotification *) noti{
     NSDictionary *info = noti.userInfo;
     CGFloat overstep = [[info objectForKey:@"offset"] floatValue];
@@ -163,7 +172,8 @@
 - (void)setTopicInfoAttr:(NSMutableAttributedString *)topicInfoAttr{
     _topicInfoAttr = topicInfoAttr;
     NSMutableAttributedString *attr = topicInfoAttr.mutableCopy;
-    [attr yj_setFont:18];
+    [attr yj_setFont:17];
+    [attr yj_setColor:LG_ColorWithHex(0x252525)];
     NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
     NSData *htmlData = [attr dataFromRange:NSMakeRange(0,attr.length) documentAttributes:exportParams error:nil];
     TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
@@ -174,6 +184,10 @@
         [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attr.length)];
     }
     self.topicTextView.attributedText = attr;
+}
+- (void)setTitleStr:(NSString *)titleStr{
+    _titleStr = titleStr;
+    self.titleLab.text = titleStr;
 }
 - (void)show{
     UIWindow *rootWindow = [UIApplication sharedApplication].keyWindow;
@@ -194,7 +208,11 @@
     
     __weak typeof(self) weakSelf = self;
     if (btn.tag == 2 && self.answerResultBlock) {
-        self.answerResultBlock(self.textView.text);
+        NSString *text = self.textView.text;
+        if (!IsStrEmpty(text) && IsStrEmpty([text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]])) {
+            text = @"";
+        }
+        self.answerResultBlock(text);
         [UIView animateWithDuration:0.2 animations:^{
             weakSelf.alpha = 0;
         } completion:^(BOOL finished) {
@@ -231,12 +249,11 @@
 - (LGBaseTextView *)textView{
     if (!_textView) {
         _textView = [[LGBaseTextView alloc] initWithFrame:CGRectZero];
-        _textView.font = [UIFont systemFontOfSize:16];
         [_textView setAutoCursorPosition:YES];
 //        _textView.assistHeight = 40;
         _textView.placeholder = @"请输入...";
         _textView.maxLength = 1000;
-        _textView.font = LG_SysFont(18);
+        _textView.font = LG_SysFont(17);
         _textView.limitType = YJTextViewLimitTypeEmojiLimit;
     }
     return _textView;

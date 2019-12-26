@@ -554,6 +554,18 @@ LGNNewFilterDelegate
         _tableView.requestStatus = LGBaseTableViewRequestStatusStartLoading;
     [_tableView lg_bindViewModel:self.viewModel];
     
+        
+        if (self.paramModel.SystemType ==SystemType_ALL || self.paramModel.SystemType ==SystemType_ASSISTANTER ||self.paramModel.SystemType ==SystemType_YPT) {
+            [self.tableView allocInitRefreshHeader:YES allocInitFooter:YES];
+            
+        }else{
+//            其他集成进来的 不分页  每次加载全部 不支持上拉加载更多
+            [self.tableView allocInitRefreshHeader:YES allocInitFooter:NO];
+        }
+        
+ 
+   
+        
         @weakify(self);
 
         self.tableView.notoDataCall = ^(NSInteger page) {
@@ -594,6 +606,12 @@ LGNNewFilterDelegate
         configure.style = (_systemType == SystemUsedTypeAssistanter) ? SearchToolViewStyleFilter:SearchToolViewStyleDefault;
         _toolView = [[LGNSearchToolView alloc] initWithFrame:CGRectZero configure:configure];
         _toolView.delegate = self;
+        if(_systemType ==SystemUsedTypeAssistanter){
+            _toolView.filterBtn.hidden = YES;
+             _toolView.remarkBtn.hidden = YES;
+        }
+        
+        
     }
     return _toolView;
 }

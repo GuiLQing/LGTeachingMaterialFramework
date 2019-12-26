@@ -37,7 +37,9 @@
         make.height.greaterThanOrEqualTo(@44);
     }];
     
-    BOOL isHideIndexBgImg = [NSUserDefaults yj_boolForKey:YJTaskModule_ImageLabelBgHidden_UserDefault_Key];
+}
+- (void)setIsHideIndexBgImg:(BOOL)isHideIndexBgImg{
+    _isHideIndexBgImg = isHideIndexBgImg;
     self.choiceLab.isHideIndexBgImg = isHideIndexBgImg;
 }
 - (void)setIsChoiced:(BOOL)isChoiced{
@@ -54,7 +56,8 @@
 }
 - (void)setTextAttr:(NSMutableAttributedString *)textAttr{
     _textAttr = textAttr;
-    [textAttr yj_setFont:16];
+    [textAttr yj_setFont:17];
+    [textAttr yj_setColor:LG_ColorWithHex(0x252525)];
     self.textView.attributedText = textAttr;
 }
 - (YJTaskChoiceLabel *)choiceLab{

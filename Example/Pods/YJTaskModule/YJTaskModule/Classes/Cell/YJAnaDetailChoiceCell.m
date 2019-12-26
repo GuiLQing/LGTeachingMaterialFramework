@@ -107,18 +107,67 @@ static CGFloat YJAnaDetailChoiceCollectionCellHeight = 80;
 
 - (void)setSmallModel:(YJBasePaperSmallModel *)smallModel{
     _smallModel = smallModel;
-    if (!IsStrEmpty(smallModel.yj_smallAnswerAnalysis)) {
-        self.analysisL.text = [NSString stringWithFormat:@"本题解析: %@",smallModel.yj_smallAnswerAnalysis];
+    if (!IsStrEmpty(smallModel.yj_smallComment) && ![kApiParams(self.analysisL.text) containsString:@"【本题评语】"]) {
+        self.analysisL.text = [NSString stringWithFormat:@"【本题评语】 %@",smallModel.yj_smallComment];
     }
-     [self.collectionView reloadData];
+    if (!IsStrEmpty(smallModel.yj_smallAnswerAnalysis) && ![kApiParams(self.analysisL.text) containsString:@"【本题解析】"]) {
+        NSString *text = kApiParams(self.analysisL.text);
+        if (!IsStrEmpty(text)) {
+            text = [text stringByAppendingString:@"\n"];
+        }
+        text = [text stringByAppendingString:[NSString stringWithFormat:@"【本题解析】 %@",smallModel.yj_smallAnswerAnalysis]];
+        self.analysisL.text = text;
+    }
+    [self.collectionView reloadData];
+}
+- (void)setImpKnText:(NSString *)impKnText{
+    _impKnText = impKnText;
+    if (!IsStrEmpty(impKnText) && ![kApiParams(self.analysisL.text) containsString:@"【重要考点】"]) {
+        NSString *text = kApiParams(self.analysisL.text);
+        if (!IsStrEmpty(text)) {
+            text = [text stringByAppendingString:@"\n"];
+        }
+        text = [text stringByAppendingString:[NSString stringWithFormat:@"【重要考点】 %@",impKnText]];
+        self.analysisL.text = text;
+    }
+    if (!IsStrEmpty(self.analysisL.text)) {
+        NSMutableAttributedString *attr = self.analysisL.text.yj_toMutableAttributedString;
+        [attr yj_setFont:17];
+        [attr yj_setColor:LG_ColorWithHex(0x333333)];
+        NSRange range = [attr.string rangeOfString:@"【重要考点】"];
+        if (range.location != NSNotFound) {
+            [attr yj_setColor:LG_ColorWithHex(0xff6600) atRange:range];
+        }
+        self.analysisL.attributedText = attr;
+    }
 }
 
-
+- (void)setMainKnText:(NSString *)mainKnText{
+    _mainKnText = mainKnText;
+    if (!IsStrEmpty(mainKnText) && ![kApiParams(self.analysisL.text) containsString:@"【次重要考点】"]) {
+        NSString *text = kApiParams(self.analysisL.text);
+        if (!IsStrEmpty(text)) {
+            text = [text stringByAppendingString:@"\n"];
+        }
+        text = [text stringByAppendingString:[NSString stringWithFormat:@"【次重要考点】%@",mainKnText]];
+        self.analysisL.text = text;
+    }
+    if (!IsStrEmpty(self.analysisL.text)) {
+        NSMutableAttributedString *attr = self.analysisL.text.yj_toMutableAttributedString;
+        [attr yj_setFont:17];
+        [attr yj_setColor:LG_ColorWithHex(0x333333)];
+        NSRange range = [attr.string rangeOfString:@"【重要考点】"];
+        if (range.location != NSNotFound) {
+            [attr yj_setColor:LG_ColorWithHex(0xff6600) atRange:range];
+        }
+        self.analysisL.attributedText = attr;
+    }
+}
 - (UICollectionView *)collectionView{
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.minimumInteritemSpacing = 1;
-        CGFloat itemW = (LG_ScreenWidth - 2)/3;
+        CGFloat itemW = (LG_ScreenWidth - 3)/3;
         layout.itemSize = CGSizeMake(itemW, YJAnaDetailChoiceCollectionCellHeight-2);
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         _collectionView.contentInset = UIEdgeInsetsMake(1, 0, 1, 0);

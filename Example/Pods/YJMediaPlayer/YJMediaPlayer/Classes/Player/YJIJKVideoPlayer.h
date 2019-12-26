@@ -48,6 +48,7 @@
 
 - (void)setPlayerModelSrt:(YJIJKSrtModel *)srt;
 - (void)setisMute:(BOOL)mute;
+- (void)setSrtFontSize:(CGFloat)fontSize;
 /**
  *  在当前页面，设置新的视频时候调用此方法
  */
@@ -63,7 +64,8 @@
 - (void)pauseVideo;
 /** 停止视频播放 */
 - (void)stopVideo;
-
+/** 当前播放状态 */
+- (YJIJKPlayerState)currentPlayState;
 /** 销毁视频 */
 - (void)destroyVideo;
 

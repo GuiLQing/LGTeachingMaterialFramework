@@ -38,7 +38,12 @@
         [self registerClass:[LGNNoteMainTableViewCell class] forCellReuseIdentifier:NSStringFromClass([LGNNoteMainTableViewCell class])];
         [self registerClass:[LGNNoteMainImageTableViewCell class] forCellReuseIdentifier:NSStringFromClass([LGNNoteMainImageTableViewCell class])];
         [self registerClass:[LGNNoteMoreImageTableViewCell class] forCellReuseIdentifier:NSStringFromClass([LGNNoteMoreImageTableViewCell class])];
-        [self allocInitRefreshHeader:YES allocInitFooter:YES];
+        
+  
+//            [self allocInitRefreshHeader:YES allocInitFooter:YES];
+        
+        
+        
         
          
     }
@@ -51,6 +56,9 @@
 - (void)lg_bindViewModel:(id)viewModel{
     self.viewModel = viewModel;
     @weakify(self);
+    
+  
+    
     [self.viewModel.refreshSubject subscribeNext:^(NSArray *  _Nullable x) {
         
         
@@ -99,9 +107,17 @@
     
     [self.viewModel.operateSubject subscribeNext:^(id  _Nullable x) {
         @strongify(self);
+        
+        if([x containsString:@"失败"]){
+        self.requestStatus = LGBaseTableViewRequestStatusNormal;
+            [self reloadData];
+            return ;
+        }
+        
         if (x) {
             self.requestStatus = LGBaseTableViewRequestStatusStartLoading;
             [self.viewModel.refreshCommand execute:self.viewModel.paramModel];
+            [self.mj_footer endRefreshing];
             _allCount = 0;
         }
     }];
@@ -112,6 +128,7 @@
         
         self.dataArray = x;
         self.requestStatus = IsArrEmpty(x) ? LGBaseTableViewRequestStatusNoData:LGBaseTableViewRequestStatusNormal;
+        // [self.mj_footer endRefreshing];
         [self reloadData];
         _allCount = 0;
     }];
@@ -149,8 +166,9 @@
       //  cell.tag =1;
         cell.searchContent =_searchContent;
         cell.isSearchVC = _isSearchVC;
-        
+         cell.MaterialName = self.viewModel.paramModel.MaterialName;
         [cell configureCellForDataSource:model indexPath:indexPath];
+       
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
 
         return cell;
@@ -169,7 +187,9 @@
         LGNNoteMainImageTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([LGNNoteMainImageTableViewCell class]) forIndexPath:indexPath];
         cell.searchContent =_searchContent;
         cell.isSearchVC = _isSearchVC;
+          cell.MaterialName = self.viewModel.paramModel.MaterialName;
         [cell configureCellForDataSource:model indexPath:indexPath];
+        
          cell.selectionStyle = UITableViewCellSelectionStyleGray;
         return cell;
     } else {
@@ -186,7 +206,9 @@
         LGNNoteMoreImageTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([LGNNoteMoreImageTableViewCell class]) forIndexPath:indexPath];
         cell.searchContent =_searchContent;
         cell.isSearchVC = _isSearchVC;
+        cell.MaterialName = self.viewModel.paramModel.MaterialName;
         [cell configureCellForDataSource:model indexPath:indexPath];
+      
          cell.selectionStyle = UITableViewCellSelectionStyleBlue;
         //self.selectionStyle = UITableViewCellSelectionStyleNone;
 
@@ -271,7 +293,9 @@
         @weakify(self);
         [kMBAlert showAlertControllerOn:self.ownerController title:@"提示" message:@"您确定要删除该条笔记吗?" oneTitle:@"确定" oneHandle:^(UIAlertAction * _Nonnull one) {
             @strongify(self);
-            self.requestStatus = LGBaseTableViewRequestStatusStartLoading;
+           
+            self.requestStatus = LGBaseTableViewRequestDeleteLoading;
+            
             NSDictionary *param = [self configureOperatedModel:model];
             [self.viewModel.operateCommand execute:param];
         } twoTitle:@"取消" twoHandle:^(UIAlertAction * _Nonnull two) {
@@ -300,7 +324,9 @@
         @weakify(self);
         [kMBAlert showAlertControllerOn:self.ownerController title:@"提示" message:@"您确定要删除该条笔记吗?" oneTitle:@"确定" oneHandle:^(UIAlertAction * _Nonnull one) {
             @strongify(self);
-            self.requestStatus = LGBaseTableViewRequestStatusStartLoading;
+            
+           
+            self.requestStatus = LGBaseTableViewRequestDeleteLoading;
             NSDictionary *param = [self configureOperatedModel:model];
             [self.viewModel.operateCommand execute:param];
         } twoTitle:@"取消" twoHandle:^(UIAlertAction * _Nonnull two) {

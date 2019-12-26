@@ -41,7 +41,7 @@
             
             do {
                 
-                if ([presentingViewController isKindOfClass:NSClassFromString(@"LGTMNavigationViewController")]||[presentingViewController isKindOfClass:NSClassFromString(@"LGStuTabBarController")]||[presentingViewController isKindOfClass:NSClassFromString(@"AIESideNavigationController")]) {
+                if ([presentingViewController isKindOfClass:NSClassFromString(@"LGTMNavigationViewController")]||[presentingViewController isKindOfClass:NSClassFromString(@"LGStuTabBarController")]||[presentingViewController isKindOfClass:NSClassFromString(@"AIESideNavigationController")]||[presentingViewController isKindOfClass:NSClassFromString(@"MFBaseNavigationController")]) {
                     
                     
                     break;
@@ -74,6 +74,18 @@
     } else {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
+}
+
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationPortrait;
 }
 
 @end

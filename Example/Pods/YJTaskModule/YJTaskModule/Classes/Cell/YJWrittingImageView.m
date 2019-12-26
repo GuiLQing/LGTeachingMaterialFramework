@@ -64,6 +64,9 @@ static NSInteger maxUploadCount = 3;
     [self.collectionView reloadData];
 }
 - (CGFloat)collectionViewItemWidth{
+    if (IsIPad) {
+        return 120;
+    }
     return (LG_ScreenWidth - 80)/3;
 }
 - (void)uploadImageWithImgArr:(NSArray *)imgArr Completion:(void (^) (NSArray *imgUrlArr)) completion{
@@ -136,7 +139,7 @@ static NSInteger maxUploadCount = 3;
     __weak typeof(self) weakSelf = self;
     [LGTPhotoManage manage].ownController = [UIViewController yj_topControllerForController:[UIApplication sharedApplication].delegate.window.rootViewController];
 
-    [LGAlert alertSheetWithTitle:@"作业图片" message:nil canceTitle:@"取消" buttonTitles:@[@"拍摄照片",@"从手机相册中选取"] buttonBlock:^(NSInteger index) {
+    [LGAlert alertSheetWithTitle:@"作业图片" message:nil canceTitle:@"取消" buttonTitles:@[@"拍摄照片",@"从本地相册中选取"] buttonBlock:^(NSInteger index) {
         if (index == 0) {
             [weakSelf.photoManager photoFromCamera];
         }else{

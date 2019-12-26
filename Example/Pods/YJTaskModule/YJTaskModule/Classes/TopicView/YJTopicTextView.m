@@ -12,7 +12,7 @@
 #import "YJConst.h"
 
 #define kYJTextColor LG_ColorWithHex(0x06C6F4)
-static CGFloat kYJTextFontSize = 16;
+static CGFloat kYJTextFontSize = 17;
 @implementation YJTextAttachment
 @end
 
@@ -83,6 +83,9 @@ static CGFloat kYJTextFontSize = 16;
                     textFiled.backgroundColor = kYJTextColor;
                     textFiled.textColor = [UIColor whiteColor];
                     NSString *placeholder = @"(1)";
+                    if (!IsArrEmpty(self.topicIndexs)) {
+                        placeholder = self.topicIndexs.firstObject;
+                    }
                     NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:textFiled.font}];
                     textFiled.attributedPlaceholder = attrString;
                     YJTextAttachment *textAttachment = [[YJTextAttachment alloc] initWithData:nil ofType:nil] ;
@@ -102,6 +105,10 @@ static CGFloat kYJTextFontSize = 16;
     }
     
     [blankAttrString yj_setFont:kYJTextFontSize];
+    [blankAttrString yj_setColor:LG_ColorWithHex(0x252525)];
+    if ([blankAttrString.string rangeOfString:@"【听力原文】"].location != NSNotFound) {
+        [blankAttrString yj_setColor:LG_ColorWithHex(0xb06223) atRange:[blankAttrString.string rangeOfString:@"【听力原文】"]];
+    }
     NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
     NSData *htmlData = [blankAttrString dataFromRange:NSMakeRange(0,blankAttrString.length) documentAttributes:exportParams error:nil];
     TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
@@ -116,6 +123,10 @@ static CGFloat kYJTextFontSize = 16;
 - (void)setTopicContentAttr:(NSAttributedString *)topicContentAttr{
     NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:topicContentAttr];
     [attr yj_setFont:kYJTextFontSize];
+    [attr yj_setColor:LG_ColorWithHex(0x252525)];
+    if ([attr.string rangeOfString:@"【听力原文】"].location != NSNotFound) {
+        [attr yj_setColor:LG_ColorWithHex(0xb06223) atRange:[attr.string rangeOfString:@"【听力原文】"]];
+    }
     NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
     NSData *htmlData = [attr dataFromRange:NSMakeRange(0,attr.length) documentAttributes:exportParams error:nil];
     TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
@@ -141,6 +152,9 @@ static CGFloat kYJTextFontSize = 16;
     for (NSInteger i = 0; i < count; i++) {
         YJBlankTextField *textFiled = self.blankTextFieldArray[i];
         NSString *placeholder = [NSString stringWithFormat:@"(%li)",i+1];
+         if (!IsArrEmpty(self.topicIndexs) && i <= self.topicIndexs.count-1) {
+             placeholder = [self.topicIndexs yj_objectAtIndex:i];
+         }
         UIColor *placeholderColor;
         if (i == currentSmallIndex) {
             textFiled.backgroundColor = kYJTextColor;
@@ -163,6 +177,7 @@ static CGFloat kYJTextFontSize = 16;
     self.attributedText = attr;
     
 }
+
 - (void)setAnswerResults:(NSArray<NSString *> *)answerResults{
     NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:self.attributedText];
     // 匹配题容错处理
@@ -197,6 +212,9 @@ static CGFloat kYJTextFontSize = 16;
     btn.tag = self.blankTextFieldArray.count;
     [self.blankTextFieldArray addObject:btn];
     NSString *placeholder = [NSString stringWithFormat:@"(%li)",self.blankTextFieldArray.count];
+    if (!IsArrEmpty(self.topicIndexs) && self.topicIndexs.count >= self.blankTextFieldArray.count) {
+        placeholder = [self.topicIndexs yj_objectAtIndex:self.blankTextFieldArray.count-1];
+    }
     NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:kYJTextColor,NSFontAttributeName:btn.font}];
     btn.attributedPlaceholder = attrString;
     btn.textColor = kYJTextColor;

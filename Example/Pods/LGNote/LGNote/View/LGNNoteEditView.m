@@ -270,6 +270,7 @@ HPTextViewTapGestureRecognizerDelegate
     self.viewModel = viewModel;
     self.titleTextF.text = viewModel.dataSourceModel.NoteTitle;
     
+    
     self.contentTextView.attributedText = viewModel.dataSourceModel.NoteContent_Att;
     
     if([self.viewModel.dataSourceModel.SystemID isEqualToString:@"S21"] ||[self.viewModel.dataSourceModel.SystemID isEqualToString:@"S22"]||[self.viewModel.dataSourceModel.SystemID isEqualToString:@"000"]||[self.viewModel.dataSourceModel.SystemID isEqualToString:@"B30"]){
@@ -304,12 +305,21 @@ HPTextViewTapGestureRecognizerDelegate
     self.subjectArray = [self.viewModel configureSubjectPickerDataSource];
     
     
+if(self.viewModel.paramModel.SystemType==SystemType_HOME && self.canEditing ==YES){
+        
+        [self.sourceBtn setTitle:viewModel.paramModel.MaterialName forState:UIControlStateNormal];
+}else if (self.viewModel.paramModel.SystemType==SystemType_DZJCK){
     
-    NSLog(@"%@",viewModel.dataSourceModel.ResourceName);
+     [self.sourceBtn setTitle:viewModel.paramModel.MaterialName forState:UIControlStateNormal];
+}
+
+else{
+        [self.sourceBtn setTitle:viewModel.dataSourceModel.ResourceName forState:UIControlStateNormal];
+    }
     
     
-     [self.sourceBtn setTitle:viewModel.dataSourceModel.ResourceName forState:UIControlStateNormal];
     
+   
     @weakify(self)
     [[self.viewModel getSubjectIDAndPickerSelectedForSubjectArray:viewModel.subjectArray subjectName:viewModel.dataSourceModel.SubjectName] subscribeNext:^(NSArray * _Nullable subjectSelectedData) {
         @strongify(self);
@@ -421,7 +431,13 @@ HPTextViewTapGestureRecognizerDelegate
     for (int i = 0; i < imageArr.count; i ++) {
         YBImageBrowseCellData *data = [YBImageBrowseCellData new];
         data.url = imageArr[i];
-       NSString *str1 = [data.url absoluteString];;
+       NSString *str1 = [data.url absoluteString];
+        
+        if ([urlStr containsString:@".jpg"]) {
+            urlStr = [urlStr stringByReplacingOccurrencesOfString:@".png" withString:@""];
+            
+        }
+        
      if([str1 containsString:urlStr]){
          //保存照片index
          _photoIndex = i;
@@ -953,6 +969,8 @@ HPTextViewTapGestureRecognizerDelegate
         _titleTextF = [[LGNoteBaseTextField alloc] init];
         _titleTextF.borderStyle = UITextBorderStyleNone;
         _titleTextF.backgroundColor = [UIColor whiteColor];
+        _titleTextF.userInteractionEnabled = YES;
+        //_titleTextF.intrinsicContentSize
         _titleTextF.placeholder = @"请输入笔记标题(50字内)";
         _titleTextF.leftView = nil;
         _titleTextF.lgDelegate = self;

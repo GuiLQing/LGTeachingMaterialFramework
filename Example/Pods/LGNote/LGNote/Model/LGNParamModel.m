@@ -144,7 +144,7 @@
             _SystemName = @"学习小助手";
             break;
          case SystemType_ZNT:
-            _SystemName = @"重难题辅导";
+            _SystemName = @"错难题复习";
             break;
         case SystemType_YPT:
             _SystemName = @"蓝鸽云平台";
@@ -155,9 +155,15 @@
         case SystemType_XYTJ:
             _SystemName = @"学友推荐";
             break;
+        case SystemType_ZHJS:
+            _SystemName = @"智慧教室";
+            break;
+        case SystemType_DZJCK:
+            _SystemName = @"电子教材库";
+            break;
             
         default:
-            _SystemName = @"重难题辅导";
+            _SystemName = @"错难题复习";
             break;
             
     }

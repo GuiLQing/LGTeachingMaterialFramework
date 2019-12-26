@@ -57,33 +57,23 @@
     }
     return self;
 }
-
+- (CGFloat)listenBgViewWidth{
+    CGFloat listenBgViewWidth = LG_ScreenWidth-40;
+    if (IsIPad) {
+        listenBgViewWidth = 420;
+    }
+    return listenBgViewWidth;
+}
 - (void)layoutUI{
   
-    UIView *listenContentView = [UIView new];
-    [self addSubview:listenContentView];
-    [listenContentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(self);
-        make.left.equalTo(self).offset(20);
-        make.height.mas_equalTo(44);
-    }];
-    
-    
     [self addSubview:self.listenBgView];
     [self.listenBgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(self);
-        make.left.equalTo(self).offset(20);
-        make.height.mas_equalTo(44);
+        make.width.mas_equalTo(self.listenBgViewWidth);
+        make.height.mas_equalTo(42);
     }];
     
-    listenContentView.layer.cornerRadius = 22;
-    listenContentView.layer.shadowOpacity = 0.5;
-    listenContentView.layer.shadowColor = LG_ColorWithHex(0x00C3F2).CGColor;
-    listenContentView.layer.shadowOffset =  CGSizeMake(0, 2.0);
-    UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(3, 2, LG_ScreenWidth-40-6, 44) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(22, 22)];
-    listenContentView.layer.shadowPath = bezierPath.CGPath;
-    
-    [self.listenBgView yj_clipLayerWithRadius:22 width:0 color:nil];
+     [self.listenBgView yj_shadowWithCornerRadius:21 borderWidth:0 borderColor:nil shadowColor:LG_ColorWithHex(0x00C3F2) shadowOpacity:0.5 shadowOffset:CGSizeMake(0, 2.0) roundedRect:CGRectMake(3, 1, self.listenBgViewWidth-6, 42) cornerRadii:CGSizeMake(21, 21) rectCorner:UIRectCornerAllCorners];
     
     [self.listenBgView addSubview:self.playBtn];
     [self.playBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -156,9 +146,9 @@
 
 - (void)ApplicationWillResign:(NSNotification *) noti{
     if (self.listenPlayer.isPlaying) {
-        self.pauseByResign = YES;
         [self pausePlayer];
     }
+    self.pauseByResign = YES;
 
 }
 - (void)stopPlayer{
@@ -167,6 +157,8 @@
 - (void)pausePlayer{
     [self.listenPlayer pause];
     self.playBtn.selected = NO;
+    // 开启屏保
+    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
 }
 
 - (void)slideAction:(UISlider *)slide{
@@ -177,19 +169,19 @@
     if (IsArrEmpty(urlArr)) {
         return;
     }
-    if (urlArr.count <= 1) {
+//    if (urlArr.count <= 1) {
         self.listenListBtn.hidden = YES;
         [self.listenListBtn mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(0);
         }];
         self.titleNameL.hidden = YES;
-    }else{
-        self.listenListBtn.hidden = NO;
-        [self.listenListBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.width.mas_equalTo(28);
-        }];
-        self.titleNameL.hidden = NO;
-    }
+//    }else{
+//        self.listenListBtn.hidden = NO;
+//        [self.listenListBtn mas_updateConstraints:^(MASConstraintMaker *make) {
+//            make.width.mas_equalTo(28);
+//        }];
+//        self.titleNameL.hidden = NO;
+//    }
     self.titleNameL.text = self.urlNameArr[self.currentIndex];
     NSString *url = self.urlArr[self.currentIndex];
     if ([url.lowercaseString hasPrefix:@"http"]) {
@@ -203,13 +195,16 @@
 - (void)listenListClickAction:(UIButton *) btn{
     CGPoint relativePoint = [self convertRect: self.bounds toView: [UIApplication sharedApplication].keyWindow].origin;
     CGSize relativeSize = [self convertRect: self.bounds toView: [UIApplication sharedApplication].keyWindow].size;
-    YJListenListView *listView = [YJListenListView showOnView:[UIApplication sharedApplication].keyWindow frame:CGRectMake(42, relativePoint.y+relativeSize.height, LG_ScreenWidth-84, (self.urlNameArr.count > 5 ? 5:self.urlNameArr.count)*44)];
+    CGFloat listViewX = (LG_ScreenWidth - self.listenBgViewWidth)/2 + 22;
+    YJListenListView *listView = [YJListenListView showOnView:[UIApplication sharedApplication].keyWindow frame:CGRectMake(listViewX, relativePoint.y+relativeSize.height, LG_ScreenWidth-listViewX*2, (self.urlNameArr.count > 5 ? 5:self.urlNameArr.count)*44)];
     listView.delegate = self;
     listView.currentIndex = self.currentIndex;
     listView.listenTitles = self.urlNameArr;
     self.listenListBtn.imageView.transform = CGAffineTransformMakeRotation(M_PI);
 }
 - (void)buttonAction:(UIButton *)button{
+    [[NSNotificationCenter defaultCenter] postNotificationName:YJTaskModule_StopYJTaskTopicVoicePlay_Notification object:nil userInfo:nil];
+    self.pauseByResign = NO;
     if (self.delegate && [self.delegate respondsToSelector:@selector(didClickPlay)]) {
         [self.delegate didClickPlay];
     }
@@ -237,6 +232,7 @@
             };
         }else{
             button.selected = YES;
+            self.playProgress.userInteractionEnabled = YES;
             if (![self.listenPlayer isPlaying]) {
                 [self.listenPlayer play];
             }
@@ -246,6 +242,8 @@
         button.selected = NO;
         if ([self.listenPlayer isPlaying]) {
             [self.listenPlayer pause];
+            // 开启屏保
+            [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
         }
     }
 }
@@ -291,7 +289,6 @@
     self.totalPlayTimeL.text = [self timeWithInterVal:totalDuration];
     if (!self.pauseByResign) {
         self.BtnTapBlock();
-        self.pauseByResign = NO;
     }
 }
 - (void)yj_listenPlayer:(YJListenPlayer *)player totalBuffer:(CGFloat)totalBuffer{
@@ -303,11 +300,19 @@
     self.playProgress.value = progress/_totalDuration;
     self.currentPlayTimeL.text = [self timeWithInterVal:progress];
     
+     if (_totalDuration > 0 && self.listenPlayer.isPlaying) {
+         // 关闭屏保
+         [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+     }
+    
     if (progress > 0 && self.delegate && [self.delegate respondsToSelector:@selector(YJListenView:currentPlayProgress:totalDuration:)]) {
         [self.delegate YJListenView:self currentPlayProgress:progress totalDuration:_totalDuration];
     }
 }
 - (void)yj_listenPlayerDidPlayFinish{
+    // 开启屏保
+    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
+    self.playProgress.userInteractionEnabled = NO;
     self.playBtn.selected = NO;
     self.playProgress.value = 0;
     [self.listenPlayer stop];
@@ -321,7 +326,10 @@
     [self.listenPlayer play];
 }
 - (void)yj_listenPlayerDidPlayFail{
+    // 开启屏保
+    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     [self indicatorViewStop];
+    [self.listenPlayer stop];
     self.playBtn.selected = NO;
     self.playProgress.userInteractionEnabled = NO;
     [LGAlert showStatus:@"音频资源加载失败"];

@@ -79,11 +79,18 @@
        // self.contentView.remarkBtn.enabled = NO;
         self.contentView.remarkBtn.userInteractionEnabled = NO;
         
+        if([self.sourceModel.IsKeyPoint isEqualToString:@"0"]){
+             self.contentView.remarkBtn.hidden = YES;
+        }
+        
+       
+
+        
         self.contentView.subjectBtn.enabled = NO;
     }else{
         
         self.contentView.canEditing = YES;
-        
+         [self.contentView.titleTextF becomeFirstResponder];
     }
     
 }
@@ -142,13 +149,13 @@
         
         self.title = @"编辑笔记";
     
-       
-      
-        self.navigationItem.rightBarButtonItem.title=@"完成";
+     self.navigationItem.rightBarButtonItem.title=@"完成";
         self.contentView.titleTextF.enabled = YES;
         [self.contentView.contentTextView setEditable:YES];
         self.contentView.canEditing = YES;
        // self.contentView.remarkBtn.enabled = YES;
+        self.contentView.remarkBtn.hidden = NO;
+        
          self.contentView.remarkBtn.userInteractionEnabled = YES;
         if(self.paramModel.SystemType ==SystemType_ASSISTANTER ||self.paramModel.SystemType ==SystemType_YPT ){
         self.contentView.subjectBtn.enabled = YES;
@@ -174,8 +181,6 @@
 
 
     NSLog(@"%@===%@",_NotoContent,self.sourceModel.NoteContent);
-    
-    
 
         if(!IsStrEmpty(_NotoContent) && ![_NotoContent isEqualToString:self.sourceModel.NoteContent] ) {
             
@@ -297,16 +302,22 @@
         return;
     }
     
+    if([self.sourceModel.SystemName isEqualToString:@"课后作业"]){
+        
+        self.sourceModel.ResourceName = self.paramModel.MaterialName;
+        self.viewModel.dataSourceModel.ResourceName =self.paramModel.MaterialName;
+    }
+    
 
     
-    [kMBAlert showIndeterminateWithStatus:@"正在进行，请稍等..."];
+    [kMBAlert showIndeterminateWithStatus:@"正在上传..."];
     
     
     
   
 
 
-    [self.viewModel.operateCommand execute:[self.sourceModel mj_keyValues]];
+   [self.viewModel.operateCommand execute:[self.sourceModel mj_keyValues]];
     
     
     
@@ -315,6 +326,8 @@
     @weakify(self);
     [self.viewModel.operateSubject subscribeNext:^(id  _Nullable x) {
         @strongify(self);
+        
+        
         if (x && self.updateSubject) {
             [self.navigationController popViewControllerAnimated:YES];
             
@@ -376,10 +389,10 @@
         }
         _contentView = [[LGNNoteEditView alloc] initWithFrame:CGRectZero headerViewStyle:style];
         _contentView.ownController = self;
+        self.contentView.canEditing = self.isNewNote;
         [_contentView bindViewModel:self.viewModel];
         
-    
-        
+
      
     }
     return _contentView;

@@ -19,6 +19,8 @@ static NSString *UserDefaults_YJTaskStageType = @"UserDefaults_YJTaskStageType";
 static NSString *UserDefaults_YJTaskOfflineAssignmentID = @"UserDefaults_YJTaskOfflineAssignmentID";
 static NSString *UserDefaults_YJAnswerOfflineStatus = @"UserDefaults_YJAnswerOfflineStatus";
 static NSString *UserDefaults_YJAnswerOfflineAutoSubmitStatus = @"UserDefaults_YJAnswerOfflineAutoSubmitStatus";
+
+
 /** 作业阶段类型 */
 typedef NS_ENUM(NSInteger, YJTaskStageType) {
     YJTaskStageTypeAnswer = 0,              //作答
@@ -67,6 +69,8 @@ typedef NS_ENUM(NSInteger, YJSmallTopicType) {
 NS_ASSUME_NONNULL_BEGIN
 @protocol YJPaperSmallProtocol <NSObject>
 @optional
+/** 翻译题断句List */
+- (NSArray *)yj_smallQuesAskList;
 /** 小题作答类型 */
 - (YJSmallTopicType)yj_smallTopicType;
 /** 小题作答模式ID */
@@ -77,8 +81,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSMutableAttributedString *)yj_smallTopicAttrText;
 /** 小题题干信息(富文本)-不含索引 */
 - (NSMutableAttributedString *)yj_smallTopicContentAttrText;
+/** 答题点数 */
+- (NSInteger)yj_smallItemCount;
 /** 小题分值 */
 - (NSString *)yj_smallScore;
+/** 多答题点的小题分值 */
+- (NSString *)yj_smallMutiBlankScore;
+/** 多答题点的小题总得分 */
+- (NSString *)yj_smallMutiBlankAnswerScore;
 /** 小题解析 */
 - (NSString *)yj_smallAnswerAnalysis;
 /** 小题参考答案 */
@@ -92,10 +102,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)yj_smallStuScore;
 /** 智能评阅得分 */
 - (NSString *)yj_smallIntelligenceScore;
+/** 小题评语 */
+- (NSString *)yj_smallComment;
 /** 小题审核互评得分 */
 - (NSString *)yj_smallCheckHpScore;
 /** 小题索引 */
 - (NSInteger)yj_smallIndex;
+- (NSString *)yj_smallIndex_Ori;
+- (NSInteger)yj_smallMutiBlankIndex;
 /** 小题自增索引 */
 - (NSInteger)yj_smallPaperIndex;
 /** 小题是否需要互评 */
@@ -105,6 +119,11 @@ NS_ASSUME_NONNULL_BEGIN
 /** 审核：互评评分的学生名 */
 - (NSString *)yj_taskHpStuName;
 
+/** 英译中隐藏语音按钮 */
+- (BOOL)yj_hideSpeechBtn;
+- (BOOL)yj_translateTopic;
+/** 大题题型名 */
+- (NSString *)yj_bigTopicTypeName;
 /** 文本资源地址 */
 - (NSString *)yj_smallTopicArticle;
 /** 是否离线 */
@@ -120,10 +139,18 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 /** 大题作答类型 */
 - (YJBigTopicType)yj_bigTopicType;
-/** 大题题型及分数 */
+/** 大题题型名 */
 - (NSString *)yj_bigTopicTypeName;
 /** 大题题干信息 */
 - (NSString *)yj_topicContent;
+/** 听力原文信息 */
+- (NSString *)yj_topicListenText;
+/** 是否显示知识点信息 */
+- (BOOL)yj_showTopicKlgInfo;
+/** 重要知识点 */
+- (NSString *)yj_topicImpKlgInfo;
+/** 次重要知识点 */
+- (NSString *)yj_topicMainKlgInfo;
 /** 大题题干导语信息 */
 - (NSString *)yj_topicDirectionTxt;
 /** 大题题干信息(富文本) */
@@ -140,6 +167,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 音频名数组 */
 - (NSArray *)yj_bigMediaNames;
 /** 选词作答(选词填空，匹配题等)作答答案List */
+- (NSArray<NSString *> *)yj_bigChioceBlankTopicIndexList;
 - (NSArray<NSString *> *)yj_bigChioceBlankAnswerList;
 /** 大题ID */
 - (NSString *)yj_bigTopicID;
@@ -180,6 +208,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 改错题导语 */
 - (NSString *)yj_correntTopicPintro;
 - (YJCorrectModel *)yj_correctModel;
+/** 是否教师分析阶段 */
+- (BOOL)yj_teachAnalysisStage;
+
 @end
 
 @protocol YJPaperProtocol <NSObject>

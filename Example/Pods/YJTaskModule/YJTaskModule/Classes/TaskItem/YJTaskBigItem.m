@@ -94,11 +94,26 @@
             }
         }
     }else{
-        for (int i = 0; i < self.bigModel.yj_smallTopicList.count; i++) {
+        NSInteger smallCount = 0;
+        YJBasePaperSmallModel *lastSmallModel = (YJBasePaperSmallModel *)self.bigModel.yj_smallTopicList.lastObject;
+        if (!IsStrEmpty(lastSmallModel.yj_smallIndex_Ori)) {
+            smallCount = [[lastSmallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue]+1;
+        }else{
+            smallCount = lastSmallModel.yj_smallIndex+1;
+        }
+        for (int i = 0; i < smallCount; i++) {
             YJBasePaperSmallModel *smallModel = (YJBasePaperSmallModel *)self.bigModel.yj_smallTopicList[i];
+            if (!IsStrEmpty(smallModel.yj_smallIndex_Ori) ) {
+                smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:smallModel.yj_smallMutiBlankIndex];
+                
+            }
             YJTaskBaseSmallItem *smallItem = [[[self.bigModel taskClassByTaskStageType:taskStageType] alloc] initWithFrame:CGRectZero smallPModel:smallModel taskStageType:taskStageType];
+            if (i == smallCount-1) {
+                smallItem.lastSmallItem = YES;
+            }
+            smallItem.bigModel = self.bigModel;
             smallItem.delegate = self;
-            smallItem.totalTopicCount = self.bigModel.yj_smallTopicList.count;
+            smallItem.totalTopicCount = smallCount;
             smallItem.currentIndex = i;
             [contentView addSubview:smallItem];
             if (i == 0) {
@@ -114,7 +129,7 @@
                     make.width.mas_equalTo(LG_ScreenWidth);
                 }];
             }
-            if (i == self.bigModel.yj_smallTopicList.count-1) {
+            if (i == smallCount-1) {
                 [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.right.equalTo(smallItem.mas_right);
                 }];
@@ -127,7 +142,9 @@
         if (self.bigTopicView.taskStageType == YJTaskStageTypeAnalysis ||
             self.bigTopicView.taskStageType == YJTaskStageTypeAnalysisNoSubmit ||
             self.bigTopicView.taskStageType == YJTaskStageTypeCheck ||
-            self.bigTopicView.taskStageType == YJTaskStageTypeCheckViewer) {
+            self.bigTopicView.taskStageType == YJTaskStageTypeCheckViewer ||
+            self.bigTopicView.taskStageType == YJTaskStageTypeViewer ||
+            self.bigTopicView.taskStageType == YJTaskStageTypeAnaLysisTopicViewer) {
             self.splitView.dragEnable = YES;
         }else{
             self.splitView.dragEnable = NO;
@@ -150,15 +167,37 @@
 #pragma mark Public
 
 - (void)stopListen{
+    [self stopTaskBaseSmallItemVoicePlay];
     [self.bigTopicView stopListen];
 }
 - (void)pauseListen{
     [self.bigTopicView pauseListen];
 }
-- (void)updateCurrentSmallItem{
+- (void)updateCurrentSmallItemWithAnswer:(NSString *)answer{
     YJTaskBaseSmallItem *smallItem = [self.smallScrollContentView.subviews yj_objectAtIndex:self.currentSmallIndex];
+    YJBasePaperSmallModel *smallModel = (YJBasePaperSmallModel *)self.bigModel.yj_smallTopicList[self.currentSmallIndex];
+    if (!IsArrEmpty(smallModel.yj_smallQuesAskList)) {
+        NSString *answerStr = @"";
+        if (!IsStrEmpty(smallModel.yj_smallAnswer)) {
+            NSArray *answerStrList = [smallModel.yj_smallAnswer componentsSeparatedByString:YJTaskModule_u2060];
+            NSInteger index = smallItem.currentSmallIndex;
+            if (index <= answerStrList.count - 1) {
+                answerStr = answerStrList[index];
+            }
+        }
+      answerStr = [NSString stringWithFormat:@"%@ %@",answerStr,answer];
+      [smallModel updateSmallAnswerStr:answerStr atIndex:smallItem.currentSmallIndex];
+    }else{
+        if (!IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
+            smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:smallModel.yj_smallMutiBlankIndex];
+            smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(smallItem.currentSmallIndex + smallModel.yj_smallIndex)];
+            
+        }
+        smallModel.yj_smallAnswer = [NSString stringWithFormat:@"%@ %@",kApiParams(smallModel.yj_smallAnswer),answer];
+    }
+    
     [smallItem updateData];
-    YJBasePaperSmallModel *smallModel = [self.bigModel.yj_smallTopicList yj_objectAtIndex:self.currentSmallIndex];
+    
     if (!self.bigModel.yj_topicCarkMode && (smallModel.yj_smallTopicType == YJSmallTopicTypeBlank)) {
         [self YJ_blankAnswerUpdate];
     }
@@ -207,6 +246,7 @@
 }
 - (void)YJ_choiceTopicDidAnswer{
     if (self.currentSmallIndex < self.bigModel.yj_smallTopicList.count-1) {
+        [self stopTaskBaseSmallItemVoicePlay];
         _currentSmallIndex++;
         self.bigTopicView.highlightSmallIndex = _currentSmallIndex;
         [self.smallScrollView setContentOffset:CGPointMake(LG_ScreenWidth*_currentSmallIndex, 0) animated:YES];
@@ -215,6 +255,9 @@
             [self.ownSwipeView scrollToItemAtIndex:self.currentBigIndex+1 duration:0.2];
         }
     }
+}
+- (void)YJ_taskTopicCellDidPlayVoice{
+   [self.bigTopicView stopListen];
 }
 #pragma mark Setter
 - (void)setBottomDistance:(CGFloat)bottomDistance{
@@ -237,9 +280,18 @@
         }
     }
 }
+- (void)stopTaskBaseSmallItemVoicePlay{
+    UIView *smallItem = [self.smallScrollContentView.subviews yj_objectAtIndex:self.currentSmallIndex];
+    if ([smallItem isKindOfClass:[YJTaskBaseSmallItem class]]) {
+        [(YJTaskBaseSmallItem *)smallItem stopVoicePlay];
+    }
+    
+}
 - (void)setCurrentSmallIndex:(NSInteger)currentSmallIndex{
+    [self stopTaskBaseSmallItemVoicePlay];
     _currentSmallIndex = currentSmallIndex;
     self.bigTopicView.highlightSmallIndex = currentSmallIndex;
+
     [self.smallScrollView layoutIfNeeded];
     self.smallScrollView.contentOffset = CGPointMake(LG_ScreenWidth*self.currentSmallIndex, 0);
     if (self.bigModel.yj_topicCarkMode) {
@@ -248,7 +300,7 @@
 }
 #pragma mark Getter
 - (CGFloat)bigTopicViewHeight{
-    CGFloat pintroH = 30;
+    CGFloat pintroH = 30 * (IsIPad ? 2 : 3);
     if (IsStrEmpty(self.bigModel.yj_topicDirectionTxt)) {
         pintroH = 0;
     }
@@ -262,8 +314,10 @@
             if (self.bigTopicView.taskStageType == YJTaskStageTypeAnalysis ||
                 self.bigTopicView.taskStageType == YJTaskStageTypeAnalysisNoSubmit ||
                 self.bigTopicView.taskStageType == YJTaskStageTypeCheck ||
-                self.bigTopicView.taskStageType == YJTaskStageTypeCheckViewer) {
-                if (IsStrEmpty(self.bigModel.yj_topicContent)) {
+                self.bigTopicView.taskStageType == YJTaskStageTypeCheckViewer ||
+                self.bigTopicView.taskStageType == YJTaskStageTypeViewer ||
+                 self.bigTopicView.taskStageType == YJTaskStageTypeAnaLysisTopicViewer) {
+                if (IsStrEmpty(self.bigModel.yj_topicContent) && IsStrEmpty(self.bigModel.yj_topicListenText)) {
                     return titleH+pintroH;
                 }else{
                     return self.height*0.3;
@@ -281,7 +335,7 @@
                 if (self.bigModel.yj_isCorrectTopic && (self.bigTopicView.taskStageType == YJTaskStageTypeAnswer || self.bigTopicView.taskStageType == YJTaskStageTypeViewer)) {
                     return self.height;
                 }else{
-                    if (IsStrEmpty(self.bigModel.yj_topicContent)) {
+                    if (IsStrEmpty(self.bigModel.yj_topicContent) && IsStrEmpty(self.bigModel.yj_topicListenText)) {
                         return titleH+pintroH;
                     }else{
                         return self.height*0.3;
@@ -290,16 +344,20 @@
             }
         }
         case YJBigTopicTypeListen:
-            return titleH+pintroH+listenH;
+            if (IsStrEmpty(self.bigModel.yj_topicListenText)) {
+                return titleH+pintroH+listenH;
+            }else{
+                return titleH+listenH+self.height*0.3;
+            }
             break;
         case YJBigTopicTypeBigTextAndListen:
             if (self.bigModel.yj_topicCarkMode) {
-                return titleH+pintroH+listenH+self.height*0.4+10;
+                return titleH+listenH+self.height*0.4+10;
             }else{
-                if (IsStrEmpty(self.bigModel.yj_topicContent)) {
+                if (IsStrEmpty(self.bigModel.yj_topicContent) && IsStrEmpty(self.bigModel.yj_topicListenText)) {
                     return titleH+pintroH+listenH+14;
                 }else{
-                    return titleH+pintroH+listenH+self.height*0.3+14;
+                    return titleH+listenH+self.height*0.3+14;
                 }
             }
             break;

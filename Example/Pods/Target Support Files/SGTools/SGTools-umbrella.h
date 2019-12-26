@@ -10,7 +10,12 @@
 #endif
 #endif
 
+#import "SGAlertView.h"
 #import "SGAudioPlayer.h"
+#import "SGAnimationManager.h"
+#import "SGCheckBox.h"
+#import "SGCheckBoxGroup.h"
+#import "SGPathManager.h"
 #import "SGCollectionViewFlowLayout.h"
 #import "SGGradientProgress.h"
 #import "SGPickerView.h"
@@ -26,6 +31,8 @@
 #import "SGSingleAudioPlayer.h"
 #import "SGSpeechSynthesizerManager.h"
 #import "SGTriangleView.h"
+#import "SGUIKit.h"
+#import "UIView+SGShadow.h"
 #import "SGVideoPlayer.h"
 #import "SGVocabularyAnswerView.h"
 #import "SGVocabularyDictationView.h"

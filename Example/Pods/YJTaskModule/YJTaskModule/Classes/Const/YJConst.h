@@ -32,7 +32,7 @@
 #define IsStrEmpty(_ref)    (((_ref) == nil) || ([(_ref) isEqual:[NSNull null]]) ||([(_ref)isEqualToString:@""]))
 #define IsArrEmpty(_ref)    (((_ref) == nil) || ([(_ref) isEqual:[NSNull null]]) ||([(_ref) count] == 0))
 #define IsObjEmpty(_ref)    (((_ref) == nil) || ([(_ref) isEqual:[NSNull null]]))
-
+#define IsIPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 /** 配置 */
 static NSString *YJTaskModule_ApiUrl_UserDefault_Key = @"YJTaskModule_ApiUrl_UserDefault_Key";
 static NSString *YJTaskModule_UserID_UserDefault_Key = @"YJTaskModule_UserID_UserDefault_Key";
@@ -40,7 +40,9 @@ static NSString *YJTaskModule_UserType_UserDefault_Key = @"YJTaskModule_UserType
 static NSString *YJTaskModule_ImgAnswerEnable_UserDefault_Key = @"YJTaskModule_ImgAnswerEnable_UserDefault_Key";
 static NSString *YJTaskModule_SpeechMarkEnable_UserDefault_Key = @"YJTaskModule_SpeechMarkEnable_UserDefault_Key";
 
-static NSString *YJTaskModule_ImageLabelBgHidden_UserDefault_Key = @"YJTaskModule_ImageLabelBgHidden_UserDefault_Key";
+
+static NSString *YJTaskModule_StopYJTaskTopicVoicePlay_Notification = @"YJTaskModule_StopYJTaskTopicVoicePlay_Notification";
+
 
 static NSString *YJTaskBundle_Cell = @"Cell";
 static NSString *YJTaskBundle_Empty = @"EmptyPage";
@@ -49,4 +51,5 @@ static NSString *YJTaskBundle_AlertView = @"AlertView";
 NSBundle *YJTaskBundle(void);
 
 
-
+static NSString *YJTaskModule_u2060 = @"\u2060";
+static NSString *YJTaskModule_u2063 = @"\u2063";

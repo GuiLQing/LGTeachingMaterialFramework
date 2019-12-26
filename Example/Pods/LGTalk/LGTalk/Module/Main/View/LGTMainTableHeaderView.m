@@ -41,16 +41,16 @@
      self.contentView.backgroundColor = [UIColor whiteColor];
     [self.contentView addSubview:self.IconImageV];
     [self.IconImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.contentView).offset(10);
-        make.top.equalTo(self.contentView).offset(10);
+        make.left.equalTo(self.contentView).offset(IsIPad ? 20 : 10);
+        make.top.equalTo(self.contentView).offset(IsIPad ? 20 : 10);
         make.width.height.mas_equalTo(44);
     }];
     [self.IconImageV lgt_clipLayerWithRadius:22 width:0 color:nil];
     [self.contentView addSubview:self.setTopFlagBtn];
     [self.setTopFlagBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.contentView).offset(-10);
-        make.top.equalTo(self.contentView).offset(13);
-        make.height.mas_equalTo(22);
+        make.right.equalTo(self.contentView).offset(IsIPad ? -20 : -10);
+        make.centerY.equalTo(self.IconImageV);
+        make.height.mas_equalTo(26);
         make.width.equalTo(self.setTopFlagBtn.mas_height).multipliedBy(3);
     }];
     
@@ -68,23 +68,26 @@
     
     [self.contentView addSubview:self.replyBtn];
     [self.replyBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.contentView).offset(-10);
-        make.width.height.mas_equalTo(25);
+        make.right.equalTo(self.setTopFlagBtn).offset(IsIPad ? -8 : 0);
+        make.height.mas_equalTo(IsIPad ? 26 : 23);
+        make.width.equalTo(self.replyBtn.mas_height).multipliedBy(1.17);
         make.bottom.equalTo(self.contentView).offset(-10);
     }];
     
     [self.contentView addSubview:self.foldBtn];
     [self.foldBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.height.equalTo(self.replyBtn);
-        make.right.equalTo(self.replyBtn.mas_left).offset(-15);
+        make.right.equalTo(self.replyBtn.mas_left).offset(IsIPad ? -40 : -15);
         make.width.mas_equalTo(82);
     }];
-    
+    if (IsIPad && CGAffineTransformIsIdentity(self.foldBtn.transform)) {
+        self.foldBtn.transform = CGAffineTransformMakeScale(1.3, 1.3);
+    }
     [self.contentView addSubview:self.msgSourceL];
     [self.msgSourceL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.height.equalTo(self.replyBtn);
         make.right.equalTo(self.foldBtn.mas_left).offset(-15);
-        make.left.equalTo(self.IconImageV.mas_right).offset(2);
+        make.left.equalTo(self.msgTimeL);
     }];
     
     [self.contentView addSubview:self.sanjiaoImageV];
@@ -99,19 +102,20 @@
     [self.imageBgV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(120);
         make.left.equalTo(self.msgSourceL);
-        make.right.equalTo(self.replyBtn);
+        make.right.equalTo(self.setTopFlagBtn);
         make.bottom.equalTo(self.msgSourceL.mas_top).offset(-3);
     }];
     
     [self.imageBgV addSubview:self.photoBrowser];
     [self.photoBrowser mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.imageBgV);
+        make.left.top.height.equalTo(self.imageBgV);
+        make.width.mas_equalTo(self.imageBgV.mas_height).multipliedBy(3);
     }];
     
     [self.contentView addSubview:self.msgContentL];
     [self.msgContentL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.msgSourceL);
-        make.right.equalTo(self.replyBtn);
+        make.right.equalTo(self.setTopFlagBtn);
         make.top.equalTo(self.msgTimeL.mas_bottom).offset(3);
         make.bottom.equalTo(self.imageBgV.mas_top).offset(-3);
     }];
@@ -122,7 +126,10 @@
               make.height.mas_equalTo(0);
         }];
     }else{
-        CGFloat imageBgW = LGT_ScreenWidth - 44 - 10 - 2 - 10;
+        CGFloat imageBgW = LGT_ScreenWidth - 44 - 10 - 10 - 10;
+        if (LGT_IsIPad()) {
+            imageBgW = 120 * 3;
+        }
         [self.imageBgV mas_updateConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(imageBgW/3);
         }];
@@ -136,11 +143,11 @@
     self.msgContentL.attributedText = talkModel.Content_Attr;
     self.msgContentL.lineBreakMode = NSLineBreakByTruncatingTail;
     NSMutableAttributedString *sourceAttr = [[NSMutableAttributedString alloc] initWithString:@"来自"];
-    [sourceAttr lgt_setColor:[UIColor lightGrayColor]];
+    [sourceAttr lgt_setColor:LGT_ColorWithHex(0x989898)];
     [sourceAttr lgt_setFont:13];
   
     NSMutableAttributedString *textAttr = [[NSMutableAttributedString alloc] initWithString:talkModel.FromTopicInfo];
-    [textAttr lgt_setColor:[UIColor orangeColor]];
+    [textAttr lgt_setColor:LGT_ColorWithHex(0x47A9EA)];
     [textAttr lgt_setFont:14];
     [sourceAttr appendAttributedString:textAttr];
     self.msgSourceL.attributedText = sourceAttr;
@@ -163,9 +170,9 @@
         self.foldBtn.hidden = NO;
     }
     if (talkModel.isFold) {
-        self.foldBtn.imageView.transform = CGAffineTransformMakeRotation(-M_PI);
-    }else{
         self.foldBtn.imageView.transform = CGAffineTransformIdentity;
+    }else{
+        self.foldBtn.imageView.transform = CGAffineTransformMakeRotation(-M_PI);
     }
 }
 #pragma mark - Action
@@ -264,7 +271,7 @@
 - (UILabel *)msgTimeL{
     if (!_msgTimeL) {
         _msgTimeL = [UILabel new];
-        _msgTimeL.textColor = LGT_ColorWithHex(0x555555);
+        _msgTimeL.textColor = LGT_ColorWithHex(0x989898);
         _msgTimeL.font = [UIFont systemFontOfSize:13];
     }
     return _msgTimeL;
@@ -279,7 +286,10 @@
 }
 - (LGTPhotoBrowser *)photoBrowser{
     if (!_photoBrowser) {
-        CGFloat imageBgW = LGT_ScreenWidth - 44 - 10 - 2 - 10;
+        CGFloat imageBgW = LGT_ScreenWidth - 44 - 10 - 10 - 10;
+        if (LGT_IsIPad()) {
+            imageBgW = 120 * 3;
+        }
         _photoBrowser = [[LGTPhotoBrowser alloc] initWithFrame:CGRectZero width:imageBgW];
     }
     return _photoBrowser;

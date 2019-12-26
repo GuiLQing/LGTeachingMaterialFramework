@@ -190,6 +190,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/YJSearchController/YJSearchController.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/YJTaskMark/YJTaskMark.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/YJTaskModule/YJTaskModule.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/YJUtils/YJUtils.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/YYImage/YYImage.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
@@ -222,6 +223,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/YJSearchController/YJSearchController.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/YJTaskMark/YJTaskMark.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/YJTaskModule/YJTaskModule.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/YJUtils/YJUtils.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/YYImage/YYImage.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then

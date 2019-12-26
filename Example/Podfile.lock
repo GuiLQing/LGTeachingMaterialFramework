@@ -29,12 +29,16 @@ PODS:
   - BlocksKit/UIKit (2.2.5):
     - BlocksKit/Core
     - BlocksKit/DynamicDelegate
-  - IJKMediaFramework (0.1.2)
-  - LGAlertHUD (1.0.9):
-    - LGAlertHUD/AlertView (= 1.0.9)
+  - IJKMediaFramework (0.1.3)
+  - LGAlertHUD (1.1.2):
+    - LGAlertHUD/AlertView (= 1.1.2)
+    - LGAlertHUD/YJSheetView (= 1.1.2)
     - Masonry
     - YJExtensions
-  - LGAlertHUD/AlertView (1.0.9):
+  - LGAlertHUD/AlertView (1.1.2):
+    - Masonry
+    - YJExtensions
+  - LGAlertHUD/YJSheetView (1.1.2):
     - Masonry
     - YJExtensions
   - LGDictionary (1.0.8):
@@ -49,7 +53,7 @@ PODS:
   - LGLog/LGLogManager (1.0.2):
     - LGLog/YJCocoaLumberjack
   - LGLog/YJCocoaLumberjack (1.0.2)
-  - LGNote (1.3.2):
+  - LGNote (1.5.8):
     - AFNetworking
     - BlocksKit
     - LGAlertHUD
@@ -59,20 +63,22 @@ PODS:
     - ReactiveObjC
     - SDWebImage
     - TFHpple
+    - YJBaseModule
     - YYImage
-  - LGTalk (1.1.4):
+  - LGTalk (1.1.9):
     - AFNetworking
     - LGAlertHUD
-    - LGTalk/Category (= 1.1.4)
-    - LGTalk/Const (= 1.1.4)
-    - LGTalk/Utils (= 1.1.4)
+    - LGTalk/Category (= 1.1.9)
+    - LGTalk/Const (= 1.1.9)
+    - LGTalk/Utils (= 1.1.9)
     - Masonry
     - MJExtension
     - MJRefresh
     - SDWebImage
     - TFHpple
     - XMLDictionary
-  - LGTalk/Category (1.1.4):
+    - YJPresentAnimation
+  - LGTalk/Category (1.1.9):
     - AFNetworking
     - LGAlertHUD
     - LGTalk/Const
@@ -82,7 +88,8 @@ PODS:
     - SDWebImage
     - TFHpple
     - XMLDictionary
-  - LGTalk/Const (1.1.4):
+    - YJPresentAnimation
+  - LGTalk/Const (1.1.9):
     - AFNetworking
     - LGAlertHUD
     - Masonry
@@ -91,29 +98,21 @@ PODS:
     - SDWebImage
     - TFHpple
     - XMLDictionary
-  - LGTalk/Utils (1.1.4):
+    - YJPresentAnimation
+  - LGTalk/Utils (1.1.9):
     - AFNetworking
     - LGAlertHUD
-    - LGTalk/Utils/ActivityIndicatorView (= 1.1.4)
-    - LGTalk/Utils/ImagePickerController (= 1.1.4)
-    - LGTalk/Utils/Photo (= 1.1.4)
-    - LGTalk/Utils/PresentPushAnimation (= 1.1.4)
+    - LGTalk/Utils/ActivityIndicatorView (= 1.1.9)
+    - LGTalk/Utils/ImagePickerController (= 1.1.9)
+    - LGTalk/Utils/Photo (= 1.1.9)
     - Masonry
     - MJExtension
     - MJRefresh
     - SDWebImage
     - TFHpple
     - XMLDictionary
-  - LGTalk/Utils/ActivityIndicatorView (1.1.4):
-    - AFNetworking
-    - LGAlertHUD
-    - Masonry
-    - MJExtension
-    - MJRefresh
-    - SDWebImage
-    - TFHpple
-    - XMLDictionary
-  - LGTalk/Utils/ImagePickerController (1.1.4):
+    - YJPresentAnimation
+  - LGTalk/Utils/ActivityIndicatorView (1.1.9):
     - AFNetworking
     - LGAlertHUD
     - Masonry
@@ -122,7 +121,18 @@ PODS:
     - SDWebImage
     - TFHpple
     - XMLDictionary
-  - LGTalk/Utils/Photo (1.1.4):
+    - YJPresentAnimation
+  - LGTalk/Utils/ImagePickerController (1.1.9):
+    - AFNetworking
+    - LGAlertHUD
+    - Masonry
+    - MJExtension
+    - MJRefresh
+    - SDWebImage
+    - TFHpple
+    - XMLDictionary
+    - YJPresentAnimation
+  - LGTalk/Utils/Photo (1.1.9):
     - AFNetworking
     - LGAlertHUD
     - LGTalk/Category
@@ -133,16 +143,8 @@ PODS:
     - SDWebImage
     - TFHpple
     - XMLDictionary
-  - LGTalk/Utils/PresentPushAnimation (1.1.4):
-    - AFNetworking
-    - LGAlertHUD
-    - Masonry
-    - MJExtension
-    - MJRefresh
-    - SDWebImage
-    - TFHpple
-    - XMLDictionary
-  - LGTeachingMaterialFramework (1.0.0.0):
+    - YJPresentAnimation
+  - LGTeachingMaterialFramework (1.0.3):
     - BlocksKit
     - LGAlertHUD
     - LGDictionary
@@ -170,64 +172,75 @@ PODS:
     - MarqueeLabel/ObjC (= 3.2.0)
   - MarqueeLabel/ObjC (3.2.0)
   - Masonry (1.1.0)
-  - MJExtension (3.1.2)
-  - MJRefresh (3.2.0)
+  - MJExtension (3.2.1)
+  - MJRefresh (3.3.1)
   - MSWeakTimer (1.1.0)
-  - PSGChainedMode (1.1.5):
+  - PSGChainedMode (1.2.0):
     - ReactiveObjC
   - Reachability (3.2)
   - ReactiveObjC (3.1.1)
-  - SDWebImage (5.1.1):
-    - SDWebImage/Core (= 5.1.1)
-  - SDWebImage/Core (5.1.1)
-  - SGTools (1.2.2):
-    - SGTools/SGAudioPlayer (= 1.2.2)
-    - SGTools/SGCollectionViewFlowLayout (= 1.2.2)
-    - SGTools/SGGradientProgress (= 1.2.2)
-    - SGTools/SGPickerView (= 1.2.2)
-    - SGTools/SGSearchController (= 1.2.2)
-    - SGTools/SGShadowView (= 1.2.2)
-    - SGTools/SGSingleAudioPlayer (= 1.2.2)
-    - SGTools/SGSpeechSynthesizer (= 1.2.2)
-    - SGTools/SGTriangleView (= 1.2.2)
-    - SGTools/SGVideoPlayer (= 1.2.2)
-    - SGTools/SGVocabularyDictation (= 1.2.2)
-    - SGTools/SGVoiceAnimationView (= 1.2.2)
-  - SGTools/SGAudioPlayer (1.2.2)
-  - SGTools/SGCollectionViewFlowLayout (1.2.2)
-  - SGTools/SGGradientProgress (1.2.2)
-  - SGTools/SGPickerView (1.2.2):
-    - SGTools/SGPickerView/SGAddressPickerView (= 1.2.2)
-    - SGTools/SGPickerView/SGBase (= 1.2.2)
-    - SGTools/SGPickerView/SGDatePickerView (= 1.2.2)
-    - SGTools/SGPickerView/SGStringPickerView (= 1.2.2)
-  - SGTools/SGPickerView/SGAddressPickerView (1.2.2):
-    - SGTools/SGPickerView/SGBase
-  - SGTools/SGPickerView/SGBase (1.2.2)
-  - SGTools/SGPickerView/SGDatePickerView (1.2.2):
-    - SGTools/SGPickerView/SGBase
-  - SGTools/SGPickerView/SGStringPickerView (1.2.2):
-    - SGTools/SGPickerView/SGBase
-  - SGTools/SGSearchController (1.2.2)
-  - SGTools/SGShadowView (1.2.2)
-  - SGTools/SGSingleAudioPlayer (1.2.2)
-  - SGTools/SGSpeechSynthesizer (1.2.2)
-  - SGTools/SGTriangleView (1.2.2)
-  - SGTools/SGVideoPlayer (1.2.2)
-  - SGTools/SGVocabularyDictation (1.2.2):
+  - SDWebImage (5.4.0):
+    - SDWebImage/Core (= 5.4.0)
+  - SDWebImage/Core (5.4.0)
+  - SGTools (1.3.6):
+    - SGTools/SGAlertView (= 1.3.6)
+    - SGTools/SGAudioPlayer (= 1.3.6)
+    - SGTools/SGCheckBox (= 1.3.6)
+    - SGTools/SGCollectionViewFlowLayout (= 1.3.6)
+    - SGTools/SGGradientProgress (= 1.3.6)
+    - SGTools/SGPickerView (= 1.3.6)
+    - SGTools/SGSearchController (= 1.3.6)
+    - SGTools/SGShadowView (= 1.3.6)
+    - SGTools/SGSingleAudioPlayer (= 1.3.6)
+    - SGTools/SGSpeechSynthesizer (= 1.3.6)
+    - SGTools/SGTriangleView (= 1.3.6)
+    - SGTools/SGUIKit (= 1.3.6)
+    - SGTools/SGVideoPlayer (= 1.3.6)
+    - SGTools/SGVocabularyDictation (= 1.3.6)
+    - SGTools/SGVoiceAnimationView (= 1.3.6)
+  - SGTools/SGAlertView (1.3.6):
     - Masonry
-  - SGTools/SGVoiceAnimationView (1.2.2)
+    - SGTools/SGCheckBox
+    - SGTools/SGUIKit/SGUIView
+  - SGTools/SGAudioPlayer (1.3.6)
+  - SGTools/SGCheckBox (1.3.6)
+  - SGTools/SGCollectionViewFlowLayout (1.3.6)
+  - SGTools/SGGradientProgress (1.3.6)
+  - SGTools/SGPickerView (1.3.6):
+    - SGTools/SGPickerView/SGAddressPickerView (= 1.3.6)
+    - SGTools/SGPickerView/SGBase (= 1.3.6)
+    - SGTools/SGPickerView/SGDatePickerView (= 1.3.6)
+    - SGTools/SGPickerView/SGStringPickerView (= 1.3.6)
+  - SGTools/SGPickerView/SGAddressPickerView (1.3.6):
+    - SGTools/SGPickerView/SGBase
+  - SGTools/SGPickerView/SGBase (1.3.6)
+  - SGTools/SGPickerView/SGDatePickerView (1.3.6):
+    - SGTools/SGPickerView/SGBase
+  - SGTools/SGPickerView/SGStringPickerView (1.3.6):
+    - SGTools/SGPickerView/SGBase
+  - SGTools/SGSearchController (1.3.6)
+  - SGTools/SGShadowView (1.3.6)
+  - SGTools/SGSingleAudioPlayer (1.3.6)
+  - SGTools/SGSpeechSynthesizer (1.3.6)
+  - SGTools/SGTriangleView (1.3.6)
+  - SGTools/SGUIKit (1.3.6):
+    - SGTools/SGUIKit/SGUIView (= 1.3.6)
+  - SGTools/SGUIKit/SGUIView (1.3.6)
+  - SGTools/SGVideoPlayer (1.3.6)
+  - SGTools/SGVocabularyDictation (1.3.6):
+    - Masonry
+  - SGTools/SGVoiceAnimationView (1.3.6)
   - SwipeView (1.3.2)
   - TFHpple (2.0.0)
   - XMLDictionary (1.4.1)
   - YJActivityIndicatorView (1.0.0)
-  - YJBaseModule (1.2.2):
-    - YJBaseModule/Base (= 1.2.2)
-    - YJBaseModule/Manager (= 1.2.2)
-    - YJBaseModule/MarqueeLabel (= 1.2.2)
-    - YJBaseModule/YJBHpple (= 1.2.2)
-    - YJBaseModule/YJBWebView (= 1.2.2)
-  - YJBaseModule/Base (1.2.2):
+  - YJBaseModule (1.2.6):
+    - YJBaseModule/Base (= 1.2.6)
+    - YJBaseModule/Manager (= 1.2.6)
+    - YJBaseModule/MarqueeLabel (= 1.2.6)
+    - YJBaseModule/YJBHpple (= 1.2.6)
+    - YJBaseModule/YJBWebView (= 1.2.6)
+  - YJBaseModule/Base (1.2.6):
     - LGAlertHUD
     - Masonry
     - MJExtension
@@ -235,47 +248,47 @@ PODS:
     - YJActivityIndicatorView
     - YJBaseModule/Manager
     - YJExtensions
-  - YJBaseModule/Manager (1.2.2):
+  - YJBaseModule/Manager (1.2.6):
     - YJExtensions
-  - YJBaseModule/MarqueeLabel (1.2.2)
-  - YJBaseModule/YJBHpple (1.2.2)
-  - YJBaseModule/YJBWebView (1.2.2):
+  - YJBaseModule/MarqueeLabel (1.2.6)
+  - YJBaseModule/YJBHpple (1.2.6)
+  - YJBaseModule/YJBWebView (1.2.6):
     - Masonry
     - YJBaseModule/Manager
     - YJBaseModule/MarqueeLabel
     - YJBaseModule/YJBHpple
     - YJExtensions
-  - YJExtensions (1.1.6):
-    - YJExtensions/Foundation (= 1.1.6)
-    - YJExtensions/UIKit (= 1.1.6)
-  - YJExtensions/Foundation (1.1.6):
+  - YJExtensions (1.2.1):
+    - YJExtensions/Foundation (= 1.2.1)
+    - YJExtensions/UIKit (= 1.2.1)
+  - YJExtensions/Foundation (1.2.1):
     - TFHpple
-  - YJExtensions/UIKit (1.1.6):
+  - YJExtensions/UIKit (1.2.1):
     - YJExtensions/Foundation
-  - YJMediaPlayer (1.1.4):
-    - YJMediaPlayer/Category (= 1.1.4)
-    - YJMediaPlayer/Lrc (= 1.1.4)
-    - YJMediaPlayer/Model (= 1.1.4)
-    - YJMediaPlayer/Player (= 1.1.4)
-    - YJMediaPlayer/View (= 1.1.4)
-  - YJMediaPlayer/Category (1.1.4)
-  - YJMediaPlayer/Lrc (1.1.4):
+  - YJMediaPlayer (1.2.4):
+    - YJMediaPlayer/Category (= 1.2.4)
+    - YJMediaPlayer/Lrc (= 1.2.4)
+    - YJMediaPlayer/Model (= 1.2.4)
+    - YJMediaPlayer/Player (= 1.2.4)
+    - YJMediaPlayer/View (= 1.2.4)
+  - YJMediaPlayer/Category (1.2.4)
+  - YJMediaPlayer/Lrc (1.2.4):
     - Masonry
     - MJExtension
-  - YJMediaPlayer/Model (1.1.4):
+  - YJMediaPlayer/Model (1.2.4):
     - YJMediaPlayer/Category
     - YJMediaPlayer/Lrc
-  - YJMediaPlayer/Player (1.1.4):
+  - YJMediaPlayer/Player (1.2.4):
     - IJKMediaFramework
     - YJMediaPlayer/Model
     - YJMediaPlayer/View
-  - YJMediaPlayer/View (1.1.4):
+  - YJMediaPlayer/View (1.2.4):
     - Masonry
     - SDWebImage
     - YJMediaPlayer/Category
     - YJMediaPlayer/Lrc
     - YJMediaPlayer/Model
-  - YJNetManager (1.1.8):
+  - YJNetManager (1.2.0):
     - AFNetworking
     - LGLog
     - Reachability
@@ -283,66 +296,66 @@ PODS:
   - YJPresentAnimation (1.0.2)
   - YJResizableSplitView (1.0.0):
     - Masonry
-  - YJSearchController (1.0.5):
+  - YJSearchController (1.0.6):
     - LGAlertHUD
     - Masonry
     - YJExtensions
-    - YJSearchController/PinYin (= 1.0.5)
-  - YJSearchController/PinYin (1.0.5):
+    - YJSearchController/PinYin (= 1.0.6)
+  - YJSearchController/PinYin (1.0.6):
     - LGAlertHUD
     - Masonry
     - YJExtensions
-  - YJTaskMark (1.1.0):
-    - YJTaskMark/kuyou (= 1.1.0)
-    - YJTaskMark/Util (= 1.1.0)
-  - YJTaskMark/kuyou (1.1.0)
-  - YJTaskMark/Util (1.1.0):
+  - YJTaskMark (1.1.3):
+    - YJTaskMark/kuyou (= 1.1.3)
+    - YJTaskMark/Util (= 1.1.3)
+  - YJTaskMark/kuyou (1.1.3)
+  - YJTaskMark/Util (1.1.3):
     - LGAlertHUD
     - YJExtensions
     - YJNetManager
     - YJTaskMark/kuyou
-  - YJTaskModule (1.2.0):
-    - YJTaskModule/ActivityIndicatorView (= 1.2.0)
-    - YJTaskModule/AlertView (= 1.2.0)
-    - YJTaskModule/AnswerEditView (= 1.2.0)
-    - YJTaskModule/Base (= 1.2.0)
-    - YJTaskModule/BaseItem (= 1.2.0)
-    - YJTaskModule/Cell (= 1.2.0)
-    - YJTaskModule/Const (= 1.2.0)
-    - YJTaskModule/ImageLabel (= 1.2.0)
-    - YJTaskModule/ListenPlayer (= 1.2.0)
-    - YJTaskModule/MatchView (= 1.2.0)
-    - YJTaskModule/Model (= 1.2.0)
-    - YJTaskModule/TaskItem (= 1.2.0)
-    - YJTaskModule/TitleView (= 1.2.0)
-    - YJTaskModule/TopicCardView (= 1.2.0)
-    - YJTaskModule/TopicView (= 1.2.0)
-    - YJTaskModule/YJCorrect (= 1.2.0)
-    - YJTaskModule/YJFileManager (= 1.2.0)
-    - YJTaskModule/YJProgressView (= 1.2.0)
-    - YJTaskModule/YJSpeechMarkView (= 1.2.0)
-  - YJTaskModule/ActivityIndicatorView (1.2.0)
-  - YJTaskModule/AlertView (1.2.0):
+  - YJTaskModule (1.3.6):
+    - YJTaskModule/ActivityIndicatorView (= 1.3.6)
+    - YJTaskModule/AlertView (= 1.3.6)
+    - YJTaskModule/AnswerEditView (= 1.3.6)
+    - YJTaskModule/Base (= 1.3.6)
+    - YJTaskModule/BaseItem (= 1.3.6)
+    - YJTaskModule/Cell (= 1.3.6)
+    - YJTaskModule/Const (= 1.3.6)
+    - YJTaskModule/ImageLabel (= 1.3.6)
+    - YJTaskModule/ListenPlayer (= 1.3.6)
+    - YJTaskModule/MatchView (= 1.3.6)
+    - YJTaskModule/Model (= 1.3.6)
+    - YJTaskModule/TaskItem (= 1.3.6)
+    - YJTaskModule/TitleView (= 1.3.6)
+    - YJTaskModule/TopicCardView (= 1.3.6)
+    - YJTaskModule/TopicView (= 1.3.6)
+    - YJTaskModule/YJCorrect (= 1.3.6)
+    - YJTaskModule/YJFileManager (= 1.3.6)
+    - YJTaskModule/YJProgressView (= 1.3.6)
+    - YJTaskModule/YJSpeechMarkView (= 1.3.6)
+  - YJTaskModule/ActivityIndicatorView (1.3.6)
+  - YJTaskModule/AlertView (1.3.6):
     - Masonry
     - YJTaskModule/Const
-  - YJTaskModule/AnswerEditView (1.2.0):
+  - YJTaskModule/AnswerEditView (1.3.6):
     - LGAlertHUD
     - Masonry
     - TFHpple
     - YJResizableSplitView
     - YJTaskModule/Base
     - YJTaskModule/Const
-  - YJTaskModule/Base (1.2.0):
+  - YJTaskModule/Base (1.3.6):
     - BlocksKit
     - LGAlertHUD
     - MJExtension
     - YJTaskModule/Const
-  - YJTaskModule/BaseItem (1.2.0):
+  - YJTaskModule/BaseItem (1.3.6):
     - Masonry
     - YJTaskModule/Const
     - YJTaskModule/Model
     - YJTaskModule/TitleView
-  - YJTaskModule/Cell (1.2.0):
+  - YJTaskModule/Cell (1.3.6):
     - LGAlertHUD
     - LGTalk
     - Masonry
@@ -355,32 +368,34 @@ PODS:
     - YJTaskModule/ImageLabel
     - YJTaskModule/Model
     - YJTaskModule/YJSpeechMarkView
-  - YJTaskModule/Const (1.2.0):
+    - YJUtils
+  - YJTaskModule/Const (1.3.6):
     - YJExtensions
-  - YJTaskModule/ImageLabel (1.2.0):
+  - YJTaskModule/ImageLabel (1.3.6):
     - Masonry
     - YJTaskModule/Const
-  - YJTaskModule/ListenPlayer (1.2.0):
+  - YJTaskModule/ListenPlayer (1.3.6):
     - LGAlertHUD
     - Masonry
     - YJSearchController
     - YJTaskModule/Base
     - YJTaskModule/Const
     - YJTaskModule/YJProgressView
-  - YJTaskModule/MatchView (1.2.0):
+  - YJTaskModule/MatchView (1.3.6):
     - Masonry
     - YJTaskModule/Base
     - YJTaskModule/Const
     - YJTaskModule/ImageLabel
-  - YJTaskModule/Model (1.2.0):
+  - YJTaskModule/Model (1.3.6):
     - MJExtension
     - TFHpple
     - YJNetManager
     - YJTaskMark
     - YJTaskModule/Base
     - YJTaskModule/Const
+    - YJTaskModule/TopicCardView
     - YJTaskModule/YJFileManager
-  - YJTaskModule/TaskItem (1.2.0):
+  - YJTaskModule/TaskItem (1.3.6):
     - Masonry
     - SwipeView
     - YJResizableSplitView
@@ -391,14 +406,14 @@ PODS:
     - YJTaskModule/Model
     - YJTaskModule/TitleView
     - YJTaskModule/TopicView
-  - YJTaskModule/TitleView (1.2.0):
+  - YJTaskModule/TitleView (1.3.6):
     - Masonry
     - YJTaskModule/Const
-  - YJTaskModule/TopicCardView (1.2.0):
+  - YJTaskModule/TopicCardView (1.3.6):
     - Masonry
     - YJTaskModule/Const
     - YJTaskModule/ImageLabel
-  - YJTaskModule/TopicView (1.2.0):
+  - YJTaskModule/TopicView (1.3.6):
     - Masonry
     - TFHpple
     - YJSearchController
@@ -408,17 +423,24 @@ PODS:
     - YJTaskModule/MatchView
     - YJTaskModule/Model
     - YJTaskModule/YJCorrect
-  - YJTaskModule/YJCorrect (1.2.0):
+  - YJTaskModule/YJCorrect (1.3.6):
     - LGAlertHUD
     - Masonry
     - YJTaskModule/Base
     - YJTaskModule/Const
     - YJTaskModule/Model
-  - YJTaskModule/YJFileManager (1.2.0)
-  - YJTaskModule/YJProgressView (1.2.0)
-  - YJTaskModule/YJSpeechMarkView (1.2.0):
+  - YJTaskModule/YJFileManager (1.3.6)
+  - YJTaskModule/YJProgressView (1.3.6)
+  - YJTaskModule/YJSpeechMarkView (1.3.6):
     - Masonry
     - YJTaskModule/Const
+  - YJUtils (1.1.1):
+    - YJUtils/YJAudioMerger (= 1.1.1)
+    - YJUtils/YJAudioPlayer (= 1.1.1)
+    - YJUtils/YJMediaCutter (= 1.1.1)
+  - YJUtils/YJAudioMerger (1.1.1)
+  - YJUtils/YJAudioPlayer (1.1.1)
+  - YJUtils/YJMediaCutter (1.1.1)
   - YYImage (1.0.4):
     - YYImage/Core (= 1.0.4)
   - YYImage/Core (1.0.4)
@@ -460,6 +482,7 @@ SPEC REPOS:
     - YJSearchController
     - YJTaskMark
     - YJTaskModule
+    - YJUtils
     - YYImage
 
 EXTERNAL SOURCES:
@@ -469,36 +492,37 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   BlocksKit: 7f422b971407001178d181a43b99014ea2591fe6
-  IJKMediaFramework: a1df7357a01a11e65568b8d6cd16ca270be01034
-  LGAlertHUD: c267c0f45b2bf9d5bbdd7303c5d0da14b1f89e1e
+  IJKMediaFramework: d1c0b5b37a449c6c15af19ca7607c54640ef15a6
+  LGAlertHUD: ba3618afe9b2c4baf74fd4394c02b633e6ad08b3
   LGDictionary: 60583c0271f330cbdb45f2163100810734d61906
   LGLog: a58e542c6c99755d1b8eca492b2acf70a3115731
-  LGNote: 8267fcbef9f05fd396acda7e7ca6c092441c4a96
-  LGTalk: 023d196f8e59032b7b446573e84cf4cddbb1c119
-  LGTeachingMaterialFramework: 911a276b8b00df80d1a44c9690835f9ac5f3178f
+  LGNote: efa317ff282c1fbd9f6e4f5d15851b06f7f817e2
+  LGTalk: 977ce4056850e5852747c534a1789d3a048e7ec5
+  LGTeachingMaterialFramework: bbdcf7133a08b5418f115eaca844933403705f70
   MarqueeLabel: 440a502b91a9179bd98f9fff00ba1150650a1c0e
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MJExtension: 81e8e411ced318561dd09334b0c83d8227cef79c
-  MJRefresh: ed450d6eb9d3346a2cb033ab7eb6de090aeef437
+  MJExtension: 635f2c663dcb1bf76fa4b715b2570a5710aec545
+  MJRefresh: eeda70fbf0ad277f3178cef1cd0c3532591d6237
   MSWeakTimer: 9426150f933b80ed3acf3f6d228e4b61f0e303c8
-  PSGChainedMode: c84781f08097d1677fe945701f54b4e189a82966
+  PSGChainedMode: 47419d5f9495ae1d1dd611656fcd10376016e36f
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   ReactiveObjC: 011caa393aa0383245f2dcf9bf02e86b80b36040
-  SDWebImage: 96d7f03415ccb28d299d765f93557ff8a617abd8
-  SGTools: a75a201b7342e384d57cbbb27b13721423423169
+  SDWebImage: 5bf6aec6481ae2a062bdc59f9d6c1d1e552090e0
+  SGTools: e78c28a116407f6a04d987f18eb629f978b0b09a
   SwipeView: bd67cfaf7760c036438446b3ccb28a3b84fce009
   TFHpple: a916fe0799eb30aa29b2670d14d5868cdd3a5b81
   XMLDictionary: fa07b6ff422b3a91d47a5de9bc82e3fc04fbd167
   YJActivityIndicatorView: f51112fa59d69762bd6147cf0da573ff2a9a0215
-  YJBaseModule: 7aba773656e51ba5a76e2ae031fab6da87833cf0
-  YJExtensions: d4b5ac7e1004d05dc6425b9aff3b8437d93ef1ad
-  YJMediaPlayer: 51143218220e9e1db937d7add57d3526512e1d79
-  YJNetManager: bdf2f175fa3dcf5ebfcdfacc0c607ab1abef1b5d
+  YJBaseModule: de2b15976f6ef2057d93adfd853a98419a7e32d2
+  YJExtensions: ea5c3fb1520822c58ad8b420612693347795b6e7
+  YJMediaPlayer: 3ffd47ec325393f9cdbb1fc08050f0ecd0a12957
+  YJNetManager: ea4d76046ac25125187ce4edd5ec22bbeb84744c
   YJPresentAnimation: 58af2bfff17028cb286ecd442d418af8997f8740
   YJResizableSplitView: 5ce0f3e8a608552a6f9a8c4d987e589a9c21b17e
-  YJSearchController: 529172792ac89a353a35e628cc6033ec5639f79e
-  YJTaskMark: 9de58e1c3cb3828ac745a197db2421950e5aae4e
-  YJTaskModule: 1094a79b4430eeee371de14487a32e8dda61e277
+  YJSearchController: 77970cc713a6dbb22abb465fb6af2ceb11bb46d9
+  YJTaskMark: af9e04cc65cc35344a9286e534aeaa810117f637
+  YJTaskModule: 98bbddb1e6d86bdf08a4730d14cb7f60c76afb4e
+  YJUtils: 0ea42b64066e5b1f077bf894505b303f894fdebc
   YYImage: 1e1b62a9997399593e4b9c4ecfbbabbf1d3f3b54
 
 PODFILE CHECKSUM: 37044d14a1e18ea77ac6c6fdc7e0ac87655873b8

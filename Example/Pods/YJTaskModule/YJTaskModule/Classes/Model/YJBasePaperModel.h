@@ -9,10 +9,10 @@
 #import "LGBaseModel.h"
 #import "YJPaperProtocol.h"
 
+
 NS_ASSUME_NONNULL_BEGIN
+@class YJTaskCarkModel;
 @interface YJBasePaperSmallModel : LGBaseModel<YJPaperSmallProtocol>
-/** 答题点数 */
-@property (nonatomic,assign) NSInteger yj_smallItemCount;
 /** 单个答案 */
 @property (nonatomic,copy) NSString *yj_smallAnswer;
 /** 多个答案数组 */
@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 图片数组*/
 @property (nonatomic,strong) NSArray *yj_imgUrlArr;
+
+- (void)updateSmallAnswerStr:(NSString *)answer atIndex:(NSInteger)index;
 @end
 
 @interface YJBasePaperBigModel : LGBaseModel<YJPaperBigProtocol>
@@ -64,6 +66,11 @@ NS_ASSUME_NONNULL_BEGIN
 /** 当前大题索引 */
 @property (nonatomic,assign) NSInteger yj_currentBigIndex;
 
+/** 知识点信息显示开关 */
+@property (nonatomic,assign) BOOL yj_taskKlgInfoDisplayEnable;
+/** 是否教师分析阶段 */
+@property (nonatomic,assign) BOOL yj_taskStageTypeTeachAnalysis;
+
 /** 已作答小题数 */
 - (NSInteger)quesAnswerItemSum;
 /** 已互评小题数 */
@@ -71,6 +78,10 @@ NS_ASSUME_NONNULL_BEGIN
 /** 作答小题数 */
 - (NSInteger)quesItemSum;
 
+
+- (NSArray<YJTaskCarkModel *> *)taskCarkModelArray;
+
+- (void)updateMutiBlankScoreInfo;
 @end
 
 NS_ASSUME_NONNULL_END

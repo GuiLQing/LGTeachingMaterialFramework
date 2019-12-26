@@ -49,8 +49,8 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationController.navigationBar.translucent = NO;
 
-    _yj_noDataImgOffsetY = -40;
-    _yj_noDataSearchImgOffsetY = -70;
+    _yj_noDataImgOffsetY = IsIPad ? -70 : -50;
+    _yj_noDataSearchImgOffsetY = -80;
     _yj_loadErrorImgOffsetY = -15;
  
 }
@@ -63,8 +63,6 @@
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)] && self.closeSideslip) {
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
         ((YJBNavigationController *)self.navigationController).backGesture.enabled = NO;
-    }else if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)] && !self.closeSideslip && self.closeFullScreenSideslip) {
-        ((YJBNavigationController *)self.navigationController).backGesture.enabled = NO;
     }
 }
 - (void)viewWillDisappear:(BOOL)animated {
@@ -73,8 +71,6 @@
     
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)] && self.closeSideslip) {
         self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        ((YJBNavigationController *)self.navigationController).backGesture.enabled = YES;
-    }else if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)] && !self.closeSideslip && self.closeFullScreenSideslip) {
         ((YJBNavigationController *)self.navigationController).backGesture.enabled = YES;
     }
 }
@@ -351,7 +347,7 @@
         [self.noDataLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(self.noDataView);
             make.left.equalTo(self.noDataView).offset(20);
-            make.top.equalTo(self.noDataImgView.mas_bottom).offset(18);
+            make.centerY.equalTo(self.noDataView).offset(20);
         }];
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(yj_loadErrorUpdate)];
         [_noDataView addGestureRecognizer:tap];
@@ -418,7 +414,11 @@
 }
 - (UIImageView *)noDataImgView{
     if (!_noDataImgView) {
-        _noDataImgView = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:[YJBManager defaultManager].loadEmptyImgName atDir:@"Empty" atBundle:[YJBManager defaultManager].currentBundle]];
+        NSString *imgName = [YJBManager defaultManager].loadEmptyImgName;
+        if (IsIPad) {
+            imgName = [imgName stringByAppendingString:@"_ipad"];
+        }
+        _noDataImgView = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:imgName atDir:@"Empty" atBundle:[YJBManager defaultManager].currentBundle]];
     }
     return _noDataImgView;
 }
