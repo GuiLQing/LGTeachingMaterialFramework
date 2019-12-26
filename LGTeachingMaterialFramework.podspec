@@ -65,5 +65,6 @@ TODO: Add long description of the pod here.
   s.dependency 'LGNote'
   s.dependency 'SGTools'
   s.dependency 'MSWeakTimer'
+  s.dependency 'YJFontAlertView'
   
 end

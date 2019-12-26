@@ -324,6 +324,7 @@
 				"${BUILT_PRODUCTS_DIR}/YJActivityIndicatorView/YJActivityIndicatorView.framework",
 				"${BUILT_PRODUCTS_DIR}/YJBaseModule/YJBaseModule.framework",
 				"${BUILT_PRODUCTS_DIR}/YJExtensions/YJExtensions.framework",
+				"${BUILT_PRODUCTS_DIR}/YJFontAlertView/YJFontAlertView.framework",
 				"${BUILT_PRODUCTS_DIR}/YJNetManager/YJNetManager.framework",
 				"${BUILT_PRODUCTS_DIR}/YJPresentAnimation/YJPresentAnimation.framework",
 				"${BUILT_PRODUCTS_DIR}/YJResizableSplitView/YJResizableSplitView.framework",
@@ -358,6 +359,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YJActivityIndicatorView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YJBaseModule.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YJExtensions.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YJFontAlertView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YJNetManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YJPresentAnimation.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YJResizableSplitView.framework",
@@ -552,6 +554,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = Z35S33J39R;
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LGTeachingMaterialFramework/LGTeachingMaterialFramework-Prefix.pch";
 				INFOPLIST_FILE = "LGTeachingMaterialFramework/LGTeachingMaterialFramework-Info.plist";
@@ -570,6 +573,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = Z35S33J39R;
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LGTeachingMaterialFramework/LGTeachingMaterialFramework-Prefix.pch";
 				INFOPLIST_FILE = "LGTeachingMaterialFramework/LGTeachingMaterialFramework-Info.plist";

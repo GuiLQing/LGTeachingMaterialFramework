@@ -162,6 +162,7 @@ PODS:
     - XMLDictionary
     - YJBaseModule
     - YJExtensions
+    - YJFontAlertView
     - YJMediaPlayer
     - YJNetManager
     - YJPresentAnimation
@@ -265,6 +266,9 @@ PODS:
     - TFHpple
   - YJExtensions/UIKit (1.2.1):
     - YJExtensions/Foundation
+  - YJFontAlertView (1.0.5):
+    - Masonry
+    - YJExtensions
   - YJMediaPlayer (1.2.4):
     - YJMediaPlayer/Category (= 1.2.4)
     - YJMediaPlayer/Lrc (= 1.2.4)
@@ -475,6 +479,7 @@ SPEC REPOS:
     - YJActivityIndicatorView
     - YJBaseModule
     - YJExtensions
+    - YJFontAlertView
     - YJMediaPlayer
     - YJNetManager
     - YJPresentAnimation
@@ -498,7 +503,7 @@ SPEC CHECKSUMS:
   LGLog: a58e542c6c99755d1b8eca492b2acf70a3115731
   LGNote: efa317ff282c1fbd9f6e4f5d15851b06f7f817e2
   LGTalk: 977ce4056850e5852747c534a1789d3a048e7ec5
-  LGTeachingMaterialFramework: bbdcf7133a08b5418f115eaca844933403705f70
+  LGTeachingMaterialFramework: bfaa3b20b63e91b979302c52e9dfa5fbde21c6e0
   MarqueeLabel: 440a502b91a9179bd98f9fff00ba1150650a1c0e
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJExtension: 635f2c663dcb1bf76fa4b715b2570a5710aec545
@@ -515,6 +520,7 @@ SPEC CHECKSUMS:
   YJActivityIndicatorView: f51112fa59d69762bd6147cf0da573ff2a9a0215
   YJBaseModule: de2b15976f6ef2057d93adfd853a98419a7e32d2
   YJExtensions: ea5c3fb1520822c58ad8b420612693347795b6e7
+  YJFontAlertView: 72f2e5b12b1f543f539501a4c54f8d0c7d24a4db
   YJMediaPlayer: 3ffd47ec325393f9cdbb1fc08050f0ecd0a12957
   YJNetManager: ea4d76046ac25125187ce4edd5ec22bbeb84744c
   YJPresentAnimation: 58af2bfff17028cb286ecd442d418af8997f8740
