@@ -11,6 +11,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+static NSString * const LGElectronicMaterialOtherAppSource = @"DRM";
+
 #define LGTMManager LGTeachingMaterialManager.defaultManager
 
 @interface LGTeachingMaterialManager : NSObject
@@ -94,6 +96,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *earmarkPath;
 /** 时间戳 */
 @property (nonatomic, strong) NSString *StampTime;
+
+@property (nonatomic, assign, readonly) BOOL isRecommandModule;
 
 
 #pragma mark -

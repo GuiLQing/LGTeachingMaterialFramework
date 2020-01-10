@@ -9,7 +9,10 @@
 #ifndef LGTeachingMaterialVersion_h
 #define LGTeachingMaterialVersion_h
 
-/** 版本：1.0.3    2019-12-25 */
+/** 版本：1.0.5    2019-01-10 */
+/** 1、打包更新cocoapod */
+
+/** 版本：1.0.4    2019-12-25 */
 /** 1、电子素材优化 */
 
 /** 版本：1.0.2    2019-12-13 */
