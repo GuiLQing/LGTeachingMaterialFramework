@@ -66,5 +66,6 @@ TODO: Add long description of the pod here.
   s.dependency 'SGTools'
   s.dependency 'MSWeakTimer'
   s.dependency 'YJFontAlertView'
+  s.dependency 'YJImageBrowser'
   
 end

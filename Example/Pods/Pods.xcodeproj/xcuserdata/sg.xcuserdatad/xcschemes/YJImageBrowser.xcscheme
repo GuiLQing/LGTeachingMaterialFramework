@@ -14,9 +14,9 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7875A37150997BC68E5675CAFC14D6CF"
-               BuildableName = "Pods-LGTeachingMaterialFramework_Example.framework"
-               BlueprintName = "Pods-LGTeachingMaterialFramework_Example"
+               BlueprintIdentifier = "0DBA5D1A38B411A921E01A03055CC5D1"
+               BuildableName = "YJImageBrowser.framework"
+               BlueprintName = "YJImageBrowser"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

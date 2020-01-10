@@ -139,6 +139,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>YJImageBrowser.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>YJMediaPlayer.xcscheme</key>
 		<dict>
 			<key>isShown</key>
