@@ -23,8 +23,7 @@
 		69B473061DD4CA83A9098FE2 /* Pods_LGTeachingMaterialFramework_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BFCD682313CECB922F4D4FE /* Pods_LGTeachingMaterialFramework_Example.framework */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
-		D236AFC023C95F0C000FC99F /* LGTeachingMaterialFramework.podspec in Resources */ = {isa = PBXBuildFile; fileRef = D236AFBD23C95F0C000FC99F /* LGTeachingMaterialFramework.podspec */; };
-		D236AFC123C95F0C000FC99F /* LGTeachingMaterialFramework_Private.podspec in Resources */ = {isa = PBXBuildFile; fileRef = D236AFBF23C95F0C000FC99F /* LGTeachingMaterialFramework_Private.podspec */; };
+		D236AFE523C969ED000FC99F /* LGTeachingMaterialFramework.podspec in Resources */ = {isa = PBXBuildFile; fileRef = D236AFE423C969ED000FC99F /* LGTeachingMaterialFramework.podspec */; };
 		D2B28E642331D962008515D7 /* config.json in Resources */ = {isa = PBXBuildFile; fileRef = D2B28E632331D962008515D7 /* config.json */; };
 /* End PBXBuildFile section */
 
@@ -64,8 +63,7 @@
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		99C15F1642991BE0BCD2CEA6 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		D236AFBD23C95F0C000FC99F /* LGTeachingMaterialFramework.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LGTeachingMaterialFramework.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		D236AFBF23C95F0C000FC99F /* LGTeachingMaterialFramework_Private.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LGTeachingMaterialFramework_Private.podspec; sourceTree = "<group>"; };
+		D236AFE423C969ED000FC99F /* LGTeachingMaterialFramework.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LGTeachingMaterialFramework.podspec; path = ../LGTeachingMaterialFramework.podspec; sourceTree = "<group>"; };
 		D2B28E632331D962008515D7 /* config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = config.json; sourceTree = "<group>"; };
 		E970664535508ED11E36E118 /* Pods-LGTeachingMaterialFramework_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LGTeachingMaterialFramework_Example.debug.xcconfig"; path = "Target Support Files/Pods-LGTeachingMaterialFramework_Example/Pods-LGTeachingMaterialFramework_Example.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -178,30 +176,11 @@
 		60FF7A9C1954A5C5007DD14C /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
-				D236AFBC23C95F0C000FC99F /* Github */,
-				D236AFBE23C95F0C000FC99F /* Private */,
+				D236AFE423C969ED000FC99F /* LGTeachingMaterialFramework.podspec */,
 				31BFF551440F68E58DC8449A /* README.md */,
 				99C15F1642991BE0BCD2CEA6 /* LICENSE */,
 			);
 			name = "Podspec Metadata";
-			sourceTree = "<group>";
-		};
-		D236AFBC23C95F0C000FC99F /* Github */ = {
-			isa = PBXGroup;
-			children = (
-				D236AFBD23C95F0C000FC99F /* LGTeachingMaterialFramework.podspec */,
-			);
-			name = Github;
-			path = ../Github;
-			sourceTree = "<group>";
-		};
-		D236AFBE23C95F0C000FC99F /* Private */ = {
-			isa = PBXGroup;
-			children = (
-				D236AFBF23C95F0C000FC99F /* LGTeachingMaterialFramework_Private.podspec */,
-			);
-			name = Private;
-			path = ../Private;
 			sourceTree = "<group>";
 		};
 		F7D130AFA47493C1A0A939D8 /* Pods */ = {
@@ -299,9 +278,8 @@
 			files = (
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				D2B28E642331D962008515D7 /* config.json in Resources */,
-				D236AFC023C95F0C000FC99F /* LGTeachingMaterialFramework.podspec in Resources */,
+				D236AFE523C969ED000FC99F /* LGTeachingMaterialFramework.podspec in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
-				D236AFC123C95F0C000FC99F /* LGTeachingMaterialFramework_Private.podspec in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 			);
@@ -407,10 +385,12 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-LGTeachingMaterialFramework_Example/Pods-LGTeachingMaterialFramework_Example-resources.sh",
+				"${PODS_ROOT}/../../LGTeachingMaterialFramework/Classes/LGTeachingMaterialFramework.bundle",
 				"${PODS_ROOT}/YJMediaPlayer/YJMediaPlayer/Classes/YJMediaPlayer.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/LGTeachingMaterialFramework.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/YJMediaPlayer.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;

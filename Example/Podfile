@@ -3,7 +3,7 @@ use_frameworks!
 platform :ios, '9.0'
 
 target 'LGTeachingMaterialFramework_Example' do
-  pod 'LGTeachingMaterialFramework', :path => '../Github/'
+  pod 'LGTeachingMaterialFramework', :path => '../'
 
   pod 'MJExtension'
 end

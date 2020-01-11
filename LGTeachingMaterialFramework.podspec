@@ -7,7 +7,7 @@
 #
 
 Pod::Spec.new do |s|
-s.name             = 'LGTeachingMaterialFramework_Private'
+s.name             = 'LGTeachingMaterialFramework'
 s.version          = '1.0.5'
 s.summary          = 'A short description of LGTeachingMaterialFramework.'
 
@@ -22,7 +22,7 @@ TODO: Add long description of the pod here.
 DESC
 
 s.homepage         = 'http://192.168.3.18:3000/pengshigui/LGTeachingMaterialFramework'
-s.license          = { :type => 'MIT', :file => '../LICENSE' }
+s.license          = { :type => 'MIT', :file => 'LICENSE' }
 s.author           = { 'pengshigui' => 'gui950823@126.com' }
 s.source           = { :git => 'http://192.168.3.18:3000/pengshigui/LGTeachingMaterialFramework.git', :tag => s.version.to_s }
 

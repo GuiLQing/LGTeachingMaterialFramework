@@ -464,7 +464,7 @@ PODS:
   - YYImage/Core (1.0.4)
 
 DEPENDENCIES:
-  - LGTeachingMaterialFramework (from `../Github/`)
+  - LGTeachingMaterialFramework (from `../`)
   - MJExtension
 
 SPEC REPOS:
@@ -507,7 +507,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   LGTeachingMaterialFramework:
-    :path: "../Github/"
+    :path: "../"
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
@@ -518,7 +518,7 @@ SPEC CHECKSUMS:
   LGLog: a58e542c6c99755d1b8eca492b2acf70a3115731
   LGNote: 0dfe2a5a00685dade648c9a86c5d5ee31ecbc77c
   LGTalk: 977ce4056850e5852747c534a1789d3a048e7ec5
-  LGTeachingMaterialFramework: 9e6abe36b762d460349b817076fb13b969b70e7b
+  LGTeachingMaterialFramework: ce717e5e0fca5fb3d0d917bcba2652eae007551f
   MarqueeLabel: 440a502b91a9179bd98f9fff00ba1150650a1c0e
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJExtension: 635f2c663dcb1bf76fa4b715b2570a5710aec545
@@ -547,6 +547,6 @@ SPEC CHECKSUMS:
   YJUtils: 0ea42b64066e5b1f077bf894505b303f894fdebc
   YYImage: 1e1b62a9997399593e4b9c4ecfbbabbf1d3f3b54
 
-PODFILE CHECKSUM: 7cdc09c93ae4df42155faa0c05c8a4e3015db025
+PODFILE CHECKSUM: 37044d14a1e18ea77ac6c6fdc7e0ac87655873b8
 
 COCOAPODS: 1.7.5
