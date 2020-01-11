@@ -6,7 +6,7 @@
   "homepage": "https://github.com/GuiLQing/LGTeachingMaterialFramework",
   "license": {
     "type": "MIT",
-    "file": "LICENSE"
+    "file": "../LICENSE"
   },
   "authors": {
     "GuiLQing": "gui950823@126.com"

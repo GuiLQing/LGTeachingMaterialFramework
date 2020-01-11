@@ -8,7 +8,7 @@
 
 #import "YJAnswerAlertView.h"
 #import <YJExtensions/YJExtensions.h>
-#import "YJConst.h"
+#import "YJAnswerConst.h"
 #import "YJAnswerAlertCell.h"
 #import "YJAnswerAlertChoiceCell.h"
 #import <Masonry/Masonry.h>
@@ -166,7 +166,7 @@
         titleL.textAlignment = NSTextAlignmentCenter;
         titleL.font = [UIFont boldSystemFontOfSize:IsIPad ? 20 : 18];
         
-        UIImageView *fingerimg = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"finger" atDir:YJTaskBundle_AlertView atBundle:YJTaskBundle()]];
+        UIImageView *fingerimg = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"finger" atDir:LGAlertBundle_Answer atBundle:LGAlertBundle()]];
         [alertView addSubview:fingerimg];
         [fingerimg mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(alertView);
@@ -176,7 +176,7 @@
         }];
         
         
-        UIImageView *sureimg = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"sure" atDir:YJTaskBundle_AlertView atBundle:YJTaskBundle()]];
+        UIImageView *sureimg = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"sure" atDir:LGAlertBundle_Answer atBundle:LGAlertBundle()]];
         [alertView addSubview:sureimg];
         [sureimg mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(alertView);
@@ -186,7 +186,7 @@
         }];
         
         
-        UIImageView *slideTipimg = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"slide_tip" atDir:YJTaskBundle_AlertView atBundle:YJTaskBundle()]];
+        UIImageView *slideTipimg = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"slide_tip" atDir:LGAlertBundle_Answer atBundle:LGAlertBundle()]];
         [alertView addSubview:slideTipimg];
         [slideTipimg mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(alertView);
@@ -389,7 +389,7 @@
 #pragma Getter&Setter
 - (UIImageView *)headImageV{
     if (!_headImageV) {
-        _headImageV = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"zx_top_lancoo" atDir:YJTaskBundle_AlertView atBundle:YJTaskBundle()]];
+        _headImageV = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"zx_top_lancoo" atDir:LGAlertBundle_Answer atBundle:LGAlertBundle()]];
     }
     return _headImageV;
 }

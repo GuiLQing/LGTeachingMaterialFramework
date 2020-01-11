@@ -7,7 +7,7 @@
 
 #import "YJScoreAlert.h"
 #import <Masonry/Masonry.h>
-#import "YJConst.h"
+#import "YJAnswerConst.h"
 #import "YJTaskMarLabel.h"
 
 @interface YJScoreAlert ()
@@ -188,7 +188,7 @@
     if (isPass) {
         self.titleLab.text = @"恭喜你完成本次测试";
         [self addAnimation];
-        scoreTitleAttachment.image = [UIImage yj_imagePathName:@"分" atDir:[YJTaskBundle_AlertView stringByAppendingPathComponent:@"right"] atBundle:YJTaskBundle()];
+        scoreTitleAttachment.image = [UIImage yj_imagePathName:@"分" atDir:[LGAlertBundle_Answer stringByAppendingPathComponent:@"right"] atBundle:LGAlertBundle()];
         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] init];
         for (int i = 0; i < scoreStr.length; i++) {
             BOOL isPoint = NO;
@@ -198,7 +198,7 @@
                 score = [score stringByReplacingOccurrencesOfString:@"." withString:@"point"];
             }
             NSTextAttachment *attachment = [[NSTextAttachment alloc] initWithData:nil ofType:nil];
-            attachment.image = [UIImage yj_imagePathName:score atDir:[YJTaskBundle_AlertView stringByAppendingPathComponent:@"right"] atBundle:YJTaskBundle()];
+            attachment.image = [UIImage yj_imagePathName:score atDir:[LGAlertBundle_Answer stringByAppendingPathComponent:@"right"] atBundle:LGAlertBundle()];
             CGFloat width = attachment.image.size.width;
             CGFloat height = attachment.image.size.height;
             CGFloat rate = width/height;
@@ -216,7 +216,7 @@
         self.scoreLab.attributedText = attr;
     }else{
         self.titleLab.text = @"再接再厉，继续努力";
-        scoreTitleAttachment.image = [UIImage yj_imageNamed:@"分" atDir:[YJTaskBundle_AlertView stringByAppendingPathComponent:@"wrong"] atBundle:YJTaskBundle()];
+        scoreTitleAttachment.image = [UIImage yj_imageNamed:@"分" atDir:[LGAlertBundle_Answer stringByAppendingPathComponent:@"wrong"] atBundle:LGAlertBundle()];
         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] init];
         for (int i = 0; i < scoreStr.length; i++) {
             BOOL isPoint = NO;
@@ -226,7 +226,7 @@
                 score = [score stringByReplacingOccurrencesOfString:@"." withString:@"point"];
             }
             NSTextAttachment *attachment = [[NSTextAttachment alloc] initWithData:nil ofType:nil];
-            attachment.image = [UIImage yj_imageNamed:score atDir:[YJTaskBundle_AlertView stringByAppendingPathComponent:@"wrong"] atBundle:YJTaskBundle()];
+            attachment.image = [UIImage yj_imageNamed:score atDir:[LGAlertBundle_Answer stringByAppendingPathComponent:@"wrong"] atBundle:LGAlertBundle()];
             CGFloat width = attachment.image.size.width;
             CGFloat height = attachment.image.size.height;
             CGFloat rate = width/height;
@@ -345,25 +345,25 @@
 }
 - (UIImageView *)bgImgView{
     if (!_bgImgView) {
-        _bgImgView = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"wrong_bg" atDir:YJTaskBundle_AlertView atBundle:YJTaskBundle()] highlightedImage:[UIImage yj_imageNamed:@"right_bg" atDir:YJTaskBundle_AlertView atBundle:YJTaskBundle()]];
+        _bgImgView = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"wrong_bg" atDir:LGAlertBundle_Answer atBundle:LGAlertBundle()] highlightedImage:[UIImage yj_imageNamed:@"right_bg" atDir:LGAlertBundle_Answer atBundle:LGAlertBundle()]];
     }
     return _bgImgView;
 }
 - (UIImageView *)flowerImgView{
     if (!_flowerImgView) {
-        _flowerImgView = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"flower" atDir:YJTaskBundle_AlertView atBundle:YJTaskBundle()]];
+        _flowerImgView = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"flower" atDir:LGAlertBundle_Answer atBundle:LGAlertBundle()]];
     }
     return _flowerImgView;
 }
 - (UIImageView *)rightCountImgView{
     if (!_rightCountImgView) {
-        _rightCountImgView = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"right_count" atDir:YJTaskBundle_AlertView atBundle:YJTaskBundle()]];
+        _rightCountImgView = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"right_count" atDir:LGAlertBundle_Answer atBundle:LGAlertBundle()]];
     }
     return _rightCountImgView;
 }
 - (UIImageView *)wrongCountImgView{
     if (!_wrongCountImgView) {
-        _wrongCountImgView = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"wrong_count" atDir:YJTaskBundle_AlertView atBundle:YJTaskBundle()]];
+        _wrongCountImgView = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"wrong_count" atDir:LGAlertBundle_Answer atBundle:LGAlertBundle()]];
     }
     return _wrongCountImgView;
 }
@@ -439,7 +439,7 @@
 - (UIButton *)closeBtn{
     if (!_closeBtn) {
         _closeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_closeBtn setImage:[UIImage yj_imageNamed:@"close" atDir:YJTaskBundle_AlertView atBundle:YJTaskBundle()] forState:UIControlStateNormal];
+        [_closeBtn setImage:[UIImage yj_imageNamed:@"close" atDir:LGAlertBundle_Answer atBundle:LGAlertBundle()] forState:UIControlStateNormal];
         [_closeBtn addTarget:self action:@selector(hide) forControlEvents:UIControlEventTouchUpInside];
     }
     return _closeBtn;

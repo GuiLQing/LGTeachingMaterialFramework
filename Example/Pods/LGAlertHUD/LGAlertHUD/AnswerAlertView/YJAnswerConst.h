@@ -1,12 +1,13 @@
 //
-//  TPFConst.h
-//  LGTeachingPlanFramework
+//  YJAnswerConst.h
+//  LGAlertHUDDemo
 //
-//  Created by 刘亚军 on 2019/6/20.
-//  Copyright © 2019 刘亚军. All rights reserved.
+//  Created by 刘亚军 on 2020/1/8.
+//  Copyright © 2020 刘亚军. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+
+
 #import <YJExtensions/YJExtensions.h>
 
 // 屏幕尺寸
@@ -33,23 +34,6 @@
 #define IsArrEmpty(_ref)    (((_ref) == nil) || ([(_ref) isEqual:[NSNull null]]) ||([(_ref) count] == 0))
 #define IsObjEmpty(_ref)    (((_ref) == nil) || ([(_ref) isEqual:[NSNull null]]))
 #define IsIPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-/** 配置 */
-static NSString *YJTaskModule_ApiUrl_UserDefault_Key = @"YJTaskModule_ApiUrl_UserDefault_Key";
-static NSString *YJTaskModule_UserID_UserDefault_Key = @"YJTaskModule_UserID_UserDefault_Key";
-static NSString *YJTaskModule_UserType_UserDefault_Key = @"YJTaskModule_UserType_UserDefault_Key";
-static NSString *YJTaskModule_ImgAnswerEnable_UserDefault_Key = @"YJTaskModule_ImgAnswerEnable_UserDefault_Key";
-static NSString *YJTaskModule_SpeechMarkEnable_UserDefault_Key = @"YJTaskModule_SpeechMarkEnable_UserDefault_Key";
 
-
-static NSString *YJTaskModule_StopYJTaskTopicVoicePlay_Notification = @"YJTaskModule_StopYJTaskTopicVoicePlay_Notification";
-
-
-static NSString *YJTaskBundle_Cell = @"Cell";
-static NSString *YJTaskBundle_Empty = @"EmptyPage";
-static NSString *YJTaskBundle_ListenView = @"ListenView";
-
-NSBundle *YJTaskBundle(void);
-
-
-static NSString *YJTaskModule_u2060 = @"\u2060";
-static NSString *YJTaskModule_u2063 = @"\u2063";
+static NSString *LGAlertBundle_Answer = @"AnswerAlertView";
+NSBundle *LGAlertBundle(void);

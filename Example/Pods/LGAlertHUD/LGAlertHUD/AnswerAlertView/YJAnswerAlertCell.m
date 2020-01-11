@@ -8,7 +8,7 @@
 
 #import "YJAnswerAlertCell.h"
 #import <Masonry/Masonry.h>
-#import "YJConst.h"
+#import "YJAnswerConst.h"
 
 #import <YJExtensions/YJExtensions.h>
 

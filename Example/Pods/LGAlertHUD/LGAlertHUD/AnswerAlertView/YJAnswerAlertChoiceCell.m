@@ -9,7 +9,7 @@
 #import "YJAnswerAlertChoiceCell.h"
 #import <YJExtensions/YJExtensions.h>
 #import <Masonry/Masonry.h>
-#import "YJConst.h"
+#import "YJAnswerConst.h"
 
 @interface YJAnswerAlertChoiceCell ()
 @property (nonatomic,strong) UIImageView *bgImageView;
@@ -49,7 +49,7 @@
 }
 - (UIImageView *)bgImageView{
     if (!_bgImageView) {
-        _bgImageView = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"hud_choice_nor" atDir:YJTaskBundle_AlertView atBundle:YJTaskBundle()] highlightedImage:[UIImage yj_imageNamed:@"hud_choice_sel" atDir:YJTaskBundle_AlertView atBundle:YJTaskBundle()]];
+        _bgImageView = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"hud_choice_nor" atDir:LGAlertBundle_Answer atBundle:LGAlertBundle()] highlightedImage:[UIImage yj_imageNamed:@"hud_choice_sel" atDir:LGAlertBundle_Answer atBundle:LGAlertBundle()]];
     }
     return _bgImageView;
 }
