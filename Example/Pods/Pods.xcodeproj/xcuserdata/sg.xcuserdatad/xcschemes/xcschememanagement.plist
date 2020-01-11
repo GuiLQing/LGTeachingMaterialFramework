@@ -34,11 +34,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>LGNote.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>LGTalk.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -180,11 +175,6 @@
 			<false/>
 		</dict>
 		<key>YJUtils.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>YYImage.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
