@@ -63,7 +63,7 @@
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		99C15F1642991BE0BCD2CEA6 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		D236AFE423C969ED000FC99F /* LGTeachingMaterialFramework.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LGTeachingMaterialFramework.podspec; path = ../LGTeachingMaterialFramework.podspec; sourceTree = "<group>"; };
+		D236AFE423C969ED000FC99F /* LGTeachingMaterialFramework.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LGTeachingMaterialFramework.podspec; path = ../LGTeachingMaterialFramework.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		D2B28E632331D962008515D7 /* config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = config.json; sourceTree = "<group>"; };
 		E970664535508ED11E36E118 /* Pods-LGTeachingMaterialFramework_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LGTeachingMaterialFramework_Example.debug.xcconfig"; path = "Target Support Files/Pods-LGTeachingMaterialFramework_Example/Pods-LGTeachingMaterialFramework_Example.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -308,7 +308,6 @@
 				"${BUILT_PRODUCTS_DIR}/LGAlertHUD/LGAlertHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/LGDictionary/LGDictionary.framework",
 				"${BUILT_PRODUCTS_DIR}/LGLog/LGLog.framework",
-				"${BUILT_PRODUCTS_DIR}/LGNote/LGNote.framework",
 				"${BUILT_PRODUCTS_DIR}/LGTalk/LGTalk.framework",
 				"${BUILT_PRODUCTS_DIR}/MJExtension/MJExtension.framework",
 				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
@@ -335,7 +334,6 @@
 				"${BUILT_PRODUCTS_DIR}/YJTaskMark/YJTaskMark.framework",
 				"${BUILT_PRODUCTS_DIR}/YJTaskModule/YJTaskModule.framework",
 				"${BUILT_PRODUCTS_DIR}/YJUtils/YJUtils.framework",
-				"${BUILT_PRODUCTS_DIR}/YYImage/YYImage.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -344,7 +342,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LGAlertHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LGDictionary.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LGLog.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LGNote.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LGTalk.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJExtension.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
@@ -371,7 +368,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YJTaskMark.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YJTaskModule.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YJUtils.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYImage.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

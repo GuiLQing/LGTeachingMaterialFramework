@@ -166,7 +166,6 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/LGAlertHUD/LGAlertHUD.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/LGDictionary/LGDictionary.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/LGLog/LGLog.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/LGNote/LGNote.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/LGTalk/LGTalk.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/MJExtension/MJExtension.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework"
@@ -193,7 +192,6 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/YJTaskMark/YJTaskMark.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/YJTaskModule/YJTaskModule.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/YJUtils/YJUtils.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/YYImage/YYImage.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework"
@@ -201,7 +199,6 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/LGAlertHUD/LGAlertHUD.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/LGDictionary/LGDictionary.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/LGLog/LGLog.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/LGNote/LGNote.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/LGTalk/LGTalk.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/MJExtension/MJExtension.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework"
@@ -228,7 +225,6 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/YJTaskMark/YJTaskMark.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/YJTaskModule/YJTaskModule.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/YJUtils/YJUtils.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/YYImage/YYImage.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait
