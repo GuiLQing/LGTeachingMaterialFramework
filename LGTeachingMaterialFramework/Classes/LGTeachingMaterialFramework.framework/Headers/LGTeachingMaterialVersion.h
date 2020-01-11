@@ -9,6 +9,9 @@
 #ifndef LGTeachingMaterialVersion_h
 #define LGTeachingMaterialVersion_h
 
+/** 版本：1.0.6    2019-01-11 */
+/** 1、优化笔记工具对接跳转；2、打包更新cocoapod */
+
 /** 版本：1.0.5    2019-01-10 */
 /** 1、打包更新cocoapod */
 

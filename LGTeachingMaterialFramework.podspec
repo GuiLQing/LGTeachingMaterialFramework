@@ -62,7 +62,6 @@ TODO: Add long description of the pod here.
   s.dependency 'ReactiveObjC'
   s.dependency 'BlocksKit'
   s.dependency 'XMLDictionary'
-  s.dependency 'LGNote'
   s.dependency 'SGTools'
   s.dependency 'MSWeakTimer'
   s.dependency 'YJFontAlertView'

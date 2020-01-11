@@ -70,12 +70,14 @@ static NSString * const LGElectronicMaterialOtherAppSource = @"DRM";
 @property (nonatomic, assign, readonly) BOOL isOpenNonVipLimit;
 
 /** 应用跳转返回主页 */
-@property (nonatomic,copy) void (^jumpToHomeBlock) (void);
-@property (nonatomic,strong) void (^dismissBlock) (void);
+@property (nonatomic, copy) void (^ _Nullable jumpToHomeBlock) (void);
+@property (nonatomic, copy) void (^ _Nullable dismissBlock) (void);
 
 /** 跳转知识点学习课件 */
-@property (nonatomic,copy) void (^jumpToLGKnowledgeBlock) (UIViewController *fromController,NSString *klgCode);
-@property (nonatomic,copy) void (^jumpToLGKnowledgeAlertBlock) (UIViewController *fromController,NSString *klgCode,void (^addStudyBlock) (void));
+@property (nonatomic, copy) void (^ _Nullable jumpToLGKnowledgeBlock) (UIViewController *fromController,NSString *klgCode);
+@property (nonatomic, copy) void (^ _Nullable jumpToLGKnowledgeAlertBlock) (UIViewController *fromController,NSString *klgCode,void (^addStudyBlock) (void));
+    
+@property (nonatomic, copy) void (^ _Nullable jumpToNoteModule)(UINavigationController * _Nonnull navigationController, NSString * _Nullable resType, NSString * _Nullable resCode, NSString * _Nullable libCode, NSString * _Nullable resName, BOOL isRecommandModule);
 
 #pragma mark -
 // !!!: 模块跳转
