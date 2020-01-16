@@ -9,6 +9,9 @@
 #ifndef LGTeachingMaterialVersion_h
 #define LGTeachingMaterialVersion_h
 
+/** 版本：1.0.7    2019-01-16 */
+/** 1、优化教育云产品集成不需要电子词典功能；2、优化综合资料文本类显示区分后缀名判断是否处理HTML标签 */
+
 /** 版本：1.0.6    2019-01-11 */
 /** 1、优化笔记工具对接跳转；2、打包更新cocoapod */
 
