@@ -9,6 +9,9 @@
 #ifndef LGTeachingMaterialVersion_h
 #define LGTeachingMaterialVersion_h
 
+/** 版本：1.0.8    2019-01-16 */
+/** 1、处理学科类型ID问题 */
+
 /** 版本：1.0.7    2019-01-16 */
 /** 1、优化教育云产品集成不需要电子词典功能；2、优化综合资料文本类显示区分后缀名判断是否处理HTML标签 */
 
