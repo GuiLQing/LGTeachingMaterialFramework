@@ -9,7 +9,10 @@
 #ifndef LGTeachingMaterialVersion_h
 #define LGTeachingMaterialVersion_h
 
-/** 版本：1.0.8    2019-01-16 */
+/** 版本：1.0.9    2019-03-12 */
+/** 1、处理点击图片放大显示加载失败问题 */
+
+/** 版本：1.0.8    2019-03-05 */
 /** 1、处理学科类型ID问题 */
 
 /** 版本：1.0.7    2019-01-16 */
