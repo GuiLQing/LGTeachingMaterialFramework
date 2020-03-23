@@ -9,6 +9,9 @@
 #ifndef LGTeachingMaterialVersion_h
 #define LGTeachingMaterialVersion_h
 
+/** 版本：1.1.0    2019-03-20 */
+/** 1、iOS 13适配*/
+
 /** 版本：1.0.9    2019-03-12 */
 /** 1、处理点击图片放大显示加载失败问题 */
 
