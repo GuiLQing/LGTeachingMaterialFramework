@@ -28,6 +28,7 @@
 #import "UIImage+YJ.h"
 #import "UIImageView+YJ.h"
 #import "UINavigationBar+YJ.h"
+#import "UISegmentedControl+YJ.h"
 #import "UIView+YJ.h"
 #import "UIViewController+YJ.h"
 #import "UIWindow+YJ.h"

@@ -9,6 +9,9 @@
 #ifndef LGTeachingMaterialVersion_h
 #define LGTeachingMaterialVersion_h
 
+/** 版本：1.1.1    2019-03-30 */
+/** 1、收藏问题优化；2、综合类型视频资料切换优化 */
+
 /** 版本：1.1.0    2019-03-20 */
 /** 1、iOS 13适配*/
 

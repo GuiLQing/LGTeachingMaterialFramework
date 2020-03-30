@@ -69,6 +69,9 @@ static NSString * const LGElectronicMaterialOtherAppSource = @"DRM";
 /** 是否开启非VIP限制 */
 @property (nonatomic, assign, readonly) BOOL isOpenNonVipLimit;
 
+/// 获取当前登录状态
+@property (nonatomic, copy) void (^ _Nullable silentLoginRequest) (void (^ callbackCurrentLoginStatus)(BOOL isLogined));
+
 /** 应用跳转返回主页 */
 @property (nonatomic, copy) void (^ _Nullable jumpToHomeBlock) (void);
 @property (nonatomic, copy) void (^ _Nullable dismissBlock) (void);
