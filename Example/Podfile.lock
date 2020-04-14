@@ -137,7 +137,7 @@ PODS:
     - YJExtensions
     - YJImageBrowser
     - YJPresentAnimation
-  - LGTeachingMaterialFramework (1.1.0):
+  - LGTeachingMaterialFramework (1.1.2):
     - BlocksKit
     - LGAlertHUD
     - LGDictionary
@@ -502,7 +502,7 @@ SPEC CHECKSUMS:
   LGDictionary: c333360f83de3240a1f649d78dfbbdcb421fe5ef
   LGLog: a58e542c6c99755d1b8eca492b2acf70a3115731
   LGTalk: 3a5d7d4db47f645c5f412dcea6c511eec68eff83
-  LGTeachingMaterialFramework: c36cc2be51f69be9dbfeefbe6553e2154ddbba2a
+  LGTeachingMaterialFramework: 069efc7c54a7c2fb2965d506326eff89a0ad72b6
   MarqueeLabel: 440a502b91a9179bd98f9fff00ba1150650a1c0e
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJExtension: 635f2c663dcb1bf76fa4b715b2570a5710aec545
