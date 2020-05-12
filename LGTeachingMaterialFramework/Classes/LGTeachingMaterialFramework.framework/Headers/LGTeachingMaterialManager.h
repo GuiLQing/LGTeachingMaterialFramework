@@ -104,6 +104,8 @@ static NSString * const LGElectronicMaterialOtherAppSource = @"DRM";
 
 @property (nonatomic, assign, readonly) BOOL isRecommandModule;
 
+@property (nonatomic, assign) BOOL isHideCollect;
+
 
 #pragma mark -
 // !!!: Deprecated 已废弃
