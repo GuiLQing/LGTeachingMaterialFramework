@@ -8,13 +8,26 @@
 
 #import "YJTaskTopicCell.h"
 #import <Masonry/Masonry.h>
-#import <TFHpple/TFHpple.h>
+#import <YJExtensions/YJEHpple.h>
 #import "YJConst.h"
 #import <YJUtils/YJAudioPlayer.h>
 #import <LGAlertHUD/LGAlertHUD.h>
+#import <YJImageBrowser/YJImageBrowserView.h>
+#import <YJExtensions/YJEGumbo+Query.h>
 
-@interface YJTaskTopicCell ()<YJAudioPlayerDelegate>
-@property (nonatomic,strong) UITextView *textView;
+@interface YJTaskTopicTextView : UITextView
+@end
+@implementation YJTaskTopicTextView
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender{
+    if (action == @selector(copy:)){
+        return YES;
+    }
+    return NO;
+}
+@end
+
+@interface YJTaskTopicCell ()<YJAudioPlayerDelegate,UITextViewDelegate>
+@property (nonatomic,strong) YJTaskTopicTextView *textView;
 @property (nonatomic,strong) YJAudioPlayer *audioPlayer;
 @property (strong, nonatomic) UIButton *voiceBtn;
 @end
@@ -25,6 +38,9 @@
         [self layoutUI];
     }
     return self;
+}
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender{
+    return NO;
 }
 - (void)layoutUI{
 //    self.userInteractionEnabled = NO;
@@ -64,19 +80,72 @@
     if (!IsStrEmpty(self.voiceUrl)) {
         [attr insertAttributedString:@"      ".yj_toMutableAttributedString atIndex:0];
     }
+    
+    [self obliquenessWithAttr:attr];
+    
     [attr yj_setFont:17];
     [attr yj_setColor:LG_ColorWithHex(0x252525)];
-    NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
-    NSData *htmlData = [attr dataFromRange:NSMakeRange(0,attr.length) documentAttributes:exportParams error:nil];
-    TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
-    NSArray *tableArray = [xpathParser searchWithXPathQuery:@"//table"];
-    if (IsArrEmpty(tableArray)) {
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        paragraphStyle.lineSpacing = 8;
-        [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attr.length)];
+    
+    [self strongWithAttr:attr];
+   
+    if (!IsStrEmpty(self.topicContent) && ![self.topicContent containsString:@"style=\""]) {
+        NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
+        NSData *htmlData = [attr dataFromRange:NSMakeRange(0,attr.length) documentAttributes:exportParams error:nil];
+        YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
+        NSArray *tableArray = [xpathParser searchWithXPathQuery:@"//table"];
+        if (IsArrEmpty(tableArray)) {
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            paragraphStyle.lineSpacing = 8;
+            [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attr.length)];
+        }
     }
     self.textView.attributedText = attr;
 }
+- (void)strongWithAttr:(NSMutableAttributedString *)attr{
+    if (!IsStrEmpty(self.topicContent) && [self.topicContent.lowercaseString containsString:@"<strong"]) {
+           YJEGumboDocument *document = [[YJEGumboDocument alloc] initWithHTMLString:self.topicContent];
+           NSArray *elements = document.Query(@"strong");
+           for (YJEGumboElement *element in elements) {
+               NSString *text = [element.text() yj_deleteWhitespaceAndNewlineCharacter];
+               if (!IsStrEmpty(text)) {
+                   NSString *textAttrStr = attr.string;
+                   NSRange range = [textAttrStr rangeOfString:text];
+                   if (range.location != NSNotFound) {
+                       [attr yj_setBoldFont:17 atRange:range];
+                       NSString *class = kApiParams(element.attr(@"class"));
+                       if ([class isEqualToString:@"Ques-title"]) {
+                           NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+                           paragraphStyle.alignment = NSTextAlignmentCenter;
+                           [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
+                       }
+                   }
+               }
+           }
+       }
+}
+- (void)obliquenessWithAttr:(NSMutableAttributedString *)attr{
+    YJEGumboDocument *document = [[YJEGumboDocument alloc] initWithHTMLString:self.topicContent];
+       NSArray *elements1 = document.Query(@"i");
+       NSArray *elements2 = document.Query(@"em");
+       NSMutableArray *elements = [NSMutableArray array];
+       if (!IsArrEmpty(elements1)) {
+           [elements addObjectsFromArray:elements1];
+       }
+       if (!IsArrEmpty(elements2)) {
+           [elements addObjectsFromArray:elements2];
+          }
+       for (YJEGumboElement *element in elements) {
+           NSString *text = [element.text() yj_deleteWhitespaceAndNewlineCharacter];
+           if (!IsStrEmpty(text)) {
+               NSString *textAttrStr = attr.string;
+               NSRange range = [textAttrStr rangeOfString:text];
+               if (range.location != NSNotFound) {
+                  [attr addAttribute:NSObliquenessAttributeName value:@(0.3) range:range];
+               }
+           }
+       }
+}
+
 - (void)setVoiceUrl:(NSString *)voiceUrl{
     _voiceUrl = voiceUrl;
     self.voiceBtn.hidden = (IsStrEmpty(voiceUrl) ? YES : NO);
@@ -104,6 +173,29 @@
     [self.audioPlayer play];
     self.voiceBtn.selected = YES;
 }
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange{
+    NSString *urlStr = URL.absoluteString;
+    if (!IsStrEmpty(urlStr)) {
+        urlStr = [urlStr stringByRemovingPercentEncoding];
+        NSString *ext = [urlStr componentsSeparatedByString:@"."].lastObject;
+        if (YJTaskSupportImgType(ext)) {
+            [YJImageBrowserView showWithImageUrls:@[urlStr] atIndex:0];
+        }
+    }
+    return NO;
+}
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction API_AVAILABLE(ios(10.0) ){
+     NSString *urlStr = URL.absoluteString;
+     if (!IsStrEmpty(urlStr)) {
+         urlStr = [urlStr stringByRemovingPercentEncoding];
+         NSString *ext = [urlStr componentsSeparatedByString:@"."].lastObject;
+         if (YJTaskSupportImgType(ext)) {
+             [YJImageBrowserView showWithImageUrls:@[urlStr] atIndex:0];
+         }
+     }
+    return NO;
+}
+
 #pragma mark - YJAudioPlayerDelegate
 - (void)yj_audioPlayerDidPlayFailed{
     [LGAlert showStatus:@"播放失败"];
@@ -120,14 +212,15 @@
     [self stopPlayVoice];
 }
 
-- (UITextView *)textView{
+- (YJTaskTopicTextView *)textView{
     if (!_textView) {
-        _textView = [[UITextView alloc] initWithFrame:CGRectZero];
+        _textView = [[YJTaskTopicTextView alloc] initWithFrame:CGRectZero];
         _textView.editable = NO;
-        _textView.selectable = NO;
         _textView.scrollEnabled = NO;
+        _textView.delegate = self;
         _textView.font = [UIFont systemFontOfSize:18];
         _textView.textColor = [UIColor darkGrayColor];
+        _textView.linkTextAttributes = @{NSForegroundColorAttributeName:LG_ColorWithHex(0x252525)};
     }
     return _textView;
 }

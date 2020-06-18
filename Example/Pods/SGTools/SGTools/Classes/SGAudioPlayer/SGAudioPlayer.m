@@ -65,7 +65,12 @@ static NSString * const kTimeControlStatus        = @"timeControlStatus";
     
     _urlAsset = [AVURLAsset assetWithURL:url];
     _playerItem = [AVPlayerItem playerItemWithAsset:_urlAsset];
-    _audioPlayer = [AVQueuePlayer playerWithPlayerItem:_playerItem];
+    _playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmTimeDomain;
+    if (!_audioPlayer) {
+        _audioPlayer = [AVQueuePlayer playerWithPlayerItem:_playerItem];
+    } else {
+        [_audioPlayer replaceCurrentItemWithPlayerItem:_playerItem];
+    }
     
     if (@available(iOS 10.0, *)) {
         _audioPlayer.automaticallyWaitsToMinimizeStalling = NO;
@@ -284,9 +289,9 @@ static NSString * const kTimeControlStatus        = @"timeControlStatus";
     //耳机插入和拔掉通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioRouteChangeListenerCallback:) name:AVAudioSessionRouteChangeNotification object:[AVAudioSession sharedInstance]];
     /** 进入后台 */
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActive:) name:UIApplicationDidEnterBackgroundNotification object:nil];
     /** 返回前台 */
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActive:) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 - (void)removeNotification {

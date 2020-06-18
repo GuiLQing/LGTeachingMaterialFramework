@@ -41,11 +41,13 @@
 #import "YJWrittingImageView.h"
 #import "YJWrittingImageViewer.h"
 #import "YJConst.h"
+#import "YJTaskModuleConfig.h"
 #import "YJImageLabel.h"
 #import "YJTaskChoiceLabel.h"
 #import "YJListenListView.h"
 #import "YJListenPlayer.h"
 #import "YJListenView.h"
+#import "YJTaskBaseListenView.h"
 #import "YJMatchView.h"
 #import "YJBasePaperModel.h"
 #import "YJCorrectModel.h"
@@ -78,7 +80,9 @@
 #import "YJCorrentView.h"
 #import "YJFileManager.h"
 #import "YJProgressView.h"
+#import "YJSpeechMarkAlertProtocol.h"
 #import "YJSpeechMarkView.h"
+#import "YJTaskSpeechMarkView.h"
 
 FOUNDATION_EXPORT double YJTaskModuleVersionNumber;
 FOUNDATION_EXPORT const unsigned char YJTaskModuleVersionString[];

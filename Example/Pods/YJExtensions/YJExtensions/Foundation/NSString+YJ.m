@@ -15,6 +15,18 @@
 #define YJ_ASSOCIATIVE_CURRENT_TEXT_KEY @"ASSOCIATIVE_CURRENT_TEXT_KEY"
 
 #define IsObjEmpty(_ref)    (((_ref) == nil) || ([(_ref) isEqual:[NSNull null]]))
+
+
+static inline NSDictionary *YJHTMLEscapeMap() {
+    return @{@"&nbsp;":@" ",
+             @"&lt;":@"<",
+             @"&gt;":@">",
+             @"&amp;":@"&",
+             @"&quot;":@"\"",
+             @"&apos;":@"'"
+    };
+}
+
 @interface NSString () <NSXMLParserDelegate>
 
 @property(nonatomic, retain)NSMutableArray *currentDictionaries;
@@ -24,6 +36,9 @@
 @end
 
 @implementation NSString (YJ)
+
+
+
 + (NSString *)yj_Char1{
     return [NSString stringWithFormat:@"%c",1];
 }
@@ -259,6 +274,10 @@
             if (srcSuf && [srcSuf.lowercaseString containsString:@"gif"]) {
                 // gif 自适应
             }else{
+                if ([attributes.allKeys containsObject:@"style"]) {
+                       NSString *styleStr = [NSString stringWithFormat:@"style=\"%@\"",[attributes objectForKey:@"style"]];
+                       html = [html stringByReplacingOccurrencesOfString:styleStr withString:@""];
+                   }
                 CGFloat screenW = [UIScreen mainScreen].bounds.size.width;
                 html = [NSString stringWithFormat:@"<html><head><style>img{max-width:%.f;height:auto !important;width:auto !important;};</style></head><body style='margin:0; padding:0;'>%@</body></html>",screenW-30, html];
             }
@@ -453,6 +472,49 @@
 }
 - (NSString *)yj_URLQueryAllowedCharacterSet{
     return [self stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+}
++ (NSString *)yj_deleteURLDoubleSlashWithUrlStr:(NSString *)urlStr{
+    if (urlStr && urlStr.length > 0){
+        urlStr = [urlStr stringByRemovingPercentEncoding];
+    }
+    if (urlStr && urlStr.length > 0 && [urlStr containsString:@"://"]) {
+        NSArray *urlArr = [urlStr componentsSeparatedByString:@"://"];
+       NSString *lastStr = [urlArr.lastObject stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
+       while ([lastStr containsString:@"//"]) {
+           lastStr = [lastStr stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
+       }
+       urlStr = [NSString stringWithFormat:@"%@://%@",urlArr.firstObject,lastStr];
+    }
+    return urlStr;
+}
+- (NSString *)yj_htmlDecode{
+    if (self && self.length > 0) {
+        NSString *html = self;
+        for (NSString *keyStr in YJHTMLEscapeMap().allKeys) {
+            if ([html containsString:keyStr]) {
+                html = [html stringByReplacingOccurrencesOfString:keyStr withString:[YJHTMLEscapeMap() objectForKey:keyStr]];
+            }
+        }
+        return html;
+    }
+    return @"";
+}
++ (BOOL)yj_isNum:(NSString *)checkedNumString{
+    if (!checkedNumString || checkedNumString.length == 0) {
+        return NO;
+    }
+    checkedNumString = [checkedNumString stringByTrimmingCharactersInSet:[NSCharacterSet decimalDigitCharacterSet]];
+    if(checkedNumString.length > 0) {
+        return NO;
+    }
+    return YES;
+}
++ (BOOL)yj_predicateMatchWithText:(NSString *)text matchFormat:(NSString *)matchFormat{
+    if (!text || text.length == 0) {
+        return NO;
+    }
+    NSPredicate *predicate = [NSPredicate predicateWithFormat: @"SELF MATCHES %@", matchFormat];
+    return [predicate evaluateWithObject:text];
 }
 @end
 

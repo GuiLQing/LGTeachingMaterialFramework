@@ -11,6 +11,12 @@
 #import "YJTaskCarkModel.h"
 @implementation YJBasePaperSmallModel
 - (void)updateSmallAnswerStr:(NSString *)answer atIndex:(NSInteger)index{};
+- (NSString *)yj_smallAnswer{
+    if (self.yj_smallTopicType == YJSmallTopicTypeChoice && [NSString yj_isNum:_yj_smallAnswer]) {
+        return [NSString yj_stringToASCIIStringWithIntCount:_yj_smallAnswer.integerValue+64];
+    }
+    return _yj_smallAnswer;
+}
 @end
 
 @implementation YJBasePaperBigModel
@@ -60,6 +66,14 @@
 }
 - (void)configCorrectAnswerInfo:(NSDictionary *)answerInfo{}
 
++ (Class)taskListenViewClass{
+    Class ListenView = NSClassFromString(@"YJListenView");
+    NSString *listenClassName = [NSUserDefaults yj_stringForKey:YJTaskModule_ListenClassName_UserDefault_Key];
+    if (!IsStrEmpty(listenClassName)){
+        ListenView = NSClassFromString(listenClassName);
+    }
+    return ListenView;
+}
 - (Class)taskClassByTaskStageType:(YJTaskStageType)taskStageType{
     Class SmallItem = NSClassFromString(@"YJAnswerSmallItem");
     switch (taskStageType) {
@@ -197,18 +211,102 @@
     }
     return count;
 }
+- (NSInteger)quesMarkItemSum{
+    NSInteger itemFinishSum = 0;
+    for (YJBasePaperBigModel *bigModel in self.yj_bigTopicList) {
+        for (YJBasePaperSmallModel *smallModel in bigModel.yj_smallTopicList) {
+            BOOL isAnswer = NO;
+             if (smallModel.yj_smallAnswerType != 4 && !IsStrEmpty(smallModel.yj_smallAnswer)) {
+                 isAnswer = YES;
+             }else if (smallModel.yj_smallAnswerType == 4 && (!IsStrEmpty(smallModel.yj_smallAnswer) || !IsArrEmpty(smallModel.yj_imgUrlArr))){
+                 isAnswer = YES;
+             }
+            if (isAnswer) {
+                if (smallModel.yj_smallMarkAnswerScore.floatValue >= 0) {
+                    itemFinishSum++;
+                }
+            }else{
+                itemFinishSum++;
+            }
+           
+        }
+    }
+    return itemFinishSum;
+}
 - (NSInteger)quesHpItemSum{
     NSInteger itemFinishSum = 0;
     for (YJBasePaperBigModel *bigModel in self.yj_bigTopicList) {
         for (YJBasePaperSmallModel *smallModel in bigModel.yj_smallTopicList) {
-            if (smallModel.yj_smallAnswerType == 4 && !IsStrEmpty(smallModel.yj_smallStuScore) && smallModel.yj_smallStuScore.floatValue >= 0) {
-                itemFinishSum++;
+            if (smallModel.yj_smallAnswerType == 4) {
+                if (IsStrEmpty(smallModel.yj_smallAnswer)) {
+                    itemFinishSum++;
+                }else if (!IsStrEmpty(smallModel.yj_smallStuScore) && smallModel.yj_smallStuScore.floatValue >= 0){
+                    itemFinishSum++;
+                }
             }
         }
     }
     return itemFinishSum;
 }
-
+- (NSIndexPath *)quesUnAnswerItemIndexPath{
+    NSInteger bigIndex = 0;
+    NSInteger smallIndex = 0;
+    
+    int i = 0;
+    for (YJBasePaperBigModel *bigModel in self.yj_bigTopicList) {
+        int j = 0;
+        for (YJBasePaperSmallModel *smallModel in bigModel.yj_smallTopicList) {
+            if (smallModel.yj_smallItemCount > 1 && !IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
+                NSInteger startIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
+                if (IsStrEmpty(smallModel.yj_smallAnswer)) {
+                  bigIndex = i;
+                  smallIndex = startIndex;
+                  return [NSIndexPath indexPathForRow:smallIndex inSection:bigIndex];
+                }
+            }else{
+                if (IsStrEmpty(smallModel.yj_smallAnswer) && IsArrEmpty(smallModel.yj_imgUrlArr)) {
+                    bigIndex = i;
+                    smallIndex = j;
+                    if (!IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
+                        smallIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
+                    }
+                    return [NSIndexPath indexPathForRow:smallIndex inSection:bigIndex];
+                }
+            }
+            j++;
+        }
+        i++;
+    }
+    return [NSIndexPath indexPathForRow:smallIndex inSection:bigIndex];
+}
+- (NSIndexPath *)quesUnMarkItemIndexPath{
+    NSInteger bigIndex = 0;
+    NSInteger smallIndex = 0;
+    
+    int i = 0;
+    for (YJBasePaperBigModel *bigModel in self.yj_bigTopicList) {
+        int j = 0;
+        for (YJBasePaperSmallModel *smallModel in bigModel.yj_smallTopicList) {
+            BOOL isAnswer = NO;
+             if (smallModel.yj_smallAnswerType != 4 && !IsStrEmpty(smallModel.yj_smallAnswer)) {
+                 isAnswer = YES;
+             }else if (smallModel.yj_smallAnswerType == 4 && (!IsStrEmpty(smallModel.yj_smallAnswer) || !IsArrEmpty(smallModel.yj_imgUrlArr))){
+                 isAnswer = YES;
+             }
+            if (isAnswer && smallModel.yj_smallMarkAnswerScore.floatValue < 0) {
+                bigIndex = i;
+                smallIndex = j;
+                if (!IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
+                    smallIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
+                }
+                return [NSIndexPath indexPathForRow:smallIndex inSection:bigIndex];
+            }
+            j++;
+        }
+        i++;
+    }
+    return [NSIndexPath indexPathForRow:smallIndex inSection:bigIndex];
+}
 - (NSInteger)quesAnswerItemSum{
     NSInteger itemFinishSum = 0;
     for (YJBasePaperBigModel *bigModel in self.yj_bigTopicList) {
@@ -228,7 +326,7 @@
                     }
                 }
             }else{
-                if (!IsStrEmpty(smallModel.yj_smallAnswer) || (smallModel.yj_smallTopicType == YJSmallTopicTypeWritting && !IsArrEmpty(smallModel.yj_imgUrlArr))) {
+                if (!IsStrEmpty(smallModel.yj_smallAnswer) || (smallModel.yj_smallAnswerType == 4 && !IsArrEmpty(smallModel.yj_imgUrlArr))) {
                     itemFinishSum++;
                 }
             }
@@ -272,11 +370,79 @@
                    }
                 }
             }else{
-                if (!IsStrEmpty(smallModel.yj_smallAnswer) ||(smallModel.yj_smallTopicType == YJSmallTopicTypeWritting && !IsArrEmpty(smallModel.yj_imgUrlArr))) {
+                if (!IsStrEmpty(smallModel.yj_smallAnswer) ||(smallModel.yj_smallAnswerType == 4 && !IsArrEmpty(smallModel.yj_imgUrlArr))) {
                     [answers addObject:@(1)];
                     [indexs addObject:@(smallModel.yj_smallPaperIndex)];
                 }else{
                     [answers addObject:@(0)];
+                    [indexs addObject:@(smallModel.yj_smallPaperIndex)];
+                }
+            }
+        }
+        YJTaskCarkModel *model = [[YJTaskCarkModel alloc] init];
+        model.topcTypeName = bigModel.yj_bigTopicTypeName;
+        model.answerResults = answers;
+        model.indexs = indexs;
+        model.topicIndex = bigModel.yj_bigIndex;
+        [dataArr addObject:model];
+    }
+    return dataArr;
+    
+}
+- (NSArray<YJTaskCarkModel *> *)taskMarkCarkModelArray{
+    NSMutableArray *dataArr = [NSMutableArray array];
+    for (int i = 0; i < self.yj_bigTopicList.count; i++) {
+        YJBasePaperBigModel *bigModel = (YJBasePaperBigModel *)self.yj_bigTopicList[i];
+        NSMutableArray *answers = [NSMutableArray array];
+        NSMutableArray *indexs = [NSMutableArray array];
+        NSInteger answerCount = 0;
+        NSInteger unAnswerCount = 0;
+        for (YJBasePaperSmallModel *smallModel in bigModel.yj_smallTopicList) {
+            if (smallModel.yj_smallItemCount > 1 && !IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
+                NSInteger endIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].lastObject integerValue];
+                if (endIndex == 0) {
+                    answerCount = 0;
+                    unAnswerCount = 0;
+                }
+                if (smallModel.yj_smallMarkAnswerScore.floatValue >= 0) {
+                    if (endIndex <= smallModel.yj_smallItemCount - 1) {
+                        answerCount++;
+                        if (endIndex == smallModel.yj_smallItemCount - 1) {
+                            if (answerCount == smallModel.yj_smallItemCount) {
+                                [answers addObject:@(1)];
+                                [indexs addObject:@(smallModel.yj_smallPaperIndex)];
+                            }else{
+                                [answers addObject:@(0)];
+                                [indexs addObject:@(smallModel.yj_smallPaperIndex)];
+                            }
+                        }
+                    }
+                }else{
+                   if (endIndex == smallModel.yj_smallItemCount - 1) {
+                       if (IsStrEmpty(smallModel.yj_smallAnswer)) {
+                           [answers addObject:@(1)];
+                       }else{
+                           [answers addObject:@(0)];
+                       }
+                       [indexs addObject:@(smallModel.yj_smallPaperIndex)];
+                   }
+                }
+            }else{
+                if (smallModel.yj_smallMarkAnswerScore.floatValue >= 0) {
+                    [answers addObject:@(1)];
+                    [indexs addObject:@(smallModel.yj_smallPaperIndex)];
+                }else{
+                    BOOL isUnAnswer = NO;
+                    if (smallModel.yj_smallAnswerType != 4 && IsStrEmpty(smallModel.yj_smallAnswer)) {
+                        isUnAnswer = YES;
+                    }else if (smallModel.yj_smallAnswerType == 4 && IsStrEmpty(smallModel.yj_smallAnswer) && IsArrEmpty(smallModel.yj_imgUrlArr)){
+                        isUnAnswer = YES;
+                    }
+                    if (isUnAnswer) {
+                        [answers addObject:@(1)];
+                    }else{
+                        [answers addObject:@(0)];
+                    }
                     [indexs addObject:@(smallModel.yj_smallPaperIndex)];
                 }
             }

@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *AnswerID;
 /** 非标准答案 */
 @property (nonatomic,copy) NSString *AnswerStr;
+@property (nonatomic,strong) NSArray *AnswerImgUrlList;
 /** 新增 作答内容富文本 */
 @property (nonatomic,strong) NSMutableAttributedString *AnswerStr_Attr;
 /** 资料提交时间 */
@@ -80,10 +81,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) float TotalScore;
 /** Paper */
 @property (nonatomic,strong) YJPaperModel *Paper;
-
+/** 班级ID */
+@property (nonatomic,copy) NSString *ClassID;
 /** 非标准多资料模型 */
 @property (nonatomic,strong) NSArray<YJTaskCourResModel *> *CourResList;
 
+/** 课前非标准作答结果数组 */
+@property (nonatomic,strong) NSArray *PreviewAnswerList;
 /** 新增 */
 @property (nonatomic,strong) YJSpeechConfig *bkSpeechConfig;
 @property (nonatomic,strong) YJSpeechConfig *hwSpeechConfig;

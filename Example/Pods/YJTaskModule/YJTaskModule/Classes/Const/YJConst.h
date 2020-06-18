@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <YJExtensions/YJExtensions.h>
+#import "YJTaskModuleConfig.h"
 
 // 屏幕尺寸
 #define LG_ScreenWidth      [UIScreen mainScreen].bounds.size.width
@@ -26,19 +27,14 @@
 #define LG_ColorThemeBlue          LG_ColorWithHex(0x1379EC)
 #define LG_ColorLightGray          LG_ColorWithHex(0xEDEDED)
 
-
+#define kYJTextFontSize 17
+#define kYJTextLineSpacing 6
 //是否为空
 #define kApiParams(_ref)    (IsObjEmpty(_ref) ? @"" : _ref)
 #define IsStrEmpty(_ref)    (((_ref) == nil) || ([(_ref) isEqual:[NSNull null]]) ||([(_ref)isEqualToString:@""]))
 #define IsArrEmpty(_ref)    (((_ref) == nil) || ([(_ref) isEqual:[NSNull null]]) ||([(_ref) count] == 0))
 #define IsObjEmpty(_ref)    (((_ref) == nil) || ([(_ref) isEqual:[NSNull null]]))
 #define IsIPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-/** 配置 */
-static NSString *YJTaskModule_ApiUrl_UserDefault_Key = @"YJTaskModule_ApiUrl_UserDefault_Key";
-static NSString *YJTaskModule_UserID_UserDefault_Key = @"YJTaskModule_UserID_UserDefault_Key";
-static NSString *YJTaskModule_UserType_UserDefault_Key = @"YJTaskModule_UserType_UserDefault_Key";
-static NSString *YJTaskModule_ImgAnswerEnable_UserDefault_Key = @"YJTaskModule_ImgAnswerEnable_UserDefault_Key";
-static NSString *YJTaskModule_SpeechMarkEnable_UserDefault_Key = @"YJTaskModule_SpeechMarkEnable_UserDefault_Key";
 
 
 static NSString *YJTaskModule_StopYJTaskTopicVoicePlay_Notification = @"YJTaskModule_StopYJTaskTopicVoicePlay_Notification";
@@ -53,3 +49,13 @@ NSBundle *YJTaskBundle(void);
 
 static NSString *YJTaskModule_u2060 = @"\u2060";
 static NSString *YJTaskModule_u2063 = @"\u2063";
+
+NSArray *YJTaskSupportTextTypes(void);
+NSArray *YJTaskSupportAudioTypes(void);
+NSArray *YJTaskSupportVideoTypes(void);
+NSArray *YJTaskSupportResTypes(void);
+BOOL YJTaskSupportResType(NSString *ext);
+BOOL YJTaskSupportTextType(NSString *ext);
+BOOL YJTaskSupportAudioType(NSString *ext);
+BOOL YJTaskSupportVideoType(NSString *ext);
+BOOL YJTaskSupportImgType(NSString *ext);

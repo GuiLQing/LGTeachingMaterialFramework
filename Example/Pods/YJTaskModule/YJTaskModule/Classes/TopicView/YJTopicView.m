@@ -7,7 +7,7 @@
 //
 
 #import "YJTopicView.h"
-#import "YJListenView.h"
+#import "YJTaskBaseListenView.h"
 #import "YJMatchView.h"
 #import "YJTopicTextView.h"
 #import <Masonry/Masonry.h>
@@ -17,7 +17,7 @@
 #import <YJImageBrowser/YJImageBrowserView.h>
 
 @interface YJTopicView ()<UITextViewDelegate,YJMatchViewDelegate>
-@property (strong,nonatomic) YJListenView *listenView;
+@property (strong,nonatomic) YJTaskBaseListenView *listenView;
 @property (strong,nonatomic) YJTopicTextView *textView;
 @property (nonatomic,strong) YJWebViewController *readVC;
 @property(nonatomic,strong) YJBasePaperBigModel *bigModel;
@@ -47,6 +47,8 @@
         self.correntView.bigModel = (YJPaperBigModel *)self.bigModel;
     }else{
         self.textView.scrollEnabled = YES;
+        self.textView.topicPintro = self.bigModel.yj_topicDirectionTxt;
+        self.textView.topicContent = self.bigModel.yj_topicContent;
         if (self.bigModel.yj_bigTopicType == YJBigTopicTypeChioceBlank ||
             self.bigModel.yj_bigTopicType == YJBigTopicTypeBigTextAndBlank || [self.bigModel.yj_bigTopicTypeID isEqualToString:@"S"] || [self.bigModel.yj_bigTopicTypeID isEqualToString:@"U"]) {// 添加听力填空
             self.textView.topicIndexs = self.bigModel.yj_bigChioceBlankTopicIndexList;
@@ -85,16 +87,25 @@
     }
 }
 - (void)layoutTitleView{
+    NSString *sysID = [NSUserDefaults yj_stringForKey:YJTaskModule_SysID_UserDefault_Key];
     [self addSubview:self.titleL];
     [self.titleL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.top.equalTo(self);
         make.left.equalTo(self.mas_left).offset(10);
-        if (self.bigModel.yj_topicCarkMode) {
+        if (!IsStrEmpty(sysID) && [sysID isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
             make.height.mas_equalTo(5);
         }else{
-            make.height.mas_equalTo(36);
+            if (self.bigModel.yj_topicCarkMode) {
+                make.height.mas_equalTo(5);
+            }else{
+                make.height.mas_equalTo(36);
+            }
         }
     }];
+    
+     if (!IsStrEmpty(sysID) && [sysID isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
+         self.titleL.hidden = YES;
+     }
 }
 - (void)layoutListenView{
     [self addSubview:self.listenView];
@@ -176,6 +187,11 @@
 - (void)updateBlankAnswers{
     self.textView.answerResults = self.bigModel.yj_bigChioceBlankAnswerList;
 }
+- (void)startListen{
+    if ([self isListen]) {
+        [self.listenView startPlayer];
+    }
+}
 - (void)pauseListen{
     if ([self isListen]) {
         [self.listenView pausePlayer];
@@ -233,6 +249,7 @@
 
 #pragma mark YJMatchView delegate
 - (void)yj_matchView:(YJMatchView *)matchView didSelectedItemAtIndex:(NSInteger)index{
+    [NSUserDefaults yj_setObject:@(YES) forKey:UserDefaults_YJAnswerStatusChanged];
     NSMutableArray *arr = [NSMutableArray arrayWithArray:self.textView.answerResults];
     [arr replaceObjectAtIndex:self.currentSmallIndex withObject:[NSString yj_stringToASCIIStringWithIntCount:index+65]];
     self.textView.answerResults = arr;
@@ -247,14 +264,22 @@
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange{
     NSString *urlStr = URL.absoluteString;
     if (!IsStrEmpty(urlStr)) {
-        [YJImageBrowserView showWithImageUrls:@[urlStr] atIndex:0];
+        urlStr = [urlStr stringByRemovingPercentEncoding];
+        NSString *ext = [urlStr componentsSeparatedByString:@"."].lastObject;
+        if (YJTaskSupportImgType(ext)) {
+            [YJImageBrowserView showWithImageUrls:@[urlStr] atIndex:0];
+        }
     }
     return NO;
 }
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction API_AVAILABLE(ios(10.0)){
      NSString *urlStr = URL.absoluteString;
      if (!IsStrEmpty(urlStr)) {
-         [YJImageBrowserView showWithImageUrls:@[urlStr] atIndex:0];
+         urlStr = [urlStr stringByRemovingPercentEncoding];
+         NSString *ext = [urlStr componentsSeparatedByString:@"."].lastObject;
+         if (YJTaskSupportImgType(ext)) {
+             [YJImageBrowserView showWithImageUrls:@[urlStr] atIndex:0];
+         }
      }
     return NO;
 }
@@ -299,15 +324,16 @@
     }
     return NO;
 }
+
 - (YJCorrentView *)correntView{
     if (!_correntView) {
         _correntView = [[YJCorrentView alloc] initWithFrame:CGRectZero];
     }
     return _correntView;
 }
-- (YJListenView *)listenView{
+- (YJTaskBaseListenView *)listenView{
     if (!_listenView) {
-        _listenView = [[YJListenView alloc] initWithFrame:CGRectZero];
+        _listenView = [[[YJBasePaperBigModel taskListenViewClass] alloc] initWithFrame:CGRectZero];
     }
     return _listenView;
 }
@@ -316,7 +342,7 @@
         _textView = [[YJTopicTextView alloc] initWithFrame:CGRectZero];
         _textView.font = [UIFont systemFontOfSize:16];
         _textView.delegate = self;
-
+        _textView.linkTextAttributes = @{NSForegroundColorAttributeName:LG_ColorWithHex(0x252525)};
     }
     return _textView;
 }

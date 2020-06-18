@@ -83,20 +83,20 @@
 - (void)setKeyboardSelected:(BOOL)keyboardSelected {
     _keyboardSelected = keyboardSelected;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        self.backImageView.image = [UIImage sg_imageNamed:keyboardSelected ? @"sg_dictation_icon_keyboard_selected_ipad" : @"sg_dictation_icon_keyboard_default_ipad"];
-        self.shadowImageView.image = [UIImage sg_imageNamed:keyboardSelected ? @"sg_dictation_icon_keyboard_selected_shadow_ipad" : @"sg_dictation_icon_keyboard_default_shadow_ipad"];
+        self.backImageView.image = [UIImage sg_vr_imageNamed:keyboardSelected ? @"sg_dictation_icon_keyboard_selected_ipad" : @"sg_dictation_icon_keyboard_default_ipad"];
+        self.shadowImageView.image = [UIImage sg_vr_imageNamed:keyboardSelected ? @"sg_dictation_icon_keyboard_selected_shadow_ipad" : @"sg_dictation_icon_keyboard_default_shadow_ipad"];
     } else {
-        self.backImageView.image = [UIImage sg_imageNamed:keyboardSelected ? @"sg_dictation_icon_keyboard_selected" : @"sg_dictation_icon_keyboard_default"];
+        self.backImageView.image = [UIImage sg_vr_imageNamed:keyboardSelected ? @"sg_dictation_icon_keyboard_selected" : @"sg_dictation_icon_keyboard_default"];
     }
 }
 
 - (void)setIsReturnKeyboard:(BOOL)isReturnKeyboard {
     _isReturnKeyboard = isReturnKeyboard;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        self.backImageView.image = [UIImage sg_imageNamed:@"sg_dictation_icon_keyboard_ensure_ipad"];
-        self.shadowImageView.image = [UIImage sg_imageNamed:@"sg_dictation_icon_keyboard_ensure_shadow_ipad"];
+        self.backImageView.image = [UIImage sg_vr_imageNamed:@"sg_dictation_icon_keyboard_ensure_ipad"];
+        self.shadowImageView.image = [UIImage sg_vr_imageNamed:@"sg_dictation_icon_keyboard_ensure_shadow_ipad"];
     } else {
-        self.backImageView.image = [UIImage sg_imageNamed:@"sg_dictation_icon_keyboard_ensure"];
+        self.backImageView.image = [UIImage sg_vr_imageNamed:@"sg_dictation_icon_keyboard_ensure"];
     }
 }
 
@@ -127,6 +127,26 @@ static NSString * const SGVocabularyKeyboardCellIdentifier = @"SGVocabularyKeybo
     _randomVocabularys = randomVocabularys;
     
     [self.selectedWordsDics removeAllObjects];
+    [self.collectionView reloadData];
+}
+
+- (void)setSelectedKeyBoards:(NSArray<NSString *> *)selectedKeyBoards {
+    _selectedKeyBoards = selectedKeyBoards;
+    
+    for (NSString *text in selectedKeyBoards) {
+        if ([self.randomVocabularys containsObject:text]) {
+            for (NSInteger index = 0; index < self.randomVocabularys.count; index ++) {
+                NSString *word = self.randomVocabularys[index];
+                if ([word isEqualToString:text]) {
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+                    if (![self.selectedWordsDics.allKeys containsObject:indexPath]) {
+                        [self.selectedWordsDics setObject:text forKey:indexPath];
+                        break;
+                    }
+                }
+            }
+        }
+    }
     [self.collectionView reloadData];
 }
 

@@ -87,6 +87,7 @@ static NSString * const SGTimeControlStatus        = @"timeControlStatus";
     
     _urlAsset = [AVURLAsset assetWithURL:_audioUrl];
     _playerItem = [AVPlayerItem playerItemWithAsset:_urlAsset];
+    _playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmTimeDomain;
     _audioPlayer = [AVQueuePlayer playerWithPlayerItem:_playerItem];
     
     if (@available(iOS 10.0, *)) {
@@ -182,7 +183,11 @@ static NSString * const SGTimeControlStatus        = @"timeControlStatus";
         //由于 AVPlayer 缓存不足就会自动暂停,所以缓存充足了需要手动播放,才能继续播放
         if (_isPlaying) [self play];
     } else if ([keyPath isEqualToString:SGTimeControlStatus]) {
-        NSLog(@"timeControlStatus: %@, reason: %@, rate: %@", @(_audioPlayer.timeControlStatus), _audioPlayer.reasonForWaitingToPlay, @(_audioPlayer.rate));
+        if (@available(iOS 10.0, *)) {
+            NSLog(@"timeControlStatus: %@, reason: %@, rate: %@", @(_audioPlayer.timeControlStatus), _audioPlayer.reasonForWaitingToPlay, @(_audioPlayer.rate));
+        } else {
+            // Fallback on earlier versions
+        }
     }
 }
 
@@ -230,9 +235,9 @@ static NSString * const SGTimeControlStatus        = @"timeControlStatus";
     //耳机插入和拔掉通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioRouteChangeListenerCallback:) name:AVAudioSessionRouteChangeNotification object:[AVAudioSession sharedInstance]];
     /** 进入后台 */
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActive:) name:UIApplicationDidEnterBackgroundNotification object:nil];
     /** 返回前台 */
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActive:) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 - (void)removeNotification {

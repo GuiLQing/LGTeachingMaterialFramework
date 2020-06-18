@@ -13,6 +13,8 @@
 NS_ASSUME_NONNULL_BEGIN
 @class YJTaskCarkModel;
 @interface YJBasePaperSmallModel : LGBaseModel<YJPaperSmallProtocol>
+/** 简答题是否文本作答 */
+@property (nonatomic,assign) BOOL yj_smallSimpleTextAnswer;
 /** 单个答案 */
 @property (nonatomic,copy) NSString *yj_smallAnswer;
 /** 多个答案数组 */
@@ -34,6 +36,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSDictionary<NSString *,NSString *> *)blankTopicInfo;
 - (NSDictionary<NSString *,NSString *> *)matchTopicInfo;
 - (NSDictionary<NSString *,NSString *> *)listenTopicInfo;
+
+
++ (Class)taskListenViewClass;
 
 - (Class)taskClassByTaskStageType:(YJTaskStageType)taskStageType;
 
@@ -71,16 +76,20 @@ NS_ASSUME_NONNULL_BEGIN
 /** 是否教师分析阶段 */
 @property (nonatomic,assign) BOOL yj_taskStageTypeTeachAnalysis;
 
+
+- (NSInteger)quesMarkItemSum;
 /** 已作答小题数 */
 - (NSInteger)quesAnswerItemSum;
 /** 已互评小题数 */
 - (NSInteger)quesHpItemSum;
 /** 作答小题数 */
 - (NSInteger)quesItemSum;
-
-
+/** 未作答第一道题的索引 */
+- (NSIndexPath *)quesUnAnswerItemIndexPath;
+/** 未评阅第一道题的索引 */
+- (NSIndexPath *)quesUnMarkItemIndexPath;
 - (NSArray<YJTaskCarkModel *> *)taskCarkModelArray;
-
+- (NSArray<YJTaskCarkModel *> *)taskMarkCarkModelArray;
 - (void)updateMutiBlankScoreInfo;
 @end
 

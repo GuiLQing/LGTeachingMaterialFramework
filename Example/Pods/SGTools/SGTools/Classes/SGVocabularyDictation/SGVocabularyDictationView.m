@@ -89,11 +89,22 @@
     
     self.answerView.rightAnswer = vocabulary;
     
-    NSMutableArray *results = [NSMutableArray array];
-    for (NSArray *array in rightVocabularys) {
-        [results addObjectsFromArray:array];
+    if (!self.defaultKeyBoards || self.defaultKeyBoards.count == 0) {
+        NSMutableArray *results = [NSMutableArray array];
+        for (NSArray *array in rightVocabularys) {
+            [results addObjectsFromArray:array];
+        }
+        self.keyboardView.randomVocabularys = [SGVocabularyTools addRandomSortResults:results length:[SGVocabularyTools cutLengthByVocabulary:vocabulary]];
+        if (self.sg_updateDefaultKeyBoards) {
+            self.sg_updateDefaultKeyBoards(self.keyboardView.randomVocabularys);
+        }
+    } else {
+        self.keyboardView.randomVocabularys = self.defaultKeyBoards;
+        self.keyboardView.selectedKeyBoards = self.selectedKeyBoards;
+        for (NSString *text in self.selectedKeyBoards) {
+            [self.spellingView addSpellingAnswer:text];
+        }
     }
-    self.keyboardView.randomVocabularys = [SGVocabularyTools addRandomSortResults:results length:[SGVocabularyTools cutLengthByVocabulary:vocabulary]];
     
     [self.answerView resetLookAnswerButton];
 }
@@ -103,11 +114,36 @@
     
     [self.answerView resetLookAnswerButton];
     
-    self.answerView.hidden = viewType != SGDictationViewTypeAnswer;
-    self.voiceView.hidden = viewType == SGDictationViewTypeAnswer;
+    self.answerView.hidden = YES;
+    self.voiceView.hidden = YES;
+    
+    switch (viewType) {
+        case SGDictationViewTypeAnswer: {
+            self.answerView.hidden = NO;
+            [self.keyboardView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(self.answerView.mas_bottom).offset(10.0f);
+            }];
+        }
+            break;
+        case SGDictationViewTypeVoice: {
+            self.voiceView.hidden = NO;
+            [self.keyboardView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(self.answerView.mas_bottom).offset(10.0f);
+            }];
+        }
+            break;
+        case SGDictationViewTypeNone: {
+            [self.keyboardView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(self.spellingView.mas_bottom).offset(20.0f);
+            }];
+        }
+            break;
+    }
 }
 
 - (void)updateAnswerView:(BOOL)isHidden {
+    if (self.viewType != SGDictationViewTypeAnswer) return;
+    
     if (isHidden) {
         [self.answerView hideAnswerView];
     } else {
@@ -119,6 +155,13 @@
 
 - (void)sg_spellingViewDeleteDidClickedWithWords:(NSString *)words {
     [self.keyboardView removeWords:words];
+    
+    if (self.sg_updateSelectedKeyBoards) {
+        NSMutableArray *keyboards = [self.selectedKeyBoards mutableCopy];
+        [keyboards removeLastObject];
+        self.selectedKeyBoards = keyboards;
+        self.sg_updateSelectedKeyBoards(self.selectedKeyBoards);
+    }
 }
 
 - (void)sg_spellingViewCallbackSpellingAnswer:(NSString *)answer {
@@ -138,7 +181,27 @@
 - (void)sg_keyboardDidSelectedWithWords:(NSString *)words atIndex:(NSInteger)index complete:(void (^)(void))complete {
     if ([self.spellingView addSpellingAnswer:words]) {
         complete();
+        if (self.sg_updateSelectedKeyBoards) {
+            NSMutableArray *keyboards = [self.selectedKeyBoards mutableCopy];
+            [keyboards addObject:words];
+            self.selectedKeyBoards = keyboards;
+            self.sg_updateSelectedKeyBoards(self.selectedKeyBoards);
+        }
     }
+}
+
+- (NSArray *)defaultKeyBoards {
+    if (!_defaultKeyBoards) {
+        _defaultKeyBoards = @[];
+    }
+    return _defaultKeyBoards;
+}
+
+- (NSArray *)selectedKeyBoards {
+    if (!_selectedKeyBoards) {
+        _selectedKeyBoards = @[];
+    }
+    return _selectedKeyBoards;
 }
 
 @end

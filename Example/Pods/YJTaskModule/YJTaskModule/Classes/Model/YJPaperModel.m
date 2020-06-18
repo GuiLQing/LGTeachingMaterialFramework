@@ -9,20 +9,20 @@
 #import "YJPaperModel.h"
 #import "YJConst.h"
 #import <YJExtensions/YJEHpple.h>
-
+#import <YJExtensions/YJEGumbo+Query.h>
 static NSString *kHpStuName = @"";
 
 
 
 NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     NSString *TopicContent = htmlStr;
-    if ([TopicContent.lowercaseString containsString:@"<img"]) {
+    if ([htmlStr.lowercaseString containsString:@"<img"]) {
         NSRegularExpression *imgRegularExpretion = [NSRegularExpression regularExpressionWithPattern:@"<img[^>]*?>" options:NSRegularExpressionCaseInsensitive error:nil];
-        NSArray<NSTextCheckingResult *> *arr = [imgRegularExpretion matchesInString:TopicContent options:NSMatchingReportCompletion range:NSMakeRange(0, TopicContent.length)];
+        NSArray<NSTextCheckingResult *> *arr = [imgRegularExpretion matchesInString:htmlStr options:NSMatchingReportCompletion range:NSMakeRange(0, htmlStr.length)];
         if (!IsArrEmpty(arr)) {
             for (NSTextCheckingResult *result in arr) {
                 NSRange matchRange = result.range;
-                NSString *str = [TopicContent substringWithRange:matchRange];
+                NSString *str = [htmlStr substringWithRange:matchRange];
                 NSData *htmlData = [str dataUsingEncoding:NSUTF8StringEncoding];
                 YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
                 NSArray *imgArray = [xpathParser searchWithXPathQuery:@"//img"];
@@ -41,9 +41,7 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
 
 @implementation YJPaperTextAttachment
 @end
-@interface YJPaperBlankTextField : UITextField
 
-@end
 @implementation YJPaperBlankTextField
 
 - (instancetype)initWithFrame:(CGRect)frame{
@@ -93,10 +91,10 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
         html = [html substringToIndex:html.length-5];
     }
     if ([html.lowercaseString containsString:@"</p>"] && [html.lowercaseString componentsSeparatedByString:@"</p>"].count == 2) {
-        html = [html stringByReplacingOccurrencesOfString:@"<p" withString:@"<strong"];
-        html = [html stringByReplacingOccurrencesOfString:@"<P" withString:@"<strong"];
-        html = [html stringByReplacingOccurrencesOfString:@"p>" withString:@"strong>"];
-        html = [html stringByReplacingOccurrencesOfString:@"P>" withString:@"strong>"];
+        html = [html stringByReplacingOccurrencesOfString:@"<p" withString:@"<span"];
+        html = [html stringByReplacingOccurrencesOfString:@"<P" withString:@"<span"];
+        html = [html stringByReplacingOccurrencesOfString:@"p>" withString:@"span>"];
+        html = [html stringByReplacingOccurrencesOfString:@"P>" withString:@"span>"];
     }
     return html;
 }
@@ -123,19 +121,32 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     _OptionContentList_attr = optionContentList_attr;
 }
 - (void)setQuesAsk:(NSString *)QuesAsk{
-    if (!IsStrEmpty(QuesAsk)) {
-        NSRegularExpression *regularExpretion = [NSRegularExpression regularExpressionWithPattern:@"(?isx)<(span|p)[^>]*>[^<>]*((?<!\\d)(?=(\\d{1,3}(\\.|．|、)))[^<>]*)</(span|p)>" options:NSRegularExpressionCaseInsensitive error:nil];
+    
+    if (!IsStrEmpty(QuesAsk) && [QuesAsk.yj_deleteWhitespaceAndNewlineCharacter hasPrefix:@"<"]) {
+        NSRegularExpression *regularExpretion = [NSRegularExpression regularExpressionWithPattern:@"(?isx)<(span|p)[^>]*>[^<>(]*((?<!\\d)(?=(\\d{1,3}(\\.|．|、|\\))))[^<>]*)</(span|p)>" options:NSRegularExpressionCaseInsensitive error:nil];
         NSRange firstRange = [regularExpretion rangeOfFirstMatchInString:QuesAsk options:NSMatchingReportProgress range:NSMakeRange(0, QuesAsk.length)];
         if (firstRange.location != NSNotFound) {
-            QuesAsk = [QuesAsk stringByReplacingCharactersInRange:firstRange withString:@""];
+            NSString *firstStr = [QuesAsk substringWithRange:firstRange];
+            NSString *firstText = [NSString yj_filterHTML:firstStr].yj_deleteWhitespaceAndNewlineCharacter;
+            if (![firstStr.lowercaseString containsString:@"numvalue="] && firstText.length <= 8) {
+                QuesAsk = [QuesAsk stringByReplacingCharactersInRange:firstRange withString:@""];
+            }
         }
+    }
+    if (!IsStrEmpty(QuesAsk)) {
+        QuesAsk = [[NSRegularExpression regularExpressionWithPattern:@"<b>" options:NSRegularExpressionCaseInsensitive error:nil] stringByReplacingMatchesInString:QuesAsk options:NSMatchingReportCompletion range:NSMakeRange(0, QuesAsk.length) withTemplate:@"<strong>"];
+        QuesAsk = [[NSRegularExpression regularExpressionWithPattern:@"</b>" options:NSRegularExpressionCaseInsensitive error:nil] stringByReplacingMatchesInString:QuesAsk options:NSMatchingReportCompletion range:NSMakeRange(0, QuesAsk.length) withTemplate:@"</strong>"];
         QuesAsk = YJTaskModuleHandleImgLabInfo(QuesAsk);
     }
-    
     QuesAsk = [self yj_filterPBrHtml:QuesAsk];
+    if (!IsStrEmpty(QuesAsk) && ![QuesAsk hasPrefix:@"<span style=\"text-align: justify;line-height: 26px;\">"]) {
+        QuesAsk = [NSString stringWithFormat:@"<span style=\"text-align: justify;line-height: 26px;\">%@</span>",QuesAsk];
+    }
+    
     if (!IsStrEmpty(QuesAsk) &&
         [QuesAsk containsString:@"___"] &&
         [QuesAsk componentsSeparatedByString:@"___"].count > 2) {
+        QuesAsk = [QuesAsk stringByReplacingOccurrencesOfString:@"&nbsp;" withString:@" "];
         NSArray *arr = [QuesAsk componentsSeparatedByString:@" "];
         int count = 0;
         for (NSString *word in arr) {
@@ -143,12 +154,12 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
                 if ([word containsString:@"____"]) {
                     NSRange range = [QuesAsk rangeOfString:@"____"];
                     if (range.location != NSNotFound) {
-                        QuesAsk = [QuesAsk stringByReplacingCharactersInRange:range withString:[NSString stringWithFormat:@"%c%c",20,count+1]];
+                        QuesAsk = [QuesAsk stringByReplacingCharactersInRange:range withString:[NSString stringWithFormat:@"%c",1]];
                     }
                 }else{
                     NSRange range = [QuesAsk rangeOfString:@"___"];
                     if (range.location != NSNotFound) {
-                        QuesAsk = [QuesAsk stringByReplacingCharactersInRange:range withString:[NSString stringWithFormat:@"%c",count+1]];
+                        QuesAsk = [QuesAsk stringByReplacingCharactersInRange:range withString:[NSString stringWithFormat:@"%c",2]];
                     }
                 }
                 count++;
@@ -158,6 +169,9 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     }
     _QuesAsk = QuesAsk;
     _QuesAsk_attr = QuesAsk.yj_htmlImgFrameAdjust.yj_toHtmlMutableAttributedString;
+}
+- (NSString *)yj_smallTopicContent{
+    return self.QuesAsk;
 }
 - (NSInteger)yj_smallItemCount{
     if (self.mutiBlankDisplayEnable && !IsStrEmpty(self.IndexOri) && self.AnswerType == 2) {
@@ -180,8 +194,16 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     _AnswerStr = AnswerStr;
     self.yj_smallAnswer = AnswerStr;
 }
-
+- (NSString *)yj_smallOriStandardAnswer{
+    if (IsStrEmpty(self.QuesAnswer)) {
+        return @"略";
+    }
+    return self.QuesAnswer;
+}
 - (NSString *)yj_smallStandardAnswer{
+    if (self.QuesAnswerHidden) {
+        return @"略";
+    }
     if (IsStrEmpty(self.QuesAnswer)) {
         return @"略";
     }
@@ -194,20 +216,23 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     return [NSString yj_filterHTML:self.QuesAnswer];
 }
 - (void)setQuesAnswer:(NSString *)QuesAnswer{
+    _QuesAnswer_attr = QuesAnswer.yj_toHtmlMutableAttributedString;
     if ([QuesAnswer containsString:@"&nbsp"]) {
-        _QuesAnswer = QuesAnswer.yj_toHtmlMutableAttributedString.string;
+        _QuesAnswer = _QuesAnswer_attr.string;
     }else{
         _QuesAnswer = QuesAnswer;
     }
-//    _QuesAnswer_attr = QuesAnswer.yj_htmlToMutableAttributedString;
 }
-//- (NSMutableAttributedString *)yj_smallStandardAnswerAttrText{
-//    if (IsStrEmpty(self.QuesAnswer)) {
-//        return [[NSMutableAttributedString alloc] initWithString:@"-"];
-//    }else{
-//        return self.QuesAnswer_attr;
-//    }
-//}
+- (NSMutableAttributedString *)yj_smallStandardAnswerAttrText{
+    if (self.QuesAnswerHidden) {
+        return [[NSMutableAttributedString alloc] initWithString:@"略"];
+    }
+    if (IsStrEmpty(self.QuesAnswer)) {
+        return [[NSMutableAttributedString alloc] initWithString:@"略"];
+    }else{
+        return self.QuesAnswer_attr;
+    }
+}
 - (NSInteger)yj_smallIndex{
     return self.Index;
 }
@@ -221,12 +246,23 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     return @"";
 }
 - (NSInteger)yj_smallPaperIndex{
+    if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
+        if (self.mutiBlankDisplayEnable) {
+            NSInteger startIndex = [[self.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
+            return startIndex + 1;
+        }else{
+            return self.Index + 1;
+        }
+    }
     if (self.mutiBlankDisplayEnable && self.PaperIndexOri > 0) {
         return self.PaperIndexOri;
     }
     return self.PaperIndex;
 }
 - (NSString *)yj_smallAnswerAnalysis{
+    if (self.QuesAnalysisHidden) {
+        return @"略";
+    }
     if (!IsStrEmpty(self.QuesAnalysis) && [self.QuesAnalysis containsString:@"&nbsp;"]) {
         self.QuesAnalysis = [self.QuesAnalysis stringByReplacingOccurrencesOfString:@"&nbsp;" withString:@" "];
     }
@@ -243,12 +279,25 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     }else{
         score = [NSString stringWithFormat:@"[%.1f分]",self.QuesScore];
     }
+    if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
+        if (self.smallTopicCount <= 1) {
+            index = [NSString yj_Char1];
+        }
+        if (IsStrEmpty(_QuesAsk) && self.smallTopicCount > 1) {
+            score = @"____";
+        }else{
+            score = @"";
+        }
+    }
     if (self.QuesAsk_attr) {
         if (![self.QuesAsk_attr.string hasPrefix:index]) {
-            [self.QuesAsk_attr insertAttributedString:[[NSAttributedString alloc] initWithString:index] atIndex:0];
-            [self.QuesAsk_attr appendAttributedString:[[NSAttributedString alloc] initWithString:score]];
+            NSMutableAttributedString *indexAttr = index.yj_toMutableAttributedString;
+            NSMutableAttributedString *scoreAttr = score.yj_toMutableAttributedString;
+            [indexAttr appendAttributedString:self.QuesAsk_attr];
+            [indexAttr appendAttributedString:scoreAttr];
+            self.QuesAsk_attr = indexAttr;
         }
-        if (self.yj_smallItemCount > 1) {
+        if (self.yj_smallItemCount > 1 && self.AnswerType == 2) {
             NSMutableAttributedString *attr = self.QuesAsk_attr.mutableCopy;
             for (int i = 0; i < self.itemCount; i++) {
                 YJPaperBlankTextField *btn = [[YJPaperBlankTextField alloc] initWithFrame:CGRectMake(0, 0, 30, 22)];
@@ -259,9 +308,9 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
                 textAttachment.image = [UIImage yj_imageWithView:btn];
                 NSAttributedString *textAttachmentString = [NSAttributedString attributedStringWithAttachment:textAttachment] ;
                 NSMutableAttributedString *imageString = [[NSMutableAttributedString alloc] initWithAttributedString:textAttachmentString];
-                NSRange range = [attr.string rangeOfString:[NSString stringWithFormat:@"%c%c",20,i+1]];
+                NSRange range = [attr.string rangeOfString:[NSString stringWithFormat:@"%c",1]];
                 if (range.location == NSNotFound) {
-                    range = [attr.string rangeOfString:[NSString stringWithFormat:@"%c",i+1]];
+                    range = [attr.string rangeOfString:[NSString stringWithFormat:@"%c",2]];
                 }
                 if (range.location != NSNotFound) {
                     [attr replaceCharactersInRange:range withAttributedString:imageString];
@@ -271,11 +320,11 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
         }else{
             NSMutableAttributedString *attr = self.QuesAsk_attr.mutableCopy;
             for (int i = 0; i < self.itemCount; i++) {
-                NSRange range = [attr.string rangeOfString:[NSString stringWithFormat:@"%c%c",20,i+1]];
+                NSRange range = [attr.string rangeOfString:[NSString stringWithFormat:@"%c",1]];
                 if (range.location != NSNotFound) {
                     [attr replaceCharactersInRange:range withAttributedString:@"____".yj_toMutableAttributedString];
                 }else{
-                    range = [attr.string rangeOfString:[NSString stringWithFormat:@"%c",i+1]];
+                    range = [attr.string rangeOfString:[NSString stringWithFormat:@"%c",2]];
                     if (range.location != NSNotFound) {
                         [attr replaceCharactersInRange:range withAttributedString:@"___".yj_toMutableAttributedString];
                     }
@@ -391,6 +440,9 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
 
 
 - (void)setYj_smallAnswer:(NSString *)yj_smallAnswer{
+    if (IsObjEmpty(yj_smallAnswer)) {
+        yj_smallAnswer = @"";
+    }
     if (!IsStrEmpty(yj_smallAnswer) && IsStrEmpty([yj_smallAnswer stringByReplacingOccurrencesOfString:YJTaskModule_u2060 withString:@""].yj_deleteWhitespaceAndNewlineCharacter)) {
         yj_smallAnswer = @"";
     }
@@ -419,6 +471,9 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
 }
 - (NSString *)yj_taskHpStuName{
     return kHpStuName;
+}
+- (NSString *)yj_smallMarkAnswerScore{
+     return [NSString stringWithFormat:@"%.1f",self.AnswerScore];
 }
 - (NSString *)yj_smallStuScore{
     if ([self yj_taskStageType] == YJTaskStageTypeCheck || [self yj_taskStageType] == YJTaskStageTypeCheckViewer ||[self yj_taskStageType] == YJTaskStageTypeManualMark || [self yj_taskStageType] == YJTaskStageTypeManualMarkViewer) {
@@ -534,13 +589,46 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     for (YJPaperSmallModel *smallModel in Queses) {
         smallModel.TopicTypeID = self.TopicTypeID;
         smallModel.TopicTypeName = self.yj_bigTopicTypeName;
+        smallModel.smallTopicCount = Queses.count;
+        
+        if (!IsStrEmpty(smallModel.QuesAnswer) && [self.TopicTypeID isEqualToString:@"f"] && ![smallModel.QuesAnswer hasSuffix:@"</div>"]) {
+            NSString *QuesAnswer = smallModel.QuesAnswer;
+            if (!IsStrEmpty(QuesAnswer) && !IsStrEmpty(QuesAnswer.yj_deleteWhitespaceAndNewlineCharacter)) {
+                NSMutableString *textCopy = QuesAnswer.mutableCopy;
+                while ([textCopy hasSuffix:@" "] || [textCopy hasSuffix:@"\n"]) {
+                    if ([textCopy hasSuffix:@" "]) {
+                        [textCopy deleteCharactersInRange:NSMakeRange(textCopy.length-1, 1)];
+                    }else if ([textCopy hasSuffix:@"\n"]){
+                        [textCopy deleteCharactersInRange:NSMakeRange(textCopy.length-1, 1)];
+                    }
+                }
+                QuesAnswer = textCopy;
+            }
+            smallModel.QuesAnswer = [NSString stringWithFormat:@"<div style=\"text-indent:2em;text-align: justify;line-height: 26px;\">%@</div>",QuesAnswer];
+        }
+        
+        
     }
 }
 - (void)setTopicContent:(NSString *)TopicContent{
     if (!IsStrEmpty(TopicContent)) {
+        TopicContent = [TopicContent stringByReplacingOccurrencesOfString:@"" withString:@""];
         NSRegularExpression *regularExpretion = [NSRegularExpression regularExpressionWithPattern:@"(?isx)[_]*(<u>)*(\\d{1,3}(\\.|．|、)*)(</u>)*[_]+" options:NSRegularExpressionCaseInsensitive error:nil];
         TopicContent = [regularExpretion stringByReplacingMatchesInString:TopicContent options:NSMatchingReportProgress range:NSMakeRange(0, TopicContent.length) withTemplate:@"____"];
         TopicContent = YJTaskModuleHandleImgLabInfo(TopicContent);
+    }
+    if (!IsStrEmpty(TopicContent) && [TopicContent.lowercaseString containsString:@"<div"] && [TopicContent.lowercaseString containsString:@"border:"]) {
+        YJEGumboDocument *document = [[YJEGumboDocument alloc] initWithHTMLString:TopicContent];
+        NSArray *elements = document.Query(@"div");
+        for (YJEGumboElement *element in elements) {
+            NSString *styleAttr = element.attr(@"style");
+            NSString *htmlStr = element.html();
+            if ([styleAttr.lowercaseString containsString:@"border:"]) {
+                TopicContent = [TopicContent stringByReplacingOccurrencesOfString:styleAttr withString:@""];
+                TopicContent = [TopicContent stringByReplacingOccurrencesOfString:htmlStr withString:[NSString stringWithFormat:@"<TABLE style=\"border: 1px solid black;\"><TBODY><TR><TD>%@</TD></TR></TBODY></TABLE>",htmlStr]];
+            }
+        }
+        
     }
     _TopicContent = TopicContent;
     _TopicContent_attr = TopicContent.yj_htmlImgFrameAdjust.yj_toHtmlMutableAttributedString;
@@ -567,6 +655,9 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     if ([self yj_isCorrectTopic] && !IsStrEmpty(self.GCQues.QuesLeaderContent)) {
         _TopicPintro = self.GCQues.QuesLeaderContent;
     }
+    if ([self yj_isCorrectTopic] && !IsStrEmpty(self.GCQues.QuesBrief)) {
+        _TopicContent = self.GCQues.QuesBrief;
+    }
     if (!IsStrEmpty(self.TopicPintro)) {
         if (!IsStrEmpty(self.TopicContent)) {
             topicContent = [NSString stringWithFormat:@"%@\n%@",self.TopicPintro,self.TopicContent];
@@ -584,8 +675,8 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
 - (NSMutableAttributedString *)yj_bigTopicAttrText{
     if (!IsStrEmpty(self.TopicPintro)) {
         NSString *topicPintro = self.TopicPintro;
-        if (self.TopicContent_attr) {
-            [topicPintro stringByAppendingString:@"\n"];
+        if (self.TopicContent_attr && ![self.TopicContent_attr.string hasPrefix:topicPintro]) {
+           topicPintro = [topicPintro stringByAppendingString:@"\n"];
             [self.TopicContent_attr insertAttributedString:[[NSAttributedString alloc] initWithString:topicPintro] atIndex:0];
         }else{
             self.TopicContent_attr = [[NSMutableAttributedString alloc] initWithString:self.TopicPintro];
@@ -661,6 +752,9 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     _Main = Main;
 }
 - (NSString *)yj_topicImpKlgInfo{
+    if (self.ImporKnTextHidden) {
+        return @"无";
+    }
     NSString *ImporKnText = @"";
     if (!IsStrEmpty(self.Import)) {
         ImporKnText = [self.Import stringByReplacingOccurrencesOfString:@"|" withString:@"、"];
@@ -670,6 +764,9 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     return ImporKnText;
 }
 - (NSString *)yj_topicMainKlgInfo{
+    if (self.MainKnTextHidden) {
+        return @"无";
+    }
     NSString *MainKnText = @"";
     if (!IsStrEmpty(self.Main)) {
         MainKnText = [self.Main stringByReplacingOccurrencesOfString:@"|" withString:@"、"];
@@ -702,6 +799,9 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
                     return YJBigTopicTypeBigText;
                 }
             }else if (!IsStrEmpty(self.yj_bigMediaUrl) && IsStrEmpty(self.topicContentInfo)){
+                if (!IsStrEmpty(self.yj_topicListenText)) {
+                    return YJBigTopicTypeBigTextAndListen;
+                }
                 return YJBigTopicTypeListen;
             }else if (!IsStrEmpty(self.yj_bigMediaUrl) && !IsStrEmpty(self.topicContentInfo)){
                 return YJBigTopicTypeBigTextAndListen;
@@ -858,7 +958,7 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     if (!IsStrEmpty(self.TopicGenreName)) {
         return self.TopicGenreName;
     }
-    return self.TopicTypeName;
+    return kApiParams(self.TopicTypeName);
 }
 - (NSString *)yj_bigTopicID{
     return self.TopicID;
@@ -875,7 +975,7 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
         if (IsStrEmpty(smallModel.AnswerStr)) {
             [arr addObject:@""];
         }else{
-            [arr addObject:smallModel.AnswerStr];
+            [arr addObject:smallModel.yj_smallAnswer];
         }
     }
     return arr;
@@ -1025,6 +1125,20 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
          }
      }
     for (YJPaperBigModel *bigModel in Topics) {
+        if (!IsStrEmpty(bigModel.TopicContent) && ![bigModel.TopicContent hasSuffix:@"</div>"]) {
+            if (!bigModel.IsQuesInContent) {
+                bigModel.TopicContent = [NSString stringWithFormat:@"<div style=\"text-indent:2em;text-align: justify;line-height: 26px;\">%@</div>",bigModel.TopicContent];
+            }else{
+                bigModel.TopicContent = [NSString stringWithFormat:@"<div style=\"text-align: justify;line-height: 26px;\">%@</div>",bigModel.TopicContent];
+            }
+            
+            if (!IsStrEmpty(bigModel.SmallDirectionTxt)) {
+                bigModel.TopicContent = [NSString stringWithFormat:@"<strong style=\"text-align: center;\">%@</strong>%@",bigModel.SmallDirectionTxt,bigModel.TopicContent];
+            }
+        }
+        
+        
+        
         if (IsStrEmpty(bigModel.TopicContent) && !IsStrEmpty(bigModel.TopicPintro_copy) && [bigModel.TopicPintro_copy containsString:@"<"] && [bigModel.TopicPintro_copy containsString:@">"]) {
             bigModel.TopicContent = bigModel.TopicPintro_copy;
             bigModel.TopicPintro = @"";
@@ -1132,5 +1246,8 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
         return YES;
     }
     return NO;
+}
+- (NSString *)yj_taskName{
+    return self.PaperName;
 }
 @end

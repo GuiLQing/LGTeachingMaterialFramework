@@ -9,6 +9,12 @@
 #ifndef LGTeachingMaterialVersion_h
 #define LGTeachingMaterialVersion_h
 
+/** 版本：1.1.5    2019-06-18 */
+/** 1、电子素材问题优化  */
+
+/** 版本：1.1.4    2019-05-13 */
+/** 1、电子素材新增CourseNo字段（大数据推送使用） */
+
 /** 版本：1.1.3    2019-05-12 */
 /** 1、添加收藏功能隐藏控制 */
 
