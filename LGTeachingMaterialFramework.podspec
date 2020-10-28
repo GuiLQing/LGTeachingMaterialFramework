@@ -34,8 +34,8 @@ TODO: Add long description of the pod here.
   
   s.resources = 'LGTeachingMaterialFramework/Classes/LGTeachingMaterialFramework.bundle'
   
-  #s.dependency 'AFNetworking','3.2.1'
-  #s.dependency 'IJKMediaFramework','0.1.2'
+  s.dependency 'AFNetworking','3.2.1'
+  s.dependency 'IJKMediaFramework','0.1.2'
   s.dependency 'PSGChainedMode'
   s.dependency 'YJTaskMark'
   s.dependency 'YJMediaPlayer'
